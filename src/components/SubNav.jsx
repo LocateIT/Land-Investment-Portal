@@ -9,7 +9,7 @@ const SubNav = () => {
         gap:'1rem',
         backgroundColor:'#1E4B5F',
         position:'absolute',
-        top:'8.7vh',
+        top:'7.8vh',
         width:'100vw',
         height: '4vh',
         alignItems:'center',

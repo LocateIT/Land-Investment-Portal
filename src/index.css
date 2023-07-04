@@ -1,19 +1,24 @@
-/* :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+:root {
+  /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #242424; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  overflow: hidden;
+  width:'100vw';
+  height:'100vh';
+  margin:'0';
+  
 }
-
+/*
 a {
   font-weight: 500;
   color: #646cff;
@@ -71,7 +76,7 @@ button:focus-visible {
 .navbar{
   position: absolute;
   background-color:#003247 ;
-  margin: 0;
+  margin-top: -10px;
   width: 100vw;
   height: 8vh;
   display: flex;
@@ -95,4 +100,21 @@ button:focus-visible {
   height: 30px;
   margin-left: 52vw;
   margin-top: 20px;
+}
+#region_selection{
+  border-radius: 10px;
+border: 1px solid #8A8888;
+background: #F0EFEF;
+outline: none;
+}
+.left_side_panel{
+  width: 140px;
+height: 624px;
+border-radius: 10px;
+background: #1E4B5F;
+position: absolute;
+top: 16.5vh;
+display: flex;
+flex-direction: column;
+gap: 3rem;
 }
