@@ -18,7 +18,7 @@ const Navbar = () => {
         <div className="link_icons">
             {
                 link_icons.map( (icon) => 
-                <img src={icon} alt=""  />
+                <img src={icon} alt="" key={icon}  />
                 )
             }
         </div>

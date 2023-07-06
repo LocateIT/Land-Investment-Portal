@@ -21,7 +21,7 @@ const SubNav = () => {
             <span>LIP</span>
             |
             <span>Malawi</span>
-            <img src={right} alt="" /> 
+            <img src={right} alt="" className='right_icon' /> 
             <span>Blantyre</span>
 
     </div>
