@@ -125,6 +125,70 @@ z-index:100
 }
 
 
+@media (min--moz-device-pixel-ratio: 1.1),
+       (-o-min-device-pixel-ratio: 11/10), 
+       (-webkit-min-device-pixel-ratio: 1.1), 
+        (min-device-pixel-ratio: 1.1),
+      
+       (min-resolution: 110dpi),
+        (min-resolution: 1.1dppx) 
+       {
+  /* Styles for devices with pixel ratio 1.25 */
+  /* Add your CSS rules here */
+  .navbar{
+   
+    background-color:#003247 ;
+    margin-top: -10px;
+    width: 100vw;
+    height: 8vh;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
+  .proj_name{
+    height: 50px;
+    width: 280px;
+    margin-top: 12px;
+  
+  }
+
+  .link_icons{
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+    height: 30px;
+    margin-left: 56vw;
+    margin-top: 20px;
+  }
+  .right_icon{
+    height: 30px;
+  }
+  .selections{
+    top: 0.5vh;
+  }
+  #region_selection{
+   height: 30px !important;
+  }
+  .left_side_panel{
+    word-break: break-word;
+ height: 690px;
+ width: 120px;
+
+ 
+ font-size: 12px;
+  }
+  .left_side_icons{
+    gap: 4rem !important;
+  }
+  .left_side_links{
+    gap: 5.5rem !important;
+    word-break: break-word;
+  }
+  #map{
+    height: 80vh;
+  }
+       }
+
 @media (min--moz-device-pixel-ratio: 1.25),
        (-o-min-device-pixel-ratio: 5/4), 
        (-webkit-min-device-pixel-ratio: 1.25), 
@@ -185,9 +249,8 @@ z-index:100
     word-break: break-word;
   }
        }
-
-       @media (min--moz-device-pixel-ratio: 1.5),
-       (-o-min-device-pixel-ratio: 5/4), 
+@media (min--moz-device-pixel-ratio: 1.5),
+       (-o-min-device-pixel-ratio: 3/2), 
        (-webkit-min-device-pixel-ratio: 1.5), 
         (min-device-pixel-ratio: 1.5),
       
@@ -222,7 +285,7 @@ z-index:100
     flex-direction: row;
     gap: 2rem;
     height: 30px;
-    margin-left: 45vw;
+    margin-left: 47vw;
     margin-top: 10px;
   }
   .selections{
@@ -233,17 +296,18 @@ z-index:100
   }
   .left_side_panel{
     word-break: break-word;
- height: 470px;
+ height: 510px;
  width: 120px;
 
  
  font-size: 12px;
   }
   .left_side_icons{
-    gap: 1.5rem !important;
+    gap: 2rem !important;
+  width: 20px !important;
   }
   .left_side_links{
-    gap: 3.2rem !important;
+    gap: 3.7rem !important;
     word-break: break-word;
   }
   .subnav{
@@ -258,3 +322,216 @@ z-index:100
     height: 88vh !important;
   }
        }
+
+       /* media queries for different resolutions */
+       /* (1280x1024) SXGA Display */
+/* @media  screen and (max-width: 1280px) {
+  
+
+  .navbar{
+   
+    background-color:#003247 ;
+    margin-top: -10px;
+    width: 100vw;
+    height: 8vh;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
+  .logo{
+    height: 40px;
+    margin-top: 15px;
+  }
+  .proj_name{
+    height: 50px;
+    width: 280px;
+    margin-top: 10px;
+  
+  }
+
+  .link_icons{
+    display: flex;
+    flex-direction: row;
+    gap: 2.5rem;
+    height: 30px;
+    margin-left: 45vw;
+    margin-top: 15px;
+  }
+  .selections{
+    top: 0.5vh;
+  }
+  #region_selection{
+   height: 30px !important;
+  }
+  .left_side_panel{
+    word-break: break-word;
+ height: 720px;
+ width: 120px;
+
+ 
+ font-size: 12px;
+  }
+  .left_side_icons{
+    gap: 4rem !important;
+  width: 20px !important;
+  }
+  .left_side_links{
+    gap: 5.5rem !important;
+    word-break: break-word;
+  }
+  .subnav{
+    top:7.5vh !important;
+  height: 5vh !important;
+  font-size: 14px !important;
+  }
+  .right_icon{
+    height: 20px;
+  }
+  #map{
+    height: 88vh !important;
+  }
+} */
+
+/* (1366x768) WXGA Display laptop */
+@media  screen and (max-width: 1366px)
+ {
+  /* insert styles here */
+  .navbar{
+   
+    background-color:#003247 ;
+    margin-top: -10px;
+    width: 100vw;
+    height: 8vh;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
+  .logo{
+    height: 40px;
+    margin-top: 7px;
+  }
+  .proj_name{
+    height: 50px;
+    width: 280px;
+    margin-top: 5px;
+  
+  }
+
+  .link_icons{
+    display: flex;
+    flex-direction: row;
+    gap: 2.5rem;
+    height: 30px;
+    margin-left: 49vw;
+    margin-top: 9px;
+  }
+  .selections{
+    top: 14vh !important;
+  }
+  #region_selection{
+   height: 30px !important;
+  }
+  .left_side_panel{
+    /* word-break: break-word; */
+ height: 460px !important;
+ width: 100px;
+
+ top: 20.5vh;
+ font-size: 12px;
+  }
+  .left_side_icons{
+    gap: 1.2rem !important;
+  width: 10px !important;
+  }
+  .left_side_links{
+    gap: 2.4rem !important;
+    word-break: break-word;
+  }
+  .subnav{
+    top:7.5vh !important;
+  height: 5vh !important;
+  font-size: 14px !important;
+  }
+  .right_icon{
+    height: 20px;
+  }
+  #map{
+    height: 88vh !important;
+  }
+}
+
+
+/* (1366x768) WXGA Display laptop */
+@media  screen and (max-width: 1366px)
+and (min--moz-device-pixel-ratio: 1.25),
+       (-o-min-device-pixel-ratio: 5/4), 
+       (-webkit-min-device-pixel-ratio: 1.25), 
+        (min-device-pixel-ratio: 1.25),
+      
+       (min-resolution: 120dpi),
+        (min-resolution: 1.25dppx)
+ {
+  /* insert styles here */
+  .navbar{
+   
+    background-color:#003247 ;
+    margin-top: -10px;
+    width: 100vw;
+    height: 8vh;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
+  .logo{
+    height: 40px;
+    margin-top: 1px;
+  }
+  .proj_name{
+    height: 50px;
+    width: 280px;
+    margin-top: -5px;
+  
+  }
+
+  .link_icons{
+    display: flex;
+    flex-direction: row;
+    gap: 2.5rem;
+    height: 30px;
+    margin-left: 35vw;
+    margin-top: 5px;
+  }
+  .selections{
+    top: 14vh !important;
+  }
+  #region_selection{
+   height: 30px !important;
+  }
+  .left_side_panel{
+    /* word-break: break-word; */
+ height: 356px !important;
+ width: 100px;
+
+ top: 20.5vh;
+ font-size: 12px;
+  }
+  .left_side_icons{
+    gap: 0.4rem !important;
+  width: 10px !important;
+  }
+  .left_side_links{
+    gap: 1.6rem !important;
+    word-break: break-word;
+  }
+  .subnav{
+    top:7.5vh !important;
+  height: 5vh !important;
+  font-size: 14px !important;
+  }
+  .right_icon{
+    height: 20px;
+  }
+  #map{
+    height: 88vh !important;
+  }
+}
