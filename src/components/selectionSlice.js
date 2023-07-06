@@ -10,7 +10,7 @@ const initialState = {
     selected_crop:'',
     indicators:['Crop Production', 'Climate', 'Soil Fertility', 'Land Use', 'Night-time Light', 'Ancillary Data'],
     products:['Agricultural Productivity', 'Crop Suitability'],
-    crops:['Maize', 'Groundnuts', 'Tobacco'],
+    crops:['Maize', 'Groundnuts', 'Tobacco', 'Cranberry', 'Tea'],
 }
 
 

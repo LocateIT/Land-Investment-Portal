@@ -26,15 +26,17 @@ const Dashboard = () => {
 
 
     const left_panel_icons = [crop, cloud, soil, land, moon, ancil]
-    const left_links = ['Crop Production', 'Climate', 'Soil Fertility', 'Land Use', 'Night-time Light', 'Ancillary Data']
+    const left_links = dashboardSlice.indicators
     const [country, setCountry] = useState('')
     const [clicked_link, setClicked_link] = useState('')
     const [selected_radio, setSelected_radio] = useState(dashboardSlice.products[1])
     const [crop_, setCrop] = useState('')
+    const [indicator_, setIndicator] = useState('')
 
     let map = useRef(null);
     let country_name = useRef('')
     let crop_name = useRef('')
+    let indicator = useRef('')
 
 
  const onCountryChanged = e => {
@@ -52,6 +54,13 @@ const Dashboard = () => {
   
   
 
+  }
+
+  const onIndicatorChanged = e => {
+    const changed_indicator = e.target.value
+    console.log(changed_indicator, 'changed indicator')
+    indicator.current = e.target.value
+    setIndicator(e.target.value)
   }
 
   const onCropChanged = e => {
@@ -269,6 +278,7 @@ const cropOptions = dashboardselections.crops.map( selection => (
                
 
             }}
+            // onClick={onIndicatorChanged}
             onClick={ () => setClicked_link(link)}
             >{link}</span>
             
@@ -292,7 +302,7 @@ const cropOptions = dashboardselections.crops.map( selection => (
 
 
 {
-    clicked_link ? 
+    clicked_link === 'Crop Production'? 
     <div className="selection_panel" style={{
         position:'absolute',
         left:'6.4vw',
@@ -351,11 +361,6 @@ const cropOptions = dashboardselections.crops.map( selection => (
             </div>
 
 
-
-
-
-            
-
             :
             ''
 
@@ -390,6 +395,10 @@ const cropOptions = dashboardselections.crops.map( selection => (
 
 
     </div>
+    : clicked_link === 'Climate'? 
+    <>
+    </>
+
     : ''
 }
     
