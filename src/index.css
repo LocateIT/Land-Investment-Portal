@@ -108,7 +108,7 @@ background: #F0EFEF;
 outline: none;
 }
 .left_side_panel{
-  width: 140px;
+  width: 120px;
 height: 770px;
 border-radius: 10px;
 background: #1E4B5F;
@@ -189,13 +189,14 @@ z-index:100
   }
        }
 
-@media (min--moz-device-pixel-ratio: 1.25),
+@media only screen and (min-width: 1920px) and (min--moz-device-pixel-ratio: 1.25),
        (-o-min-device-pixel-ratio: 5/4), 
        (-webkit-min-device-pixel-ratio: 1.25), 
         (min-device-pixel-ratio: 1.25),
       
        (min-resolution: 120dpi),
-        (min-resolution: 1.25dppx) 
+        (min-resolution: 1.25dppx)
+        
        {
   /* Styles for devices with pixel ratio 1.25 */
   /* Add your CSS rules here */
@@ -460,21 +461,13 @@ z-index:100
   }
 }
 
+@media only screen and (width: 1366px) and (min-resolution: 125dpi), (min-resolution: 1.25dppx) {
+  /* CSS rules for laptops with a pixel ratio of 1.25   only screen and (width: 1092.8px) and (min-resolution: 1.25dppx),*/
+  /* Add your styles here */
 
-/* (1366x768) WXGA Display laptop */
-@media  screen and (max-width: 1366px)
-and (min--moz-device-pixel-ratio: 1.25),
-       (-o-min-device-pixel-ratio: 5/4), 
-       (-webkit-min-device-pixel-ratio: 1.25), 
-        (min-device-pixel-ratio: 1.25),
-      
-       (min-resolution: 120dpi),
-        (min-resolution: 1.25dppx)
- {
-  /* insert styles here */
   .navbar{
    
-    background-color:#003247 ;
+    background-color:#003247;
     margin-top: -10px;
     width: 100vw;
     height: 8vh;
@@ -535,3 +528,4 @@ and (min--moz-device-pixel-ratio: 1.25),
     height: 88vh !important;
   }
 }
+
