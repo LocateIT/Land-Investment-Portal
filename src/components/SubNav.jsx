@@ -1,7 +1,14 @@
 import React from 'react'
 import right from '../assets/right_.svg'
+import { useDispatch, useSelector } from 'react-redux'
+import { dashboardSelections } from './selectionSlice'
 
 const SubNav = () => {
+  const dispatch = useDispatch()
+    const dashboardselections = useSelector(dashboardSelections)
+    //return the entire dashboard slice
+    const dashboardSlice = useSelector((state) => state.dashboardselections)
+
   return (
     <div className='subnav' style={{ 
         display:'flex',
@@ -20,7 +27,7 @@ const SubNav = () => {
         }}>
             <span>LIP</span>
             |
-            <span>Malawi</span>
+            <span>{dashboardSlice.selected_country}</span>
             <img src={right} alt="" className='right_icon' /> 
             <span>Blantyre</span>
 

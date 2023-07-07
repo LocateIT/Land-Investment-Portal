@@ -7,7 +7,7 @@ import L from "leaflet"
 import "leaflet/dist/leaflet.css"
 
 import { dashboardSelections } from './selectionSlice';
-import { changeSelectedCountry, changeSelectedCrop} from './selectionSlice';
+import { changeSelectedCountry, changeSelectedCrop, changeClimateProduct, changeSoilProduct} from './selectionSlice';
 
 import Navbar from './Navbar'
 import '.././index.css'
@@ -18,6 +18,7 @@ import soil from '../assets/soil.svg'
 import land from '../assets/land.svg'
 import moon from '../assets/moon.svg'
 import ancil from '../assets/ancil.svg'
+import close from '../assets/close_.svg'
 const Dashboard = () => {
     const dispatch = useDispatch()
     const dashboardselections = useSelector(dashboardSelections)
@@ -32,11 +33,15 @@ const Dashboard = () => {
     const [selected_radio, setSelected_radio] = useState(dashboardSlice.products[1])
     const [crop_, setCrop] = useState('')
     const [indicator_, setIndicator] = useState('')
+    const [open, setOpen] = useState(true)
+    const [climate, setClimate] = useState('')
+    const [soil_, setSoil] = useState('')
 
     let map = useRef(null);
     let country_name = useRef('')
     let crop_name = useRef('')
     let indicator = useRef('')
+    // let climate = useRef('')
 
 
  const onCountryChanged = e => {
@@ -79,6 +84,30 @@ const Dashboard = () => {
   
 
   }
+  const onClimateChanged = e => {
+    const changed_climate = e.target.value
+    console.log(changed_climate, 'changed_climate')
+    // climate.current = changed_climate
+  
+
+      setClimate(e.target.value)
+
+      //update the selected_region value using dispatch changeSelelcted region reducer
+      dispatch(changeClimateProduct(e.target.value))
+    
+  }
+  const onSoilChanged = e => {
+    const changed_soil = e.target.value
+    console.log(changed_soil, 'changed_soil')
+    // climate.current = changed_climate
+  
+
+      setSoil(e.target.value)
+
+      //update the selected_region value using dispatch changeSelelcted region reducer
+      dispatch(changeSoilProduct(e.target.value))
+    
+  }
 
   const onRadioChange = e => {
     setSelected_radio(e.target.value)
@@ -86,6 +115,10 @@ const Dashboard = () => {
 
   }
 
+
+  const close_selection = () => {
+    setOpen(false)
+  }
 
 
 
@@ -98,6 +131,17 @@ const Dashboard = () => {
 const cropOptions = dashboardselections.crops.map( selection => (
     <option key={selection} value={selection}>
         {selection}
+</option>
+))
+
+const climateOptions = dashboardselections.climate_products.map( selection => (
+  <option key={selection} value={selection}>
+      {selection}
+</option>
+))
+const soilOptions = dashboardselections.soil_products.map( selection => (
+  <option key={selection} value={selection}>
+      {selection}
 </option>
 ))
 
@@ -213,11 +257,13 @@ const cropOptions = dashboardselections.crops.map( selection => (
        
     </select>
 
-    <select name="" id="region_selection"
+    <select name="" id="district_selection"
     placeholder='Select Country'
     style={{
-        // position:'absolute',
-        // top:'12vh',
+      borderRadius: '10px',
+      border: '1px solid #8A8888',
+      backgroundColor: '#F0EFEF',
+      outline: "none",
         width: '170px',
         height: '40px',
         
@@ -279,7 +325,10 @@ const cropOptions = dashboardselections.crops.map( selection => (
 
             }}
             // onClick={onIndicatorChanged}
-            onClick={ () => setClicked_link(link)}
+            onClick={ () =>{
+              setClicked_link(link);setOpen(true)
+
+            } }
             >{link}</span>
             
             )
@@ -302,17 +351,22 @@ const cropOptions = dashboardselections.crops.map( selection => (
 
 
 {
-    clicked_link === 'Crop Production'? 
+    clicked_link === 'Crop Production' && open? 
     <div className="selection_panel" style={{
         position:'absolute',
         left:'6.4vw',
         top:'17.2vh',
         backgroundColor:'#fff',
         width:'400px',
-        height:'765px',
+        height:'265px',
         zIndex:100,
-        borderRadius:'10px'
+        borderRadius:'10px',
+        color:'#1E4B5F',
+        fontWeight:'700',
+        fontFamily:'sans-serif',
+        fontSize:'14px'
     }}>
+      <img src={close} alt="" style={{ marginLeft:'19.5vw', marginTop:'3px'}}  onClick={ close_selection} />
         {
             clicked_link === 'Crop Production' ?
             
@@ -380,27 +434,96 @@ const cropOptions = dashboardselections.crops.map( selection => (
                 width: '170px',
                 height: '30px',
                 borderRadius:'10px',
-                marginTop:'15px',
-                marginLeft:'10px'
+                marginTop:'25px',
+                marginLeft:'100px',
+                outline:'none'
+                
                 
             
             }}>
                  <option value="" >Select crop</option>
                  { cropOptions }
                
-            </select> : ''
+            </select> : <p style={{
+             marginTop:'25px',
+             marginLeft:'100px'
+            }}>Above Ground Biomass</p>
+            
         }
 
         
 
 
     </div>
-    : clicked_link === 'Climate'? 
-    <>
-    </>
+    : 
 
-    : ''
+
+
+    
+    clicked_link === 'Climate'? 
+    <>
+    <select name="" id="climate_selection"
+            placeholder=''
+            value={climate}
+            onChange={onClimateChanged}
+            style={{
+                position:'absolute',
+                top:'31.8vh',
+                left:'1.2vw',
+                width: '170px',
+                height: '35px',
+                borderRadius:'10px',
+                marginTop:'25px',
+                marginLeft:'100px',
+                outline:'none',
+                zIndex:100
+                
+                
+            
+            }}>
+                 <option value="" >Select Product</option>
+                 { climateOptions }
+               
+            </select>
+    </>
+    
+    : 
+
+    clicked_link === 'Soil Fertility'? 
+    <>
+    <select name="" id="soil_selection"
+            placeholder=''
+            value={soil_}
+            onChange={onSoilChanged}
+            style={{
+                position:'absolute',
+                top:'45.8vh',
+                left:'1.2vw',
+                width: '170px',
+                height: '35px',
+                borderRadius:'10px',
+                marginTop:'25px',
+                marginLeft:'100px',
+                outline:'none',
+                zIndex:100
+                
+                
+            
+            }}>
+                 <option value="" >Select Product</option>
+                 { soilOptions }
+               
+            </select>
+    </>
+    
+    :
+    
+    ''
+
 }
+
+
+
     
     
     </>
