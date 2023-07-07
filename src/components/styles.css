@@ -1,0 +1,59 @@
+.App {
+    font-family: sans-serif;
+  }
+  
+  .title {
+    text-align: center;
+  }
+  
+  .custom-select-container {
+    display: inline-block;
+    min-width: 250px;
+    text-align: center;
+    position: relative;
+  }
+  
+  .selected-text {
+    background-color: #1E4B5F;
+    padding: 6px 20px;
+    border-bottom: 1px solid #fff;
+  }
+  
+  .selected-text::after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 16px;
+    border: 7px solid transparent;
+    border-color: #fff transparent transparent transparent;
+  }
+  
+  .selected-text.active::after {
+    top: 8px;
+    border-color: transparent transparent #fff transparent;
+  }
+  
+  ul {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  
+  .select-options {
+    position: absolute;
+    width: 100%;
+  }
+  
+  li {
+    list-style-type: none;
+    padding: 6px 20px;
+    background: #1E4B5F;
+    border-bottom: 1px solid #fff;
+    cursor: pointer;
+  }
+  
+  li:hover {
+    background-color: #32a6a6;
+    color: #ffffff;
+  }
+  

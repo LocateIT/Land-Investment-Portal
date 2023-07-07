@@ -7,11 +7,12 @@ import L from "leaflet"
 import "leaflet/dist/leaflet.css"
 
 import { dashboardSelections } from './selectionSlice';
-import { changeSelectedCountry, changeSelectedCrop, changeClimateProduct, changeSoilProduct} from './selectionSlice';
+import { changeSelectedCountry,  changeSelectedDistrict, changeSelectedCrop, changeClimateProduct, changeSoilProduct} from './selectionSlice';
 
 import Navbar from './Navbar'
 import '.././index.css'
 import SubNav from './SubNav'
+import Index from './index'
 import crop from '../assets/crop.svg'
 import cloud from '../assets/cloud.svg'
 import soil from '../assets/soil.svg'
@@ -36,11 +37,14 @@ const Dashboard = () => {
     const [open, setOpen] = useState(true)
     const [climate, setClimate] = useState('')
     const [soil_, setSoil] = useState('')
+    const [district, setDistrict] = useState('')
+    const ancil_data_list = dashboardSlice.ancil_data
 
     let map = useRef(null);
     let country_name = useRef('')
     let crop_name = useRef('')
     let indicator = useRef('')
+    let wmsLayer = useRef(null)
     // let climate = useRef('')
 
 
@@ -60,6 +64,24 @@ const Dashboard = () => {
   
 
   }
+  const onDistrictChanged = e => {
+    const changed_district = e.target.value
+    console.log(changed_district, 'changed_district')
+    // country_name.current = changed_country
+  
+
+      setDistrict(e.target.value)
+
+      //update the selected_region value using dispatch changeSelelcted region reducer
+      dispatch(changeSelectedDistrict(e.target.value))
+    //  fetchRegion()
+   
+  
+  
+
+  }
+
+  
 
   const onIndicatorChanged = e => {
     const changed_indicator = e.target.value
@@ -129,7 +151,7 @@ const Dashboard = () => {
 ))
 
 const cropOptions = dashboardselections.crops.map( selection => (
-    <option key={selection} value={selection}>
+    <option key={selection} value={selection} style={{ }}>
         {selection}
 </option>
 ))
@@ -140,6 +162,11 @@ const climateOptions = dashboardselections.climate_products.map( selection => (
 </option>
 ))
 const soilOptions = dashboardselections.soil_products.map( selection => (
+  <option key={selection} value={selection}>
+      {selection}
+</option>
+))
+const districtOptions = dashboardselections.districts.map( selection => (
   <option key={selection} value={selection}>
       {selection}
 </option>
@@ -215,6 +242,34 @@ const soilOptions = dashboardselections.soil_products.map( selection => (
           L.control.layers(baseMaps).addTo(map.current);
     }
 
+//fetch crop data
+const fetchCrop = () => {
+  if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  map.current.createPane("pane400").style.zIndex = 200;
+  if(clicked_link === 'Crop Production' && selected_radio === 'Crop Suitability') {
+    
+      wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+        pane: 'pane400',
+        layers: `Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability`,
+        crs:L.CRS.EPSG4326,
+        styles: `Crop_Production_Crop_Suitability_${dashboardSlice.selected_crop}_${district}`,
+        // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+      
+        format: 'image/png',
+        transparent: true,
+        opacity:1.0
+        
+        
+       
+   });
+  
+   wmsLayer.current.addTo(map.current);
+  
+    }
+}
+
+
+
 
     useEffect(() => {
         setLeafletMap()
@@ -258,7 +313,9 @@ const soilOptions = dashboardselections.soil_products.map( selection => (
     </select>
 
     <select name="" id="district_selection"
-    placeholder='Select Country'
+  
+    value={district}
+    onChange={onDistrictChanged}
     style={{
       borderRadius: '10px',
       border: '1px solid #8A8888',
@@ -271,8 +328,7 @@ const soilOptions = dashboardselections.soil_products.map( selection => (
     }}
     >
          <option value="" >Select District</option>
-        <option value="">Blantyre</option>
-        <option value="">Balaka</option>
+                {districtOptions}
     </select>
 
     </div>
@@ -358,7 +414,7 @@ const soilOptions = dashboardselections.soil_products.map( selection => (
         top:'17.2vh',
         backgroundColor:'#fff',
         width:'400px',
-        height:'265px',
+        height:'355px',
         zIndex:100,
         borderRadius:'10px',
         color:'#1E4B5F',
@@ -424,27 +480,29 @@ const soilOptions = dashboardselections.soil_products.map( selection => (
 
         {
             selected_radio === 'Crop Suitability' ? 
-            <select name="" id="crop_selection"
-            placeholder=''
-            value={crop_}
-            onChange={onCropChanged}
+            <div 
+           
             style={{
                 // position:'absolute',
                 // top:'12vh',
-                width: '170px',
-                height: '30px',
+                // width: '170px',
+                // height: '30px',
+                color:'white',
                 borderRadius:'10px',
                 marginTop:'25px',
-                marginLeft:'100px',
-                outline:'none'
+                marginLeft:'70px',
+                outline:'none',zIndex:101
                 
                 
             
             }}>
-                 <option value="" >Select crop</option>
-                 { cropOptions }
+                 <Index />
+
+                 <button type='button' style={{marginTop:'20vh',  marginLeft:'70px'}} onClick={fetchCrop}>fetch</button>
                
-            </select> : <p style={{
+            </div> 
+            
+            : <p style={{
              marginTop:'25px',
              marginLeft:'100px'
             }}>Above Ground Biomass</p>
@@ -516,11 +574,60 @@ const soilOptions = dashboardselections.soil_products.map( selection => (
             </select>
     </>
     
-    :
+    : 
+    clicked_link === 'Ancillary Data' && open ? 
     
+    <div className="ancil_panel" style={{
+      position:'absolute',
+      left:'6.4vw',
+      top:'77vh',
+      backgroundColor:'#fff',
+      width:'500px',
+      height:'205px',
+      zIndex:100,
+      borderRadius:'10px',
+      color:'#1E4B5F',
+      fontWeight:'700',
+      fontFamily:'sans-serif',
+      fontSize:'14px'
+    }}>
+      <img src={close} alt="" style={{ marginLeft:'24.5vw', marginTop:'3px'}}  onClick={ close_selection} />
+     
+      {
+        ancil_data_list.map((item) => 
+        <>
+         
+        
+        <div style={{ display: 'flex', flexDirection:'row', gap:'0.1rem', padding:'4px', marginTop:'5px'}}>
+        <input type="checkbox" name="" id="" key={item} />
+        <span >{item}</span>
+        </div>
+        </>
+        
+        )
+
+      }
+
+
+
+    </div>
+    :
+
+    clicked_link === 'Land Use' ?
+    <div className="landuse" 
+    style={{ position:'absolute',
+    left:'6.4vw',
+    top:'64vh',
+    zIndex:100}}>
+         <Index />
+    </div>
+ 
+    :
     ''
 
 }
+
+
 
 
 

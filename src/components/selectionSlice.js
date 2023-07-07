@@ -2,7 +2,34 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     countries: ['Malawi', 'Guinea', 'Madagascar'],
-    districts: [],
+    districts: [
+        "Balaka",
+        "Blantyre",
+        "Chikwawa",
+        "Chiradzulu",
+        "Chitipa",
+        "Dedza",
+        "Dowa",
+        "Karonga",
+        "Kasungu",
+        "Lilongwe",
+        "Machinga",
+        "Mangochi",
+        "Mchinji",
+        "Mulanje",
+        "Mwanza",
+        "Mzimba",
+        "Nkhata Bay",
+        "Nkhotakota",
+        "Nsanje",
+        "Ntcheu",
+        "Ntchisi",
+        "Phalombe",
+        "Rumphi",
+        "Salima",
+        "Thyolo",
+        "Zomba"
+    ],
     selected_country:'Malawi',
     selected_district:'',
     selected_indicator:'',
@@ -14,7 +41,8 @@ const initialState = {
     crops:['Maize', 'Groundnuts', 'Tobacco', 'Cranberry', 'Tea'],
     climate_products:['Precipitation', 'Temperature', 'Elevation'],
     soil_products:['Soil Texture','Organic Carbon', 'Drainage', 'Cations', 'Nutrients'],
-    selected_soil:''
+    selected_soil:'',
+    ancil_data:['Road Network', 'Towns', 'Market Accessibility', 'Economic Activity', "Demographics"]
 }
 
 
@@ -54,5 +82,5 @@ const dashboardSelectionSlice = createSlice({
 })
 
 export const dashboardSelections = (state) => state.dashboardselections;
-export const { changeSelectedCountry, changeSelectedCrop, changeClimateProduct, changeSoilProduct} = dashboardSelectionSlice.actions
+export const { changeSelectedCountry, changeSelectedDistrict, changeSelectedCrop, changeClimateProduct, changeSoilProduct} = dashboardSelectionSlice.actions
 export default dashboardSelectionSlice.reducer
