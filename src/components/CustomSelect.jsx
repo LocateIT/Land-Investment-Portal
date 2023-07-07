@@ -43,7 +43,7 @@ const CustomSelect = (props) => {
   };
 
   return (
-    <div className="custom-select-container">
+    <div className="custom-select-container" style={{ borderRadius:'10px'}}>
       <div
         className={showOptionList ? "selected-text active" : "selected-text"}
         onClick={handleListDisplay}

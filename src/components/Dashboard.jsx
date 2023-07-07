@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import "leaflet"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
+import  axios from 'axios'
 
 import { dashboardSelections } from './selectionSlice';
 import { changeSelectedCountry,  changeSelectedDistrict, changeSelectedCrop, changeClimateProduct, changeSoilProduct} from './selectionSlice';
@@ -38,6 +39,7 @@ const Dashboard = () => {
     const [climate, setClimate] = useState('')
     const [soil_, setSoil] = useState('')
     const [district, setDistrict] = useState('')
+    
     const ancil_data_list = dashboardSlice.ancil_data
 
     let map = useRef(null);
@@ -45,6 +47,8 @@ const Dashboard = () => {
     let crop_name = useRef('')
     let indicator = useRef('')
     let wmsLayer = useRef(null)
+    let current_response = useRef(null)
+    let current_geojson = useRef(null)
     // let climate = useRef('')
 
 
@@ -58,7 +62,7 @@ const Dashboard = () => {
 
       //update the selected_region value using dispatch changeSelelcted region reducer
       dispatch(changeSelectedCountry(e.target.value))
-    //  fetchRegion()
+     fetchRegion()
    
   
   
@@ -75,6 +79,7 @@ const Dashboard = () => {
       //update the selected_region value using dispatch changeSelelcted region reducer
       dispatch(changeSelectedDistrict(e.target.value))
     //  fetchRegion()
+    fetchDistricts()
    
   
   
@@ -100,7 +105,8 @@ const Dashboard = () => {
 
       //update the selected_region value using dispatch changeSelelcted region reducer
       dispatch(changeSelectedCrop(e.target.value))
-    //  fetchRegion()
+    // fetchRegion()
+    // fetchRegion
    
   
   
@@ -241,6 +247,119 @@ const districtOptions = dashboardselections.districts.map( selection => (
       
           L.control.layers(baseMaps).addTo(map.current);
     }
+
+    //fetch countries
+    const fetchRegion = async() => {
+  
+      try {   
+        if(current_geojson.current) map.current.removeLayer(current_geojson.current)
+        if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+        // console.log(current_name.current, 'curent name')
+        // var basin = current_name.current
+        // console.log(basin, 'basin current')
+
+
+        const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL`);
+        console.log(wms.data)
+        var wms_resp = wms.data
+        const cql_fiter_column = wms_resp['wms']['cql_column']
+        const wms_layer_name = wms_resp['wms']['layer_name']
+        const district_cql = cql_fiter_column + "=" +district['district_id']
+
+        const resp = await axios.get(`http://139.84.229.39:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=${wms_layer_name}&outputFormat=application/json`);
+       
+        var aoi_data = resp.data
+        console.log(aoi_data, 'aoi response')
+        current_response.current = aoi_data
+        console.log(current_response.current, 'current aoi')
+    
+        console.log(current_response.current.features[0].geometry.coordinates, 'multipolygon')
+           // map.createPane("pane1000").style.zIndex = 300;
+           current_geojson.current = L.geoJSON(current_response.current, {
+            style: {
+              color: "black",
+              opacity: 1,
+              fillOpacity:0,
+              weight: 4
+            }
+            // pane: 'pane1000'
+          })
+          current_geojson.current.addTo(map.current)
+          
+          map.current.fitBounds(current_geojson.current.getBounds(), {
+                  padding: [50, 50],
+                });
+       
+        
+        
+      } catch (error) {
+        console.log( error)
+        
+      }
+    }
+    //fetch countries
+    const fetchDistricts = async() => {
+  
+      try {   
+        if(current_geojson.current) map.current.removeLayer(current_geojson.current)
+        if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+        // console.log(current_name.current, 'curent name')
+        // var basin = current_name.current
+        // console.log(basin, 'basin current')
+
+
+        const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL`);
+        console.log(wms.data)
+        var wms_resp = wms.data
+        const cql_fiter_column = wms_resp['wms']['cql_column']
+        const wms_layer_name = wms_resp['wms']['layer_name']
+        const id = wms_resp['district_id']
+     
+        const mapped = id.map((item) => {
+          return item.district_id
+        })
+        // console.log(mapped, 'mapped ids')
+
+        // console.log(id[0].district_id, 'idddddd')
+        const district_cql = cql_fiter_column + "=" +district+id[0].district_id
+        
+
+        // const resp = await axios.get(`http://139.84.229.39:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=${wms_layer_name}&outputFormat=application/json`);
+        
+          const resp = await axios.get("http://139.84.229.39:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName="
+          +wms_layer_name+"&outputFormat=application/json&CQL_FILTER="+district_cql);
+
+       
+        var aoi_data = resp.data
+        console.log(aoi_data, 'aoi response')
+        current_response.current = aoi_data
+        console.log(current_response.current, 'current aoi')
+    
+        // console.log(current_response.current.features[0].geometry.coordinates, 'multipolygon')
+           // map.createPane("pane1000").style.zIndex = 300;
+           current_geojson.current = L.geoJSON(current_response.current, {
+            style: {
+              color: "black",
+              opacity: 1,
+              fillOpacity:0,
+              weight: 4
+            }
+            // pane: 'pane1000'
+          })
+          current_geojson.current.addTo(map.current)
+          
+          map.current.fitBounds(current_geojson.current.getBounds(), {
+                  padding: [50, 50],
+                });
+       
+        
+        
+      } catch (error) {
+        console.log( error)
+        
+      }
+    }
+
 
 //fetch crop data
 const fetchCrop = () => {
@@ -498,7 +617,17 @@ const fetchCrop = () => {
             }}>
                  <Index />
 
-                 <button type='button' style={{marginTop:'20vh',  marginLeft:'70px'}} onClick={fetchCrop}>fetch</button>
+                 <button type='button' 
+                 style={{
+                  width: '100px', 
+                  height:'30px',
+                  marginTop:'10vh',  
+                  marginLeft:'80px', 
+                  borderRadius:'10px', 
+                  backgroundColor:'#1E4B5F',
+                  color:'#fff',
+                  outline:'none',
+                  border:'none'}} onClick={fetchCrop}>fetch</button>
                
             </div> 
             

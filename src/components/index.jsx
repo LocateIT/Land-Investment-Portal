@@ -32,7 +32,7 @@ const index = ({}) => {
     return (
       <div className="App">
         {/* <h3 className="title">Custom React Select</h3> */}
-        <div className="test">
+        <div className="test" >
           <CustomSelect
             defaultText={defaultSelectText}
             optionsList={countryList}
