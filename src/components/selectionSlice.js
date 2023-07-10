@@ -2,7 +2,11 @@ import { createSlice } from '@reduxjs/toolkit'
 import  axios from 'axios'
 
 const initialState = {
-    countries: ['Malawi', 'Guinea', 'Madagascar'],
+    countries:[ 
+    {value:'Malawi',label:'Malawi'},
+     {value:'Guinea', label:'Guinea'},
+     {value:'Madagascar', label:'Madagascar'}
+    ],
     districts: [
         "Balaka",
         "Blantyre",
@@ -32,7 +36,7 @@ const initialState = {
         "Zomba"
     ],
     districts_2:[],
-    selected_country:'Malawi',
+    selected_country:'',
     selected_district:'',
     selected_indicator:'',
     selected_product:'',

@@ -56,15 +56,15 @@ const Dashboard = () => {
 
 
  const onCountryChanged = e => {
-    const changed_country = e.target.value
+    const changed_country = e
     console.log(changed_country, 'changed_country')
     country_name.current = changed_country
   
 
-      setCountry(e.target.value)
+      setCountry(changed_country.value)
 
       //update the selected_region value using dispatch changeSelelcted region reducer
-      dispatch(changeSelectedCountry(e.target.value))
+      dispatch(changeSelectedCountry(changed_country.value))
      fetchRegion()
    
   
@@ -155,10 +155,9 @@ const Dashboard = () => {
 
 
  const countryOptions = dashboardselections.countries.map( selection => (
-    <option key={selection} value={selection}>
-        {selection}
-</option>
+    selection
 ))
+console.log(countryOptions, 'country options')
 
 const cropOptions = dashboardselections.crops.map( selection => (
     <option key={selection} value={selection} style={{ }}>
@@ -182,7 +181,11 @@ const districtOptions = dashboardselections.districts.map( selection => (
 </option>
 ))
 
-
+const snack_options = [
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' },
+];
 
 const districtOptions2 = district_option.map( selection => (
   <option key={selection.value} value={selection.label}>
@@ -507,12 +510,12 @@ const fetchCrop = () => {
     <div className="selections" style={{
         display:'flex',
         flexDirection:'row',
-        gap:'1rem',
+        gap:'0.2rem',
         position:'absolute',
         top:'12.4vh',
         zIndex:100
     }}>
-        <select name="" id="region_selection"
+        {/* <select  id="region_selection"
     placeholder=''
     value={country}
     onChange={onCountryChanged}
@@ -527,7 +530,14 @@ const fetchCrop = () => {
          <option value="" >Select Country</option>
          { countryOptions }
        
-    </select>
+    </select> */}
+
+<Select 
+    defaultValue={'Select Country'}
+    onChange={onCountryChanged}
+    options={countryOptions}
+    placeholder={'Select Country'}
+    />
 
     {/* <select name="" id="district_selection"
   
@@ -554,6 +564,7 @@ const fetchCrop = () => {
     defaultValue={'Select District'}
     onChange={onDistrictChanged}
     options={district_option}
+    placeholder={'Select District'}
     />
 
     </div>
@@ -566,7 +577,7 @@ const fetchCrop = () => {
           
             display:'flex',
             flexDirection: 'column',
-            gap:'5rem'
+            gap:'2.6rem'
         }}>
         {
             left_panel_icons.map((icon) => 
@@ -590,7 +601,7 @@ const fetchCrop = () => {
         position:'absolute',
         display:'flex',
         flexDirection: 'column',
-        gap:'6rem'
+        gap:'3.3rem'
     }}>
         
     {
@@ -636,7 +647,7 @@ const fetchCrop = () => {
     <div className="selection_panel" style={{
         position:'absolute',
         left:'6.4vw',
-        top:'17.2vh',
+        top:'30.2vh',
         backgroundColor:'#fff',
         width:'400px',
         height:'355px',
@@ -761,7 +772,7 @@ const fetchCrop = () => {
             onChange={onClimateChanged}
             style={{
                 position:'absolute',
-                top:'31.8vh',
+                top:'39.8vh',
                 left:'1.2vw',
                 width: '170px',
                 height: '35px',
@@ -790,7 +801,7 @@ const fetchCrop = () => {
             onChange={onSoilChanged}
             style={{
                 position:'absolute',
-                top:'45.8vh',
+                top:'49.8vh',
                 left:'1.2vw',
                 width: '170px',
                 height: '35px',

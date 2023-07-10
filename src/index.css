@@ -96,7 +96,7 @@ button:focus-visible {
 .link_icons{
   display: flex;
   flex-direction: row;
-  gap: 5rem;
+  gap: 6rem;
   height: 30px;
   margin-left: 52vw;
   margin-top: 20px;
@@ -109,14 +109,14 @@ outline: none;
 }
 .left_side_panel{
   width: 120px;
-height: 770px;
+height: 570px;
 border-radius: 10px;
 background: #1E4B5F;
 position: absolute;
-top: 16.5vh;
+top: 29.5vh;
 display: flex;
 flex-direction: row;
-gap: 5rem;
+gap: 1rem;
 margin-top: 5px;
 z-index:100
 }
@@ -124,6 +124,13 @@ z-index:100
   height: 30px;
 }
 
+.css-13cymwt-control{
+  background-color: rgb(255, 255, 255) !important;
+  width: 170px;
+  border-radius: 10px !important;
+  z-index: 120;
+  /* margin-left: 6.2vw; */
+}
 
 @media (min--moz-device-pixel-ratio: 1.1),
        (-o-min-device-pixel-ratio: 11/10), 

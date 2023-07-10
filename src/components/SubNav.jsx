@@ -28,6 +28,7 @@ const SubNav = () => {
             <span>LIP</span>
             |
             <span>{dashboardSlice.selected_country}</span>
+            {/* {dashboardSlice.selected_country} */}
             <img src={right} alt="" className='right_icon' /> 
             <span>{dashboardSlice.selected_district}</span>
 
