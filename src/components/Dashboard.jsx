@@ -8,7 +8,8 @@ import "leaflet/dist/leaflet.css"
 import  axios from 'axios'
 
 import { dashboardSelections } from './selectionSlice';
-import { changeSelectedCountry,  changeSelectedDistrict, changeSelectedCrop, changeClimateProduct, changeSoilProduct} from './selectionSlice';
+import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct} from './selectionSlice';
+import Select from 'react-select'
 
 import Navbar from './Navbar'
 import '.././index.css'
@@ -39,6 +40,8 @@ const Dashboard = () => {
     const [climate, setClimate] = useState('')
     const [soil_, setSoil] = useState('')
     const [district, setDistrict] = useState('')
+    const [district_option, setdistrict_option] = useState([])
+    const [selected_district_id, setselected_district_id] = useState(null)
     
     const ancil_data_list = dashboardSlice.ancil_data
 
@@ -69,17 +72,18 @@ const Dashboard = () => {
 
   }
   const onDistrictChanged = e => {
-    const changed_district = e.target.value
+    const changed_district = e
     console.log(changed_district, 'changed_district')
     // country_name.current = changed_country
   
 
-      setDistrict(e.target.value)
+      setDistrict({id:changed_district.value, name:changed_district.label})
+      // console.log(e.target.value, 'e.target.value')
 
       //update the selected_region value using dispatch changeSelelcted region reducer
-      dispatch(changeSelectedDistrict(e.target.value))
-    //  fetchRegion()
-    fetchDistricts()
+      dispatch(changeSelectedDistrict(changed_district.label))
+    
+    fetchDistricts(changed_district.value)
    
   
   
@@ -180,6 +184,40 @@ const districtOptions = dashboardselections.districts.map( selection => (
 
 
 
+const districtOptions2 = district_option.map( selection => (
+  <option key={selection.value} value={selection.label}>
+      {selection.label}
+</option>
+))
+const customoptions = (anArray) =>{
+  var opt = anArray.map((item) => {
+     return (
+        <option key={item.value} value={item.label}  > 
+        {item.label} 
+        </option>
+     )
+  })
+return opt
+  
+}
+console.log(district_option, 'district option')
+
+
+
+
+
+
+
+
+
+// const districtID = district_option.map( selection => (
+//   selection.value
+// ))
+// console.log(districtID, 'district ID')
+
+
+
+
     //map setup
 
     const setLeafletMap = () => {
@@ -248,6 +286,35 @@ const districtOptions = dashboardselections.districts.map( selection => (
           L.control.layers(baseMaps).addTo(map.current);
     }
 
+const fetchOptions = async() => {
+    const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL`);
+        console.log(wms.data)
+        var wms_resp = wms.data
+        const cql_fiter_column = wms_resp['wms']['cql_column']
+        const wms_layer_name = wms_resp['wms']['layer_name']
+        const id = wms_resp['district_id']
+        console.log(id, 'wms resp ids')
+        const custom_districts = () => {
+          var option = id.map( (item) => {
+            return({ value: item.district_id, label:item.distinct_name
+
+            })
+            
+          })
+          console.log(option, 'options')
+
+    
+          // const districtids = district_option.map( (selection) => selection.value)
+          // console.log(districtids, 'distritct ids')
+       return  setdistrict_option(option)
+          //  return option
+
+        }
+        custom_districts()
+
+      
+      }
+
     //fetch countries
     const fetchRegion = async() => {
   
@@ -296,9 +363,12 @@ const districtOptions = dashboardselections.districts.map( selection => (
         console.log( error)
         
       }
+
+      fetchOptions()
+      // customoptions()
     }
     //fetch countries
-    const fetchDistricts = async() => {
+    const fetchDistricts = async(id) => {
   
       try {   
         if(current_geojson.current) map.current.removeLayer(current_geojson.current)
@@ -308,20 +378,32 @@ const districtOptions = dashboardselections.districts.map( selection => (
         // console.log(basin, 'basin current')
 
 
-        const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL`);
+       
+        
+        // function titleCase(str) {
+        //   str = str.toLowerCase().split(' ');
+        //   for (var i = 0; i < str.length; i++) {
+        //       str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+        //   }
+        //   return str.join(' ');
+        //   }
+     
+        // const mapped = id.map((item) => {
+        //   return ({ value: item.district_id, label:item.district_name}) 
+           
+        // })
+        // console.log(mapped, 'mapped object ids')
+
+        // console.log(id[0].district_id, 'idddddd') 
+        if(district_option != null) {
+          console.log(district_option)
+          const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL`);
         console.log(wms.data)
         var wms_resp = wms.data
         const cql_fiter_column = wms_resp['wms']['cql_column']
         const wms_layer_name = wms_resp['wms']['layer_name']
-        const id = wms_resp['district_id']
-     
-        const mapped = id.map((item) => {
-          return item.district_id
-        })
-        // console.log(mapped, 'mapped ids')
-
-        // console.log(id[0].district_id, 'idddddd')
-        const district_cql = cql_fiter_column + "=" +district+id[0].district_id
+        // const id = wms_resp['district_id']
+        const district_cql = cql_fiter_column + "="  +id
         
 
         // const resp = await axios.get(`http://139.84.229.39:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=${wms_layer_name}&outputFormat=application/json`);
@@ -351,6 +433,9 @@ const districtOptions = dashboardselections.districts.map( selection => (
           map.current.fitBounds(current_geojson.current.getBounds(), {
                   padding: [50, 50],
                 });
+
+        }
+        
        
         
         
@@ -371,7 +456,7 @@ const fetchCrop = () => {
         pane: 'pane400',
         layers: `Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability`,
         crs:L.CRS.EPSG4326,
-        styles: `Crop_Production_Crop_Suitability_${dashboardSlice.selected_crop}_${district}`,
+        styles: `Crop_Production_Crop_Suitability_${dashboardSlice.selected_crop}_${district.name}`,
         // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
       
         format: 'image/png',
@@ -392,6 +477,7 @@ const fetchCrop = () => {
 
     useEffect(() => {
         setLeafletMap()
+        
         // fetchRegion()
         // store.dispatch(setRegion())
         // eeInitialize();
@@ -401,6 +487,18 @@ const fetchCrop = () => {
     
       
     }, [])
+    useEffect(() => {
+      // setLeafletMap()
+      
+      // fetchRegion()
+      // store.dispatch(setRegion())
+      // eeInitialize();
+      // fetchEarthEngine()
+     
+      
+  
+    
+  }, [district_option])
 
   return (
     <>
@@ -431,9 +529,9 @@ const fetchCrop = () => {
        
     </select>
 
-    <select name="" id="district_selection"
+    {/* <select name="" id="district_selection"
   
-    value={district}
+   
     onChange={onDistrictChanged}
     style={{
       borderRadius: '10px',
@@ -446,9 +544,17 @@ const fetchCrop = () => {
 
     }}
     >
-         <option value="" >Select District</option>
-                {districtOptions}
-    </select>
+        
+                <option value="" hidden>Select District</option>
+         {customoptions(district_option)}
+    </select> */}
+
+
+    <Select 
+    defaultValue={'Select District'}
+    onChange={onDistrictChanged}
+    options={district_option}
+    />
 
     </div>
     

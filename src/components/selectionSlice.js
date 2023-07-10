@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import  axios from 'axios'
 
 const initialState = {
     countries: ['Malawi', 'Guinea', 'Madagascar'],
@@ -30,6 +31,7 @@ const initialState = {
         "Thyolo",
         "Zomba"
     ],
+    districts_2:[],
     selected_country:'Malawi',
     selected_district:'',
     selected_indicator:'',
@@ -54,8 +56,37 @@ const dashboardSelectionSlice = createSlice({
             state.selected_country = action.payload
            
         },
-        changeSelectedDistrict:(state, action) => {
+        // showDistrictOptions:async (state, action) => {
+        //     // state.districts_2 = action.payload
+        //     try {
+        //         const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL`);
+        //         console.log(wms.data)
+        //         var wms_resp = wms.data
+        //         const cql_fiter_column = wms_resp['wms']['cql_column']
+        //         const wms_layer_name = wms_resp['wms']['layer_name']
+        //         const id = wms_resp['district_id']
+        //         console.log(id, 'wms resp ids')
+        //         // const custom_districts = () => {
+        //           var option = id.map( (item) => {
+        //             return({ value: item.district_id, label:item.distinct_name
+        
+        //             })
+                    
+        //           })
+        //           console.log(option, 'options')
+        //           state.districts_2 = option
+        //           return option
+                
+        //     } catch (error) {
+        //         console.log(error)
+                
+        //     }
+
+        // },
+        changeSelectedDistrict: (state, action) => {
             state.selected_district = action.payload
+            
+
            
         },
         changeSelectedIndicator:(state, action) => {
@@ -75,6 +106,13 @@ const dashboardSelectionSlice = createSlice({
         },
         changeSoilProduct:(state, action) => {
             state.selected_soil = action.payload
+        },
+        fetchDistricts:(state, action) => {
+            state.districts_2 = action.payload
+        //   return option
+        // }
+        // custom_districts()
+        
         }
 
 
@@ -82,5 +120,7 @@ const dashboardSelectionSlice = createSlice({
 })
 
 export const dashboardSelections = (state) => state.dashboardselections;
-export const { changeSelectedCountry, changeSelectedDistrict, changeSelectedCrop, changeClimateProduct, changeSoilProduct} = dashboardSelectionSlice.actions
+export const { changeSelectedCountry, changeSelectedDistrict,
+    //  showDistrictOptions, fetchDistricts, 
+     changeSelectedCrop, changeClimateProduct, changeSoilProduct} = dashboardSelectionSlice.actions
 export default dashboardSelectionSlice.reducer
