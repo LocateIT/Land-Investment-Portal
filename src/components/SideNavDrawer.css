@@ -1,0 +1,26 @@
+.side-nav-drawer {
+  width: 25vw;
+  height: 90%;
+  position: absolute;
+  top: 12vh;
+  right: -550px;
+  background-color: #f0f0f0;
+  transition: margin-left 0.7s ease-in-out;
+  z-index: 103;
+}
+
+
+
+.side-nav-drawer.open {
+    right: 0vw;
+    transform: translateX(0);
+}
+
+.side-nav-content {
+  padding: 20px;
+}
+
+.close-btn {
+  display: block;
+  margin-top: 80vh;
+}

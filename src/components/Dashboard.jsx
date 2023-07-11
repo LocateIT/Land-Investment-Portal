@@ -8,7 +8,7 @@ import "leaflet/dist/leaflet.css"
 import  axios from 'axios'
 
 import { dashboardSelections } from './selectionSlice';
-import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct} from './selectionSlice';
+import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels} from './selectionSlice';
 import Select from 'react-select'
 
 import Navbar from './Navbar'
@@ -17,6 +17,7 @@ import SubNav from './SubNav'
 import Index from './index'
 import ClimateIndex from './ClimateIndex'
 import CustomClimateSelect from './CustomClimate';
+import SideNavDrawer from './SideNavDrawer';
 import crop from '../assets/crop.svg'
 import cloud from '../assets/cloud.svg'
 import soil from '../assets/soil.svg'
@@ -24,6 +25,7 @@ import land from '../assets/land.svg'
 import moon from '../assets/moon.svg'
 import ancil from '../assets/ancil.svg'
 import close from '../assets/close_.svg'
+import open_icon from '../assets/open.svg'
 const Dashboard = () => {
     const dispatch = useDispatch()
     const dashboardselections = useSelector(dashboardSelections)
@@ -44,6 +46,9 @@ const Dashboard = () => {
     const [district, setDistrict] = useState('')
     const [district_option, setdistrict_option] = useState([])
     const [selected_district_id, setselected_district_id] = useState(null)
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [stats_figures, setstats_figures] = useState([])
+    const [stats_labels, setstats_labels] = useState([])
     
     const ancil_data_list = dashboardSlice.ancil_data
 
@@ -57,6 +62,12 @@ const Dashboard = () => {
     let agb_legend = useRef(null)
     let crop_legend = useRef(null)
     let climate_legend = useRef(null)
+
+    const handleDrawerToggle = () => {
+      setIsDrawerOpen(!isDrawerOpen);
+      // document.getElementsByClassName("left_side_panel").style.css.backgroundColor='red'
+      document.querySelector(".leaflet-control-layers leaflet-control").style.right = "-25vw"
+    };
 
 
  const onCountryChanged = e => {
@@ -95,7 +106,6 @@ const Dashboard = () => {
   }
 
   
-
   const onIndicatorChanged = e => {
     const changed_indicator = e.target.value
     console.log(changed_indicator, 'changed indicator')
@@ -208,19 +218,6 @@ return opt
   
 }
 console.log(district_option, 'district option')
-
-
-
-
-
-
-
-
-
-// const districtID = district_option.map( selection => (
-//   selection.value
-// ))
-// console.log(districtID, 'district ID')
 
 
 
@@ -451,6 +448,26 @@ const fetchOptions = async() => {
         
       }
     }
+//fetch stats
+ const fetchCropStats = async () => {
+ 
+  try {
+    const response = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_statistics/?data_name=${dashboardSlice.selected_crop}&district_name=${district.name}&country_name=Malawi`);
+    console.log('crop stats',response.data)
+    var labels = Object.keys(response.data[0])
+    var figures = Object.values(response.data[0])
+    console.log('stats figures and labels', figures, labels)
+    setstats_figures(figures)
+    dispatch(changeStatsFigures(figures))
+
+
+    setstats_labels(labels)
+    dispatch(changeStatsLabels(labels))
+  } catch (error) {
+    
+  }
+
+}
 
 
 //fetch crop data
@@ -501,6 +518,9 @@ const fetchCrop = () => {
   
      }
      addCropLegend()
+
+
+     fetchCropStats()
   
     }
 
@@ -608,6 +628,7 @@ map.current.createPane("pane400").style.zIndex = 200;
   }
 
 }
+
 
 
 
@@ -1035,6 +1056,13 @@ map.current.createPane("pane400").style.zIndex = 200;
     ''
 
 }
+
+<img src={open_icon} alt="" 
+style={{ position:'absolute', zIndex:120, right:'0.2vw', top:'50vh'}} 
+onClick={handleDrawerToggle}
+ />
+
+<SideNavDrawer isOpen={isDrawerOpen} onClose={handleDrawerToggle} />
 
 
 

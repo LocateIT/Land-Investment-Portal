@@ -48,7 +48,9 @@ const initialState = {
     climate_products:['Precipitation', 'Temperature', "Evapotranspiration", 'Elevation'],
     soil_products:['Soil Texture','Organic Carbon', 'Drainage', 'Cations', 'Nutrients'],
     selected_soil:'',
-    ancil_data:['Road Network', 'Towns', 'Market Accessibility', 'Economic Activity', "Demographics"]
+    ancil_data:['Road Network', 'Towns', 'Market Accessibility', 'Economic Activity', "Demographics"],
+    stats_figures:[],
+    stats_labels:[]
 }
 
 
@@ -118,6 +120,13 @@ const dashboardSelectionSlice = createSlice({
         // custom_districts()
         
         },
+        changeStatsFigures:(state, action) => {
+            state.stats_figures = action.payload
+            
+        },
+        changeStatsLabels:(state, action) => {
+            state.stats_labels = action.payload
+        }
        
 
 
@@ -127,5 +136,5 @@ const dashboardSelectionSlice = createSlice({
 export const dashboardSelections = (state) => state.dashboardselections;
 export const { changeSelectedCountry, changeSelectedDistrict,
     //  showDistrictOptions, fetchDistricts, 
-     changeSelectedCrop, changeClimateProduct, changeSoilProduct} = dashboardSelectionSlice.actions
+     changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels} = dashboardSelectionSlice.actions
 export default dashboardSelectionSlice.reducer
