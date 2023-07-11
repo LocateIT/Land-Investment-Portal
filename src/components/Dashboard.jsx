@@ -553,17 +553,19 @@ const fetchCrop = () => {
 
   
 }
-const fetchClimate = () => {
+const fetchClimate = (e) => {
+  console.log(e, 'event')
+  const climate_name = e
   // console.log('climate data')
-//   dispatch(changeClimateProduct(e.target.getAttribute("data-name")))
+  dispatch(changeClimateProduct(climate_name))
 if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
 map.current.createPane("pane400").style.zIndex = 200;
   if(clicked_link === 'Climate') {
     wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
       pane: 'pane400',
-      layers: `Landinvestment_datasets:${dashboardSlice.selected_climate}_Climate_and_Geography_Climate`,
+      layers: `Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate`,
       crs:L.CRS.EPSG4326,
-      styles: `Climate_and_Geography_Climate_${dashboardSlice.selected_climate}_${district.name}`,
+      styles: `Climate_and_Geography_Climate_${climate_name}_${district.name}`,
       // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
     
       format: 'image/png',
@@ -588,7 +590,7 @@ map.current.createPane("pane400").style.zIndex = 200;
       climate_legend.current.onAdd = function(map) {
     var div = L.DomUtil.create("div", "legend");
         
-    div.innerHTML += (`<p>${dashboardSlice.selected_district} ${dashboardSlice.selected_climate}</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_climate}_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+    div.innerHTML += (`<p>${dashboardSlice.selected_district} ${climate_name}</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
 
         
     let draggable = new L.Draggable(div); //the legend can be dragged around the div

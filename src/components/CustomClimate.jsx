@@ -42,8 +42,8 @@ const CustomClimateSelect = ({ fetchClimateData }) => {
     setDefaultSelectText(e.target.getAttribute("data-name"));
     setShowOptionList(false);
     console.log(e.target.getAttribute("data-name"));
-    
-    fetchClimateData(dispatch(changeClimateProduct(e.target.getAttribute("data-name"))))
+    // dispatch(changeClimateProduct(e.target.getAttribute("data-name")))
+    fetchClimateData(e.target.getAttribute("data-name"))
     // const { fetchClimateData } = props
     
   };
