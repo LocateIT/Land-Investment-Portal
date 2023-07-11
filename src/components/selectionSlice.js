@@ -36,7 +36,7 @@ const initialState = {
         "Zomba"
     ],
     districts_2:[],
-    selected_country:'',
+    selected_country:'Malawi',
     selected_district:'',
     selected_indicator:'',
     selected_product:'',

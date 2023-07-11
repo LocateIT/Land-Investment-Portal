@@ -473,7 +473,32 @@ const fetchCrop = () => {
    wmsLayer.current.addTo(map.current);
   
     }
+
+    if(clicked_link === 'Crop Production' && selected_radio === 'Agricultural Productivity') {
+    
+      wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+        pane: 'pane400',
+        layers: `Landinvestment_datasets:Above_Ground_Biomass_Crop_Production_Agricultural_Productivity`,
+        crs:L.CRS.EPSG4326,
+        styles: `Crop_Production_Agricultural_Productivity_Above_Ground_Biomass_${district.name}`,
+        // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+      
+        format: 'image/png',
+        transparent: true,
+        opacity:1.0
+        
+        
+       
+   });
+  
+   wmsLayer.current.addTo(map.current);
+  
+    }
+
+  
 }
+
+
 
 
 
@@ -734,17 +759,7 @@ const fetchCrop = () => {
             }}>
                  <Index />
 
-                 <button type='button' 
-                 style={{
-                  width: '100px', 
-                  height:'30px',
-                  marginTop:'10vh',  
-                  marginLeft:'80px', 
-                  borderRadius:'10px', 
-                  backgroundColor:'#1E4B5F',
-                  color:'#fff',
-                  outline:'none',
-                  border:'none'}} onClick={fetchCrop}>fetch</button>
+                
                
             </div> 
             
@@ -755,7 +770,17 @@ const fetchCrop = () => {
             
         }
 
-        
+<button type='button' 
+                 style={{
+                  width: '100px', 
+                  height:'30px',
+                  marginTop:'8vh',  
+                  marginLeft:'140px', 
+                  borderRadius:'10px', 
+                  backgroundColor:'#1E4B5F',
+                  color:'#fff',
+                  outline:'none',
+                  border:'none'}} onClick={fetchCrop}>fetch</button>
 
 
     </div>
