@@ -37,7 +37,7 @@ const initialState = {
     ],
     districts_2:[],
     selected_country:'Malawi',
-    selected_district:'',
+    selected_district:'Balaka',
     selected_indicator:'',
     selected_product:'',
     selected_crop:'',
@@ -117,7 +117,8 @@ const dashboardSelectionSlice = createSlice({
         // }
         // custom_districts()
         
-        }
+        },
+       
 
 
     }

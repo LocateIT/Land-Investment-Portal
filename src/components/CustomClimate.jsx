@@ -2,20 +2,23 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 
 import { dashboardSelections } from './selectionSlice';
-import {  changeClimateProduct } from './selectionSlice';
+import {  changeClimateProduct} from './selectionSlice';
 
-const CustomSelect = (props) => {
+const CustomClimateSelect = ({ fetchClimateData }) => {
   const dispatch = useDispatch()
     const dashboardselections = useSelector(dashboardSelections)
     //return the entire dashboard slice
     const dashboardSlice = useSelector((state) => state.dashboardselections)
-  const [defaultSelectText, setDefaultSelectText] = useState("");
+    const [defaultSelectText, setDefaultSelectText] = useState("Select product")
   const [showOptionList, setShowOptionList] = useState(false);
-  const { optionsList } = props;
+  const [optionsList, setOptionsList] = useState(dashboardSlice.climate_products)
+
+
+
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
-    setDefaultSelectText(props.defaultText);
+    setDefaultSelectText(defaultSelectText);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -39,9 +42,12 @@ const CustomSelect = (props) => {
     setDefaultSelectText(e.target.getAttribute("data-name"));
     setShowOptionList(false);
     console.log(e.target.getAttribute("data-name"));
-    dispatch(changeClimateProduct(e.target.getAttribute("data-name")))
+    
+    fetchClimateData(dispatch(changeClimateProduct(e.target.getAttribute("data-name"))))
+    // const { fetchClimateData } = props
+    
   };
-
+  
   return (
     <div className="custom-select-container" style={{ borderRadius:'10px'}}>
       <div
@@ -58,6 +64,7 @@ const CustomSelect = (props) => {
               data-name={option}
               key={option}
               onClick={handleOptionClick}
+              onChange={fetchClimateData}
             >
               {option}
             </li>
@@ -68,4 +75,4 @@ const CustomSelect = (props) => {
   );
 };
 
-export default CustomSelect;
+export default CustomClimateSelect;

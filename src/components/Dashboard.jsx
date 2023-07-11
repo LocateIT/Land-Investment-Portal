@@ -16,6 +16,7 @@ import '.././index.css'
 import SubNav from './SubNav'
 import Index from './index'
 import ClimateIndex from './ClimateIndex'
+import CustomClimateSelect from './CustomClimate';
 import crop from '../assets/crop.svg'
 import cloud from '../assets/cloud.svg'
 import soil from '../assets/soil.svg'
@@ -55,6 +56,7 @@ const Dashboard = () => {
     let current_geojson = useRef(null)
     let agb_legend = useRef(null)
     let crop_legend = useRef(null)
+    let climate_legend = useRef(null)
 
 
  const onCountryChanged = e => {
@@ -119,15 +121,15 @@ const Dashboard = () => {
 
   }
   const onClimateChanged = e => {
-    const changed_climate = e.target.value
+    const changed_climate = e.target.getAttribute("data-name")
     console.log(changed_climate, 'changed_climate')
     // climate.current = changed_climate
   
 
-      setClimate(e.target.value)
+      setClimate(e.target.getAttribute("data-name"))
 
       //update the selected_region value using dispatch changeSelelcted region reducer
-      dispatch(changeClimateProduct(e.target.value))
+      dispatch(changeClimateProduct(e.target.getAttribute("data-name")))
     
   }
   const onSoilChanged = e => {
@@ -551,6 +553,59 @@ const fetchCrop = () => {
 
   
 }
+const fetchClimate = () => {
+  // console.log('climate data')
+//   dispatch(changeClimateProduct(e.target.getAttribute("data-name")))
+if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+map.current.createPane("pane400").style.zIndex = 200;
+  if(clicked_link === 'Climate') {
+    wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+      pane: 'pane400',
+      layers: `Landinvestment_datasets:${dashboardSlice.selected_climate}_Climate_and_Geography_Climate`,
+      crs:L.CRS.EPSG4326,
+      styles: `Climate_and_Geography_Climate_${dashboardSlice.selected_climate}_${district.name}`,
+      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+    
+      format: 'image/png',
+      transparent: true,
+      opacity:1.0
+      
+      
+     
+ });
+
+ wmsLayer.current.addTo(map.current);
+
+  //add legend
+  const addClimateLegend = () => {
+    if(climate_legend.current)map.current.removeControl(climate_legend.current)
+    if(crop_legend.current)map.current.removeControl(crop_legend.current)
+    if(agb_legend.current)map.current.removeControl(agb_legend.current)
+    if(wmsLayer.current){
+      var legend = L.control({position:'bottomright'});
+      climate_legend.current = legend
+
+      climate_legend.current.onAdd = function(map) {
+    var div = L.DomUtil.create("div", "legend");
+        
+    div.innerHTML += (`<p>${dashboardSlice.selected_district} ${dashboardSlice.selected_climate}</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_climate}_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+
+        
+    let draggable = new L.Draggable(div); //the legend can be dragged around the div
+    draggable.enable();
+
+    return div;
+    };
+
+    climate_legend.current.addTo(map.current);
+    }
+
+   }
+   addClimateLegend()
+
+  }
+
+}
 
 
 
@@ -576,6 +631,7 @@ const fetchCrop = () => {
       // store.dispatch(setRegion())
       // eeInitialize();
       // fetchEarthEngine()
+     
      
       
   
@@ -888,7 +944,9 @@ const fetchCrop = () => {
               
           
           }}>
-            <ClimateIndex />
+            <CustomClimateSelect 
+           fetchClimateData={fetchClimate}
+            />
               
             </div>
             

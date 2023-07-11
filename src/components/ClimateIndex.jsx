@@ -1,20 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { useState } from "react";
-import CustomClimate from "./CustomClimate"
+import CustomClimate from "./CustomClimate";
 import { useDispatch, useSelector } from 'react-redux'
 import { dashboardSelections } from './selectionSlice'
 
 import "./styles.css";
 
 
-const index = ({}) => {
+const index = ({}, props) => {
   const dispatch = useDispatch()
     const dashboardselections = useSelector(dashboardSelections)
     //return the entire dashboard slice
     const dashboardSlice = useSelector((state) => state.dashboardselections)
   const [showList, setShowList] = useState(false)
-  const [defaultSelectText, setDefaultSelectText] = useState("Select Product")
+  const [defaultSelectText, setDefaultSelectText] = useState("Select product")
   const [countryList, setCountryList] = useState(dashboardSlice.climate_products)
 
   
@@ -28,6 +28,8 @@ const index = ({}) => {
   //     ]
   //   };
   // }
+  const { fetchClimateData } = props
+   
   
     return (
       <div className="App">
@@ -36,6 +38,7 @@ const index = ({}) => {
           <CustomClimate
             defaultText={defaultSelectText}
             optionsList={countryList}
+            fetchClimateData={fetchClimateData}
           />
         </div>
        
