@@ -30,7 +30,7 @@ const SubNav = () => {
             <span>{dashboardSlice.selected_country}</span>
             {/* {dashboardSlice.selected_country} */}
             <img src={right} alt="" className='right_icon' /> 
-            <span>{dashboardSlice.selected_district}</span>
+            <span>{dashboardSlice.selected_district} || {dashboardSlice.selected_product}</span>
 
     </div>
   )

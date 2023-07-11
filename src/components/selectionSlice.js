@@ -39,7 +39,7 @@ const initialState = {
     selected_country:'Malawi',
     selected_district:'Balaka',
     selected_indicator:'',
-    selected_product:'',
+    selected_product:'Crop Suitability',
     selected_crop:'',
     selected_climate:'',
     indicators:['Crop Production', 'Climate', 'Soil Fertility', 'Land Use', 'Night-time Light', 'Ancillary Data'],
@@ -134,7 +134,6 @@ const dashboardSelectionSlice = createSlice({
 })
 
 export const dashboardSelections = (state) => state.dashboardselections;
-export const { changeSelectedCountry, changeSelectedDistrict,
-    //  showDistrictOptions, fetchDistricts, 
-     changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels} = dashboardSelectionSlice.actions
+export const { changeSelectedCountry, changeSelectedDistrict, 
+    changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels, changeSelectedProduct} = dashboardSelectionSlice.actions
 export default dashboardSelectionSlice.reducer

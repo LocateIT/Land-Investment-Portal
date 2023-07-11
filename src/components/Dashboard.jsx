@@ -8,7 +8,7 @@ import "leaflet/dist/leaflet.css"
 import  axios from 'axios'
 
 import { dashboardSelections } from './selectionSlice';
-import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels} from './selectionSlice';
+import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels, changeSelectedProduct} from './selectionSlice';
 import Select from 'react-select'
 
 import Navbar from './Navbar'
@@ -66,7 +66,7 @@ const Dashboard = () => {
     const handleDrawerToggle = () => {
       setIsDrawerOpen(!isDrawerOpen);
       // document.getElementsByClassName("left_side_panel").style.css.backgroundColor='red'
-      document.querySelector(".leaflet-control-layers leaflet-control").style.right = "-25vw"
+      // document.querySelector(".leaflet-control-layers leaflet-control").style.right = "-25vw"
     };
 
 
@@ -158,6 +158,7 @@ const Dashboard = () => {
   const onRadioChange = e => {
     setSelected_radio(e.target.value)
     console.log(e.target.value) //logs agri prod, crop suitabbility
+    dispatch(changeSelectedProduct(e.target.value))
 
   }
 
@@ -469,6 +470,27 @@ const fetchOptions = async() => {
 
 }
 
+const fetchAGBStats = async () => {
+ 
+  try {
+    const response = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_statistics/?data_name=Above Ground Biomass&district_name=${district.name}&country_name=Malawi`);
+    console.log('crop stats',response.data)
+    var labels = Object.keys(response.data[0])
+    var figures = Object.values(response.data[0])
+    console.log('stats figures and labels', figures, labels)
+    setstats_figures(figures)
+    dispatch(changeStatsFigures(figures))
+
+
+    setstats_labels(labels)
+    dispatch(changeStatsLabels(labels))
+  } catch (error) {
+    
+  }
+
+}
+
+
 
 //fetch crop data
 const fetchCrop = () => {
@@ -568,6 +590,8 @@ const fetchCrop = () => {
 
    }
    addAGBLegend()
+
+   fetchAGBStats()
   
     }
 
