@@ -15,6 +15,7 @@ import Navbar from './Navbar'
 import '.././index.css'
 import SubNav from './SubNav'
 import Index from './index'
+import ClimateIndex from './ClimateIndex'
 import crop from '../assets/crop.svg'
 import cloud from '../assets/cloud.svg'
 import soil from '../assets/soil.svg'
@@ -52,7 +53,7 @@ const Dashboard = () => {
     let wmsLayer = useRef(null)
     let current_response = useRef(null)
     let current_geojson = useRef(null)
-    // let climate = useRef('')
+    let agb_legend = useRef(null)
 
 
  const onCountryChanged = e => {
@@ -492,6 +493,31 @@ const fetchCrop = () => {
    });
   
    wmsLayer.current.addTo(map.current);
+
+   //add legend
+   const addAGBLegend = () => {
+    if(agb_legend.current)map.removeControl(agb_legend.current)
+    if(wmsLayer.current){
+      var legend = L.control({position:'bottomright'});
+      agb_legend.current = legend
+
+      agb_legend.current.onAdd = function(map) {
+    var div = L.DomUtil.create("div", "legend");
+        
+    div.innerHTML += (`<p>${district.name} Above Ground Biomass </p>`) + '<img src="' + "http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:Elevation_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '" />' ;
+
+        
+    let draggable = new L.Draggable(div); //the legend can be dragged around the div
+    draggable.enable();
+
+    return div;
+    };
+
+    agb_legend.current.addTo(map.current);
+    }
+
+   }
+   addAGBLegend()
   
     }
 
@@ -791,7 +817,7 @@ const fetchCrop = () => {
     
     clicked_link === 'Climate'? 
     <>
-    <select name="" id="climate_selection"
+    {/* <select name="" id="climate_selection"
             placeholder=''
             value={climate}
             onChange={onClimateChanged}
@@ -813,7 +839,31 @@ const fetchCrop = () => {
                  <option value="" >Select Product</option>
                  { climateOptions }
                
-            </select>
+            </select> */}
+            <div id="climate_selection" 
+            style={{
+              position:'absolute',
+              top:'39.8vh',
+              left:'1.2vw',
+              width: '170px',
+              height: '35px',
+              borderRadius:'10px',
+              marginTop:'25px',
+              marginLeft:'100px',
+              outline:'none',
+              zIndex:100,
+              color:'white',
+              fontWeight:'600',
+              fontFamily:'sans-serif',
+              fontSize:'14px'
+              
+              
+          
+          }}>
+            <ClimateIndex />
+              
+            </div>
+            
     </>
     
     : 

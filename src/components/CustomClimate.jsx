@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 
 import { dashboardSelections } from './selectionSlice';
-import { changeSelectedCountry, changeSelectedCrop, changeClimateProduct, changeSoilProduct} from './selectionSlice';
+import {  changeClimateProduct } from './selectionSlice';
 
 const CustomSelect = (props) => {
   const dispatch = useDispatch()
@@ -39,7 +39,7 @@ const CustomSelect = (props) => {
     setDefaultSelectText(e.target.getAttribute("data-name"));
     setShowOptionList(false);
     console.log(e.target.getAttribute("data-name"));
-    dispatch(changeSelectedCrop(e.target.getAttribute("data-name")))
+    dispatch(changeClimateProduct(e.target.getAttribute("data-name")))
   };
 
   return (

@@ -45,7 +45,7 @@ const initialState = {
     indicators:['Crop Production', 'Climate', 'Soil Fertility', 'Land Use', 'Night-time Light', 'Ancillary Data'],
     products:['Agricultural Productivity', 'Crop Suitability'],
     crops:['Maize', 'Groundnuts', 'Tobacco', 'Cranberry', 'Tea'],
-    climate_products:['Precipitation', 'Temperature', 'Elevation'],
+    climate_products:['Precipitation', 'Temperature', "Evapotranspiration", 'Elevation'],
     soil_products:['Soil Texture','Organic Carbon', 'Drainage', 'Cations', 'Nutrients'],
     selected_soil:'',
     ancil_data:['Road Network', 'Towns', 'Market Accessibility', 'Economic Activity', "Demographics"]
