@@ -8,7 +8,7 @@ import "leaflet/dist/leaflet.css"
 import  axios from 'axios'
 
 import { dashboardSelections } from './selectionSlice';
-import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels, changeSelectedProduct} from './selectionSlice';
+import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels, changeSelectedProduct, changeSelectedIndicator} from './selectionSlice';
 import Select from 'react-select'
 
 import Navbar from './Navbar'
@@ -800,7 +800,7 @@ map.current.createPane("pane400").style.zIndex = 200;
             }}
             // onClick={onIndicatorChanged}
             onClick={ () =>{
-              setClicked_link(link);setOpen(true)
+              setClicked_link(link);setOpen(true);dispatch(changeSelectedIndicator(link))
 
             } }
             >{link}</span>

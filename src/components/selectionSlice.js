@@ -135,5 +135,5 @@ const dashboardSelectionSlice = createSlice({
 
 export const dashboardSelections = (state) => state.dashboardselections;
 export const { changeSelectedCountry, changeSelectedDistrict, 
-    changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels, changeSelectedProduct} = dashboardSelectionSlice.actions
+    changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels, changeSelectedProduct, changeSelectedIndicator} = dashboardSelectionSlice.actions
 export default dashboardSelectionSlice.reducer

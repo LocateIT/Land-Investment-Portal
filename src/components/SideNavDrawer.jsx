@@ -38,21 +38,32 @@ const SideNavDrawer = ({ isOpen, onClose }) => {
       }
   return (
     <div className={`side-nav-drawer ${isOpen ? 'open' : ''}`}>
-       <span style={{fontFamily:'cursive', marginTop:'10vh'}}> { dashboardSlice.selected_product === 'Crop Suitability' ?
+
+      { dashboardSlice.selected_indicator === 'Crop Production' ?
+       <> 
+
+
+<span style={{fontFamily:'cursive', marginTop:'10vh'}}> { dashboardSlice.selected_product === 'Crop Suitability' ?
        `${dashboardSlice.selected_district}  ${dashboardSlice.selected_crop} Suitability` :
        dashboardSlice.selected_product === 'Agricultural Productivity' ? `${dashboardSlice.selected_district} Above Ground Biomass` : ''
       
       }</span>
       <div className="side-nav-content">
-        {/* Your navigation links */}
-        {/* <ul>
-          <li>Link 1</li>
-          <li>Link 2</li>
-          <li>Link 3</li>
-        </ul> */}
-      
+        { dashboardSlice.selected_product === 'Crop Suitability' ||   dashboardSlice.selected_product === 'Agricultural Productivity' ?
+
         <CropBar data={lulcChartData} />
+        : 
+
+        ''
+        }
+       
+      
+        
       </div>
+       
+       </> 
+       : ''}
+     
       <button className="close-btn" onClick={onClose}>
         Close
       </button>
