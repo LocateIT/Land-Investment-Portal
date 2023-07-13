@@ -63,10 +63,35 @@ const SideNavDrawer = ({ isOpen, onClose }) => {
        
        </> 
        : ''}
+
+{ dashboardSlice.selected_indicator === 'Climate' ?
+       <> 
+
+
+<span style={{fontFamily:'cursive', marginTop:'10vh'}}> { dashboardSlice.selected_climate ?
+       `${dashboardSlice.selected_district}  ${dashboardSlice.selected_climate}` :
+        ''
+      
+      }</span>
+      <div className="side-nav-content">
+        { dashboardSlice.selected_indicator === 'Climate' ?
+
+        <CropBar data={lulcChartData} />
+        : 
+
+        ''
+        }
+       
+      
+        
+      </div>
+       
+       </> 
+       : ''}
      
-      <button className="close-btn" onClick={onClose}>
+      {/* <button className="close-btn" onClick={onClose}>
         Close
-      </button>
+      </button> */}
     </div>
   );
 };

@@ -26,6 +26,7 @@ import moon from '../assets/moon.svg'
 import ancil from '../assets/ancil.svg'
 import close from '../assets/close_.svg'
 import open_icon from '../assets/open.svg'
+import close_icon from '../assets/close_icon.svg'
 const Dashboard = () => {
     const dispatch = useDispatch()
     const dashboardselections = useSelector(dashboardSelections)
@@ -47,6 +48,7 @@ const Dashboard = () => {
     const [district_option, setdistrict_option] = useState([])
     const [selected_district_id, setselected_district_id] = useState(null)
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isDrawerOpen2, setIsDrawerOpen2] = useState(true);
     const [stats_figures, setstats_figures] = useState([])
     const [stats_labels, setstats_labels] = useState([])
     
@@ -64,10 +66,28 @@ const Dashboard = () => {
     let climate_legend = useRef(null)
 
     const handleDrawerToggle = () => {
-      setIsDrawerOpen(!isDrawerOpen);
-      // document.getElementsByClassName("left_side_panel").style.css.backgroundColor='red'
-      // document.querySelector(".leaflet-control-layers leaflet-control").style.right = "-25vw"
+      setIsDrawerOpen(true);
+      // setIsDrawerOpen(!isDrawerOpen) to toggle open and close
+      
+      // document.getElementsByClassName("leaflet-bottom.leaflet-right .leaflet-control").style.position = "absolute"
+
+    //  if(isDrawerOpen === true && crop_legend != null) {
+    //   document.querySelector(".leaflet-bottom.leaflet-right .leaflet-control").style.position = "absolute"
+    //   document.querySelector(".leaflet-bottom.leaflet-right .leaflet-control").style.right = "24.8vw"
+    //   document.querySelector(".leaflet-bottom.leaflet-right .leaflet-control").style.top = "-15vh"
+
+    //  }
+    
+    //     if(!isDrawerOpen && crop_legend != null) {
+    //       document.querySelector(".leaflet-bottom.leaflet-right .leaflet-control").style.position = "absolute"
+    //     document.querySelector(".leaflet-bottom.leaflet-right .leaflet-control").style.right = "0.2vw"
+    //     document.querySelector(".leaflet-bottom.leaflet-right .leaflet-control").style.top = "-17vh"
+
+    //     }
+      
+     
     };
+   
 
 
  const onCountryChanged = e => {
@@ -130,18 +150,18 @@ const Dashboard = () => {
   
 
   }
-  const onClimateChanged = e => {
-    const changed_climate = e.target.getAttribute("data-name")
-    console.log(changed_climate, 'changed_climate')
-    // climate.current = changed_climate
+  // const onClimateChanged = e => {
+  //   const changed_climate = e.target.getAttribute("data-name")
+  //   console.log(changed_climate, 'changed_climate')
+  //   // climate.current = changed_climate
   
 
-      setClimate(e.target.getAttribute("data-name"))
+  //     setClimate(e.target.getAttribute("data-name"))
 
-      //update the selected_region value using dispatch changeSelelcted region reducer
-      dispatch(changeClimateProduct(e.target.getAttribute("data-name")))
+  //     //update the selected_region value using dispatch changeSelelcted region reducer
+  //     dispatch(changeClimateProduct(e.target.getAttribute("data-name")))
     
-  }
+  // }
   const onSoilChanged = e => {
     const changed_soil = e.target.value
     console.log(changed_soil, 'changed_soil')
@@ -492,6 +512,9 @@ const fetchAGBStats = async () => {
 
 
 
+
+
+
 //fetch crop data
 const fetchCrop = () => {
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
@@ -524,7 +547,14 @@ const fetchCrop = () => {
         crop_legend.current = legend
   
         crop_legend.current.onAdd = function(map) {
-      var div = L.DomUtil.create("div", "legend");
+          var div = L.DomUtil.create("div", `${isDrawerOpen ? 'legend2' : 'legend'}`)
+          // if( isDrawerOpen == true) {
+          //   var div = L.DomUtil.create("div", 'legend')
+          // } else{
+          //   var div = L.DomUtil.create("div", 'legend2')
+          // }
+          
+       
           
       div.innerHTML += (`<p>${dashboardSlice.selected_district} ${selected_radio}</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
   
@@ -600,8 +630,10 @@ const fetchCrop = () => {
 const fetchClimate = (e) => {
   console.log(e, 'event')
   const climate_name = e
-  // console.log('climate data')
   dispatch(changeClimateProduct(climate_name))
+  // console.log('climate data')
+  setClimate(climate_name)
+  
 if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
 map.current.createPane("pane400").style.zIndex = 200;
   if(clicked_link === 'Climate') {
@@ -648,6 +680,33 @@ map.current.createPane("pane400").style.zIndex = 200;
 
    }
    addClimateLegend()
+
+
+
+   const fetchClimateStats = async () => {
+ 
+    try {
+      console.log(climate_name,'selected climate')
+      const response = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_statistics/?data_name=${climate_name}&district_name=${district.name}&country_name=Malawi`);
+      console.log('climate stats',response.data)
+      var labels = Object.keys(response.data[0])
+      var figures = Object.values(response.data[0])
+      console.log('stats figures and labels', figures, labels)
+      setstats_figures(figures)
+      dispatch(changeStatsFigures(figures))
+  
+  
+      setstats_labels(labels)
+      dispatch(changeStatsLabels(labels))
+    } catch (error) {
+      
+    }
+  
+  }
+
+
+    fetchClimateStats()
+ 
 
   }
 
@@ -937,7 +996,7 @@ map.current.createPane("pane400").style.zIndex = 200;
                   backgroundColor:'#1E4B5F',
                   color:'#fff',
                   outline:'none',
-                  border:'none'}} onClick={fetchCrop}>fetch</button>
+                  border:'none'}} onClick = { ()=> { fetchCrop();handleDrawerToggle()}}>fetch</button>
                   
 
     </div>
@@ -1081,10 +1140,18 @@ map.current.createPane("pane400").style.zIndex = 200;
 
 }
 
-<img src={open_icon} alt="" 
+{ isDrawerOpen == false ?  <img src={open_icon} alt=""  
 style={{ position:'absolute', zIndex:120, right:'0.2vw', top:'50vh'}} 
-onClick={handleDrawerToggle}
+onClick={ () => {isDrawerOpen == true? setIsDrawerOpen(false) : setIsDrawerOpen(true) }}
+ /> : 
+
+ <img src={close_icon} alt=""  
+style={{ position:'absolute', zIndex:120, right:'24.9vw', top:'52vh'}} 
+onClick={ () => {isDrawerOpen == true? setIsDrawerOpen(false) : setIsDrawerOpen(true) }}
  />
+
+}
+
 
 <SideNavDrawer isOpen={isDrawerOpen} onClose={handleDrawerToggle} />
 
