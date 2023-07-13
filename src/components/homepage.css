@@ -1,0 +1,26 @@
+.homepage{
+  background-image: url('../src/assets/homepage.jpg');
+  height:'100vh';
+   width:'100vw';
+   /* box-shadow: inset 0 0 0 50px */
+}
+
+.button_slide {
+    /* color: #FFF;
+    border: 2px solid rgb(216, 2, 134);
+    border-radius: 0px;
+    padding: 18px 36px;
+    display: inline-block; */
+    /* font-family: "Lucida Console", Monaco, monospace; */
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px; 
+    cursor: pointer;
+    box-shadow: inset 0 0 0 0 #127a52;
+    -webkit-transition: ease-out 0.4s;
+    -moz-transition: ease-out 0.4s;
+    transition: ease-out 0.4s;
+  }
+.slide_right:hover {
+    box-shadow: inset 400px 0 0 0 #127a52;
+  }

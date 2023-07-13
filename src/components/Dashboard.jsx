@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import "leaflet"
 import L from "leaflet"
@@ -28,6 +29,7 @@ import close from '../assets/close_.svg'
 import open_icon from '../assets/open.svg'
 import close_icon from '../assets/close_icon.svg'
 const Dashboard = () => {
+  
     const dispatch = useDispatch()
     const dashboardselections = useSelector(dashboardSelections)
     //return the entire dashboard slice
