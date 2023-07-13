@@ -706,6 +706,7 @@ map.current.createPane("pane400").style.zIndex = 200;
 
 
     fetchClimateStats()
+    handleDrawerToggle()
  
 
   }
@@ -1051,7 +1052,7 @@ map.current.createPane("pane400").style.zIndex = 200;
           
           }}>
             <CustomClimateSelect 
-           fetchClimateData={fetchClimate}
+           fetchClimateData={  fetchClimate }
             />
               
             </div>
