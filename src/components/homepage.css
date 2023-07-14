@@ -16,11 +16,11 @@
     font-weight: bold;
     letter-spacing: 1px; 
     cursor: pointer;
-    box-shadow: inset 0 0 0 0 #127a52;
+    box-shadow: inset 0 0 0 0 #1481c3;
     -webkit-transition: ease-out 0.4s;
     -moz-transition: ease-out 0.4s;
     transition: ease-out 0.4s;
   }
 .slide_right:hover {
-    box-shadow: inset 400px 0 0 0 #127a52;
+    box-shadow: inset 400px 0 0 0 #1481c3;
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { dashboardSelections } from './selectionSlice';
 import './SideNavDrawer.css';
@@ -11,27 +11,20 @@ const SideNavDrawer = ({ isOpen, onClose }) => {
   const dashboardselections = useSelector(dashboardSelections)
   //return the entire dashboard slice
   const dashboardSlice = useSelector((state) => state.dashboardselections)
+  const [color_array, setcolor_array] = useState([])
 
   const [slider_value, setslider_value] = useState(0)
+  const crop_color = ['blue',"#a8a800","#0c7437","#6aff4e","#ccc","#bd6860","green","#fff1d2"]
+  const agb_color = ['#ee7245','#fdad61', '#fffebe', "#acd9e9","#2e7cb7", "#2c7bb6"]
+  const precip_color = ["#c6cdd4", "#d1c8b0", "#d0bf90", "#7ba7b3", "#2871b0", "#08306b"]
+  const temperature_color = ["#3aee5b", "#49883f", "#b8e38b", "#dbe5b3", "#e77d1a", "#f90f49"]
     let lulcChartData = {
         labels: dashboardSlice.stats_labels,
         datasets: [
           {
             data: dashboardSlice.stats_figures,
     
-            backgroundColor: [
-              'blue',
-              "#a8a800",
-              "#0c7437",
-              "#6aff4e",
-              "#ccc",
-              "#bd6860",
-              "green",
-              "#fff1d2",
-              "#55ff00",
-              '#4dd7ff',
-              '#d2efff'
-            ],
+            backgroundColor:dashboardSlice.stats_color,
             barThickness: 40,
          
          
@@ -51,6 +44,16 @@ const sliderfunc = (e)  => {
   // input.style.setProperty("--thumb-rotate", `${value * 720}deg`);
   p.innerHTML = Math.round(value * 100);
 };
+
+
+
+// useEffect(() => {
+//   color_func()
+
+
+ 
+// }, [color_array])
+
   return (
     <div className={`side-nav-drawer ${isOpen ? 'open' : ''}`}>
 

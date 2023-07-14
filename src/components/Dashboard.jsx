@@ -9,7 +9,8 @@ import "leaflet/dist/leaflet.css"
 import  axios from 'axios'
 
 import { dashboardSelections } from './selectionSlice';
-import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels, changeSelectedProduct, changeSelectedIndicator} from './selectionSlice';
+import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels,
+   changeSelectedProduct, changeSelectedIndicator, changeStatsColor} from './selectionSlice';
 import Select from 'react-select'
 
 import Navbar from './Navbar'
@@ -18,6 +19,7 @@ import SubNav from './SubNav'
 import Index from './index'
 import ClimateIndex from './ClimateIndex'
 import CustomClimateSelect from './CustomClimate';
+import CustomSoil from './CustomSoil'
 import SideNavDrawer from './SideNavDrawer';
 import crop from '../assets/crop.svg'
 import cloud from '../assets/cloud.svg'
@@ -53,6 +55,14 @@ const Dashboard = () => {
     const [isDrawerOpen2, setIsDrawerOpen2] = useState(true);
     const [stats_figures, setstats_figures] = useState([])
     const [stats_labels, setstats_labels] = useState([])
+
+
+    const [color_array, setcolor_array] = useState([])
+    const crop_color = ['blue',"#a8a800","#0c7437","#6aff4e","#ccc","#bd6860","green","#fff1d2"]
+    const agb_color = ["#f2f2a3", "#ffff00", "#ff0000", "#b007ed", "#071dad"]
+    const precip_color = ["#c6cdd4", "#d1c8b0", "#d0bf90", "#7ba7b3", "#2871b0", "#08306b"]
+    const temperature_color = ["#3aee5b", "#49883f", "#b8e38b", "#dbe5b3", "#e77d1a", "#f90f49"]
+    const elevation_color = ['#ee7245','#fdad61', '#fffebe', "#acd9e9","#2e7cb7", "#2c7bb6"]
     
     const ancil_data_list = dashboardSlice.ancil_data
 
@@ -121,6 +131,7 @@ const Dashboard = () => {
       dispatch(changeSelectedDistrict(changed_district.label))
     
     fetchDistricts(changed_district.value)
+    
    
   
   
@@ -404,16 +415,6 @@ const fetchOptions = async() => {
         // var basin = current_name.current
         // console.log(basin, 'basin current')
 
-
-       
-        
-        // function titleCase(str) {
-        //   str = str.toLowerCase().split(' ');
-        //   for (var i = 0; i < str.length; i++) {
-        //       str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
-        //   }
-        //   return str.join(' ');
-        //   }
      
         // const mapped = id.map((item) => {
         //   return ({ value: item.district_id, label:item.district_name}) 
@@ -460,6 +461,8 @@ const fetchOptions = async() => {
           map.current.fitBounds(current_geojson.current.getBounds(), {
                   padding: [50, 50],
                 });
+
+                
 
         }
         
@@ -512,8 +515,20 @@ const fetchAGBStats = async () => {
 
 }
 
+const color_func = () => {
+  if(dashboardSlice.selected_product === 'Crop Suitability' ) {
+    setcolor_array(crop_color) 
+    dispatch(changeStatsColor(crop_color))
+  }
+  if(dashboardSlice.selected_product === 'Agricultural Productivity'  ) {
+    setcolor_array(agb_color)
+    dispatch(changeStatsColor(agb_color))
 
+  }
 
+  
+
+}
 
 
 
@@ -575,6 +590,7 @@ const fetchCrop = () => {
 
 
      fetchCropStats()
+     color_func()
   
     }
 
@@ -608,7 +624,7 @@ const fetchCrop = () => {
       agb_legend.current.onAdd = function(map) {
     var div = L.DomUtil.create("div", "legend");
         
-    div.innerHTML += (`<p>${dashboardSlice.selected_district} Above Ground Biomass </p>`) + '<img src="' + "http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:Elevation_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '" />' ;
+    div.innerHTML += (`<p>${dashboardSlice.selected_district} Above Ground Biomass </p>`) + '<img src="' + "http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:Above_Ground_Biomass_Crop_Production_Agricultural_Productivity&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '" />' ;
 
         
     let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -624,6 +640,7 @@ const fetchCrop = () => {
    addAGBLegend()
 
    fetchAGBStats()
+   color_func()
   
     }
 
@@ -632,13 +649,30 @@ const fetchCrop = () => {
 const fetchClimate = (e) => {
   console.log(e, 'event')
   const climate_name = e
-  dispatch(changeClimateProduct(climate_name))
+  dispatch(changeClimateProduct(e))
   // console.log('climate data')
   setClimate(climate_name)
+
+
+  if( climate_name === 'Precipitation' ) {
+    setcolor_array(precip_color)
+    dispatch(changeStatsColor(precip_color))
+  }
+          
+  if( climate_name === 'Elevation'){
+    setcolor_array(agb_color)
+    dispatch(changeStatsColor(elevation_color))
+  }
+  
+  if( climate_name === 'Temperature' ) {
+    setcolor_array(temperature_color)
+    dispatch(changeStatsColor(temperature_color))
+
+  }
   
 if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
 map.current.createPane("pane400").style.zIndex = 200;
-  if(clicked_link === 'Climate') {
+  if(clicked_link === 'Climate' && climate_name && current_geojson.current) {
     wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
       pane: 'pane400',
       layers: `Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate`,
@@ -709,11 +743,44 @@ map.current.createPane("pane400").style.zIndex = 200;
 
     fetchClimateStats()
     handleDrawerToggle()
+
+   
  
 
   }
 
 }
+const fetchSoilData = (e) => {
+  console.log('soil',e)
+
+}
+const fetchLandUse = () => {
+  if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+// map.current.createPane("pane400").style.zIndex = 200;
+  if(clicked_link === 'Land Use' && current_geojson.current != null) {
+    wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+      pane: 'pane400',
+      layers: `Landinvestment_datasets:Land_Use_Crop_Production_Soil`,
+      crs:L.CRS.EPSG4326,
+      // styles: `Climate_and_Geography_Climate_${climate_name}_${district.name}`,
+      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+    
+      format: 'image/png',
+      transparent: true,
+      opacity:1.0
+      
+      
+     
+ });
+
+ wmsLayer.current.addTo(map.current);
+}
+  
+
+  
+}
+
+// fetchLandUse()
 
 
 
@@ -745,7 +812,7 @@ map.current.createPane("pane400").style.zIndex = 200;
       
   
     
-  }, [district_option, district.name])
+  }, [district_option, district.name, color_array, climate])
 
   return (
     <>
@@ -1046,7 +1113,7 @@ map.current.createPane("pane400").style.zIndex = 200;
               outline:'none',
               zIndex:100,
               color:'white',
-              fontWeight:'600',
+              fontWeight:'500',
               fontFamily:'sans-serif',
               fontSize:'14px'
               
@@ -1065,7 +1132,7 @@ map.current.createPane("pane400").style.zIndex = 200;
 
     clicked_link === 'Soil Fertility'? 
     <>
-    <select name="" id="soil_selection"
+    {/* <select name="" id="soil_selection"
             placeholder=''
             value={soil_}
             onChange={onSoilChanged}
@@ -1087,7 +1154,25 @@ map.current.createPane("pane400").style.zIndex = 200;
                  <option value="" >Select Product</option>
                  { soilOptions }
                
-            </select>
+            </select> */}
+
+<div className="landuse" 
+    style={{ position:'absolute',
+    left:'6.4vw',
+    top:'52vh',
+    color:'#fff',
+    zIndex:100,
+    fontWeight:'500',
+    fontFamily:'sans-serif',
+    fontSize:'14px'
+              }}>
+      <CustomSoil 
+      fetchSoilData={fetchSoilData}
+      />
+         
+    </div>
+
+
     </>
     
     : 
@@ -1130,13 +1215,7 @@ map.current.createPane("pane400").style.zIndex = 200;
     :
 
     clicked_link === 'Land Use' ?
-    <div className="landuse" 
-    style={{ position:'absolute',
-    left:'6.4vw',
-    top:'64vh',
-    zIndex:100}}>
-         <Index />
-    </div>
+    ''
  
     :
     ''

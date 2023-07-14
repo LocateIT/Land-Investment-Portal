@@ -6,8 +6,11 @@ import { useNavigate } from 'react-router-dom'
 const HomePage = () => {
     const navigate = useNavigate() //navigate programmatically onclick
   return (
-    <div className='homepage'>
-        <img src={home_image} alt="" style={{height:'100vh', width:'100vw', marginLeft:'-0.43vw', marginTop:'-0.4vw', zIndex:50}}/>
+    <div className='homepage' style={{display:'flex',
+    flexDirection:'column',
+justifyContent:'center', 
+      alignItems:'center'}}>
+        <img src={home_image} alt="" style={{height:'100vh', width:'100vw', marginLeft:'0', marginTop:'-0.4vw', zIndex:50}}/>
         <div 
         style={{
              display:'flex',
@@ -20,16 +23,17 @@ const HomePage = () => {
                 backgroundColor:'#ccc',
                  zIndex:120, 
                  height:'35vh',
-                 opacity:0.7,
+                 opacity:0.85,
                  padding:'20px',
                  paddingBottom:'60px',
                  borderRadius:'10px',
                  width:'30vw'}}>
-                    <p style={{fontFamily:'sans-serif', fontSize:'40px', fontWeight:'bolder'}}>Land Investment Portal</p>
+                    <p style={{fontFamily:'sans-serif', fontSize:'40px', fontWeight:'bolder', color:'#1e4b5f'}}>Land Investment Portal</p>
                     <p style={{fontFamily:'sans-serif', fontSize:'18px', fontWeight:'lighter'}}>Facilitating sustainable decision making to identify land for agricultural investment</p>
-                    <button type='button' class="button_slide slide_right" style={{borderRadius:'20px',
+                    <button type='button' class="button_slide slide_right"
+                     style={{borderRadius:'20px',
                 height: '40px',
-                width:'200px', border:'none'}}
+                width:'200px', border:'none', color:'#fff', backgroundColor:'#164b75'}}
                 onClick={() => navigate('dashboard')}>Visit Dashboard</button>
                  </div>
                 

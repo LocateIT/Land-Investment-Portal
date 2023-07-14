@@ -21,7 +21,7 @@ const SubNav = () => {
         height: '4vh',
         alignItems:'center',
         color:'#fff',
-        fontSize:'20px',
+        fontSize:'18px',
         fontFamily:'sans-serif'
         
         }}>
@@ -32,7 +32,7 @@ const SubNav = () => {
             <img src={right} alt="" className='right_icon' /> 
             <span>{dashboardSlice.selected_district}</span>
             <img src={right} alt="" className='right_icon' /> 
-            <span>{dashboardSlice.selected_indicator}</span>
+            <span>{dashboardSlice.selected_indicator} ||{dashboardSlice.selected_climate}</span>
 
     </div>
   )
