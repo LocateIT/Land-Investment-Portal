@@ -105,7 +105,7 @@ const Dashboard = () => {
  const onCountryChanged = e => {
     const changed_country = e
     console.log(changed_country, 'changed_country')
-    country_name.current = changed_country
+    country_name.current = changed_country.value
   
 
       setCountry(changed_country.value)
@@ -325,7 +325,10 @@ console.log(district_option, 'district option')
     }
 
 const fetchOptions = async() => {
-    const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL`);
+  console.log(country_name.current, 'selected countryyyyyyyyyyyyyy')
+  var taifa = country_name.current
+  console.log(taifa, 'taifa')
+    const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL&country_name=${taifa}`);
         console.log(wms.data)
         var wms_resp = wms.data
         const cql_fiter_column = wms_resp['wms']['cql_column']
@@ -362,16 +365,19 @@ const fetchOptions = async() => {
         // console.log(current_name.current, 'curent name')
         // var basin = current_name.current
         // console.log(basin, 'basin current')
+// console.log('chosen country',dashboardSlice.selected_country)
+var taifa = country_name.current
 
-
-        const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL`);
+        const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL&country_name=${taifa}`);
         console.log(wms.data)
         var wms_resp = wms.data
         const cql_fiter_column = wms_resp['wms']['cql_column']
         const wms_layer_name = wms_resp['wms']['layer_name']
         const district_cql = cql_fiter_column + "=" +district['district_id']
-
-        const resp = await axios.get(`http://139.84.229.39:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=${wms_layer_name}&outputFormat=application/json`);
+        // const district_cql2 = cql_fiter_column + "=" +country
+        const country_filter = wms_resp['country_details']['country_id']
+        console.log('COUNTRY FILTER',country_filter)
+        const resp = await axios.get("http://139.84.229.39:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=Landinvestment_datasets:District&outputFormat=application/json&CQL_FILTER=country_id="+country_filter);
        
         var aoi_data = resp.data
         console.log(aoi_data, 'aoi response')
@@ -425,13 +431,16 @@ const fetchOptions = async() => {
         // console.log(id[0].district_id, 'idddddd') 
         if(district_option != null) {
           console.log(district_option)
-          const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL`);
+          var taifa = country_name.current
+          const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL&country_name=${taifa}`);
         console.log(wms.data)
         var wms_resp = wms.data
         const cql_fiter_column = wms_resp['wms']['cql_column']
         const wms_layer_name = wms_resp['wms']['layer_name']
         // const id = wms_resp['district_id']
         const district_cql = cql_fiter_column + "="  +id
+        const district_cql2 = 'country_name' + "=" +country
+        // const country_filter = wms_resp['country_details']['country_id']
         
 
         // const resp = await axios.get(`http://139.84.229.39:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=${wms_layer_name}&outputFormat=application/json`);
