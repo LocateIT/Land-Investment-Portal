@@ -777,6 +777,113 @@ const fetchCrop = () => {
 
   
 }
+
+const fetchCountryClimate = (e) => {
+  console.log(e, 'event')
+  const climate_name = e
+  dispatch(changeClimateProduct(e))
+  // console.log('climate data')
+  setClimate(climate_name)
+
+
+  if( climate_name === 'Precipitation' ) {
+    setcolor_array(precip_color)
+    dispatch(changeStatsColor(precip_color))
+  }
+          
+  if( climate_name === 'Elevation'){
+    setcolor_array(agb_color)
+    dispatch(changeStatsColor(elevation_color))
+  }
+  
+  if( climate_name === 'Temperature' ) {
+    setcolor_array(temperature_color)
+    dispatch(changeStatsColor(temperature_color))
+
+  }
+  
+if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+map.current.createPane("pane400").style.zIndex = 200;
+
+if(clicked_link === 'Climate' && climate_name && current_country_geojson.current != null ) {
+  wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+    pane: 'pane400',
+    layers: `Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate`,
+    crs:L.CRS.EPSG4326,
+    styles: '',
+    // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+  
+    format: 'image/png',
+    transparent: true,
+    opacity:1.0
+    
+    
+   
+});
+
+wmsLayer.current.addTo(map.current);
+
+//add legend
+const addClimateLegend = () => {
+  if(climate_legend.current)map.current.removeControl(climate_legend.current)
+  if(crop_legend.current)map.current.removeControl(crop_legend.current)
+  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  if(wmsLayer.current){
+    var legend = L.control({position:'bottomright'});
+    climate_legend.current = legend
+
+    climate_legend.current.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+      
+  div.innerHTML += (`<p>${country_name.current} ${climate_name}</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+
+      
+  let draggable = new L.Draggable(div); //the legend can be dragged around the div
+  draggable.enable();
+
+  return div;
+  };
+
+  climate_legend.current.addTo(map.current);
+  }
+
+ }
+ addClimateLegend()
+
+
+
+//  const fetchClimateStats = async () => {
+
+//   try {
+//     console.log(climate_name,'selected climate')
+//     const response = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_statistics/?data_name=${climate_name}&district_name=${district.name}&country_name=Malawi`);
+//     console.log('climate stats',response.data)
+//     var labels = Object.keys(response.data[0])
+//     var figures = Object.values(response.data[0])
+//     console.log('stats figures and labels', figures, labels)
+//     setstats_figures(figures)
+//     dispatch(changeStatsFigures(figures))
+
+
+//     setstats_labels(labels)
+//     dispatch(changeStatsLabels(labels))
+//   } catch (error) {
+    
+//   }
+
+// }
+
+
+//   fetchClimateStats()
+  // handleDrawerToggle()
+
+ 
+
+
+}
+
+
+}
 const fetchClimate = (e) => {
   console.log(e, 'event')
   const climate_name = e
@@ -803,7 +910,10 @@ const fetchClimate = (e) => {
   
 if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
 map.current.createPane("pane400").style.zIndex = 200;
-  if(clicked_link === 'Climate' && climate_name && current_geojson.current) {
+
+
+
+  if(clicked_link === 'Climate' && climate_name && current_geojson.current ) {
     wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
       pane: 'pane400',
       layers: `Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate`,
@@ -1288,7 +1398,7 @@ className='fetch_button'
           
           }}>
             <CustomClimateSelect 
-           fetchClimateData={  fetchClimate }
+           fetchClimateData={ district.name != null ? fetchClimate : fetchCountryClimate }
             />
               
             </div>
