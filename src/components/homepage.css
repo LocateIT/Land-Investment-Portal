@@ -24,3 +24,11 @@
 .slide_right:hover {
     box-shadow: inset 400px 0 0 0 #1481c3;
   }
+
+  @media  screen and (max-width: 1366px)
+ {
+  #visit_dash {
+    /* margin-top: 5vw !important; */
+    height: 8vh !important;
+  }
+ }

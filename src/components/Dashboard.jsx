@@ -73,6 +73,7 @@ const Dashboard = () => {
     let wmsLayer = useRef(null)
     let current_response = useRef(null)
     let current_geojson = useRef(null)
+     let current_country_geojson = useRef(null)
     let agb_legend = useRef(null)
     let crop_legend = useRef(null)
     let climate_legend = useRef(null)
@@ -360,7 +361,7 @@ const fetchOptions = async() => {
     const fetchRegion = async() => {
   
       try {   
-        if(current_geojson.current) map.current.removeLayer(current_geojson.current)
+        if(current_country_geojson.current) map.current.removeLayer(current_country_geojson.current)
         if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
         // console.log(current_name.current, 'curent name')
         // var basin = current_name.current
@@ -386,7 +387,7 @@ var taifa = country_name.current
     
         console.log(current_response.current.features[0].geometry.coordinates, 'multipolygon')
            // map.createPane("pane1000").style.zIndex = 300;
-           current_geojson.current = L.geoJSON(current_response.current, {
+           current_country_geojson.current = L.geoJSON(current_response.current, {
             style: {
               color: "black",
               opacity: 1,
@@ -395,11 +396,16 @@ var taifa = country_name.current
             }
             // pane: 'pane1000'
           })
-          current_geojson.current.addTo(map.current)
+          current_country_geojson.current.addTo(map.current)
           
-          map.current.fitBounds(current_geojson.current.getBounds(), {
+          map.current.fitBounds(current_country_geojson.current.getBounds(), {
                   padding: [50, 50],
                 });
+
+
+
+
+                
        
         
         
@@ -416,6 +422,7 @@ var taifa = country_name.current
   
       try {   
         if(current_geojson.current) map.current.removeLayer(current_geojson.current)
+        if(current_country_geojson.current) map.current.removeLayer(current_country_geojson.current)
         if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
         // console.log(current_name.current, 'curent name')
         // var basin = current_name.current
@@ -539,12 +546,127 @@ const color_func = () => {
 
 }
 
+const fetchCountryCrop = () => {
 
+  if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  map.current.createPane("pane400").style.zIndex = 200;
+
+  if( current_country_geojson.current != null && clicked_link === 'Crop Production' && selected_radio === 'Crop Suitability') {
+    
+    wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+      pane: 'pane400',
+      layers: `Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability`,
+      crs:L.CRS.EPSG4326,
+      styles: '',
+      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+    
+      format: 'image/png',
+      transparent: true,
+      opacity:1.0
+      
+      
+     
+ });
+
+ wmsLayer.current.addTo(map.current);
+
+  //add legend
+  const addCropLegend = () => {
+    if(crop_legend.current)map.current.removeControl(crop_legend.current)
+    if(agb_legend.current)map.current.removeControl(agb_legend.current)
+    if(wmsLayer.current){
+      var legend = L.control({position:'bottomright'});
+      crop_legend.current = legend
+
+      crop_legend.current.onAdd = function(map) {
+        var div = L.DomUtil.create("div", `${isDrawerOpen ? 'legend2' : 'legend'}`)
+        // if( isDrawerOpen == true) {
+        //   var div = L.DomUtil.create("div", 'legend')
+        // } else{
+        //   var div = L.DomUtil.create("div", 'legend2')
+        // }
+        
+     
+        
+    div.innerHTML += (`<p>${country_name.current} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+
+        
+    let draggable = new L.Draggable(div); //the legend can be dragged around the div
+    draggable.enable();
+
+    return div;
+    };
+
+    crop_legend.current.addTo(map.current);
+    }
+
+   }
+   addCropLegend()
+
+
+  //  fetchCropStats()
+  //  color_func()
+
+  }
+
+  if( current_country_geojson.current != null && clicked_link === 'Crop Production' && selected_radio === 'Agricultural Productivity') {
+    
+    wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+      pane: 'pane400',
+      layers: `Landinvestment_datasets:Above_Ground_Biomass_Crop_Production_Agricultural_Productivity`,
+      crs:L.CRS.EPSG4326,
+      styles: '',
+      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+    
+      format: 'image/png',
+      transparent: true,
+      opacity:1.0
+      
+      
+     
+ });
+
+ wmsLayer.current.addTo(map.current);
+
+ //add legend
+ const addAGBLegend = () => {
+  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  if(crop_legend.current)map.current.removeControl(crop_legend.current)
+  if(wmsLayer.current){
+    var legend = L.control({position:'bottomright'});
+    agb_legend.current = legend
+
+    agb_legend.current.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+      
+  div.innerHTML += (`<p>${country_name.current} Above Ground Biomass </p>`) + '<img src="' + "http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:Above_Ground_Biomass_Crop_Production_Agricultural_Productivity&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '" />' ;
+
+      
+  let draggable = new L.Draggable(div); //the legend can be dragged around the div
+  draggable.enable();
+
+  return div;
+  };
+
+  agb_legend.current.addTo(map.current);
+  }
+
+ }
+ addAGBLegend()
+
+//  fetchAGBStats()
+//  color_func()
+
+  }
+}
 
 //fetch crop data
 const fetchCrop = () => {
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
   map.current.createPane("pane400").style.zIndex = 200;
+
+  
+
   if(clicked_link === 'Crop Production' && selected_radio === 'Crop Suitability') {
     
       wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
@@ -582,7 +704,7 @@ const fetchCrop = () => {
           
        
           
-      div.innerHTML += (`<p>${dashboardSlice.selected_district} ${selected_radio}</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+      div.innerHTML += (`<p>${dashboardSlice.selected_district} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
   
           
       let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -603,7 +725,7 @@ const fetchCrop = () => {
   
     }
 
-    if(clicked_link === 'Crop Production' && selected_radio === 'Agricultural Productivity') {
+    if( clicked_link === 'Crop Production' && selected_radio === 'Agricultural Productivity') {
     
       wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
         pane: 'pane400',
@@ -1065,7 +1187,9 @@ const fetchLandUse = () => {
             
         }
 
-<button type='button' 
+        {
+          district.name != null ?
+          <button type='button' 
 className='fetch_button'
                  style={{
                   width: '100px', 
@@ -1076,8 +1200,41 @@ className='fetch_button'
                   backgroundColor:'#1E4B5F',
                   color:'#fff',
                   outline:'none',
-                  border:'none'}} onClick = { ()=> { fetchCrop();handleDrawerToggle()}}>fetch</button>
+                  border:'none'}} onClick = { ()=> {  fetchCrop();handleDrawerToggle()
                   
+                    }}>Fetch </button>
+
+                    : current_country_geojson.current != null ?
+                    <button type='button' 
+className='fetch_button'
+                 style= {{
+                  width: '100px', 
+                  height:'30px',
+                  marginTop:'8vh',  
+                  marginLeft:'140px', 
+                  borderRadius:'10px', 
+                  backgroundColor:'#1E4B5F',
+                  color:'#fff',
+                  outline:'none',
+                  border:'none'}} onClick = { ()=> {  fetchCountryCrop()
+                  
+                    }}>Fetch</button>
+                    : ''
+
+        }
+
+
+
+
+
+                  
+
+
+                  
+
+                 
+
+
 
     </div>
     : 

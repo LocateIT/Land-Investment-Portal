@@ -575,6 +575,7 @@ div.legend2 .leaflet-control{
   #map{
     height: 88vh !important;
   }
+ 
 }
 
 @media only screen and (width: 1366px) and (min-resolution: 125dpi), (min-resolution: 1.25dppx) {
@@ -609,6 +610,7 @@ div.legend2 .leaflet-control{
     height: 30px;
     margin-left: 35vw;
     margin-top: 5px;
+   
   }
   .selections{
     top: 14vh !important;

@@ -30,7 +30,7 @@ justifyContent:'center',
                  width:'30vw'}}>
                     <p style={{fontFamily:'sans-serif', fontSize:'40px', fontWeight:'bolder', color:'#1e4b5f'}}>Land Investment Portal</p>
                     <p style={{fontFamily:'sans-serif', fontSize:'18px', fontWeight:'lighter'}}>Facilitating sustainable decision making to identify land for agricultural investment</p>
-                    <button type='button' class="button_slide slide_right"
+                    <button type='button' class="button_slide slide_right" id='visit_dash'
                      style={{borderRadius:'20px',
                 height: '40px',
                 width:'200px', border:'none', color:'#fff', backgroundColor:'#164b75'}}
