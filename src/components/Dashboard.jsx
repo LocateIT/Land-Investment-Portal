@@ -9,7 +9,7 @@ import "leaflet/dist/leaflet.css"
 import  axios from 'axios'
 
 import { dashboardSelections } from './selectionSlice';
-import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels,
+import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels, changeAcreageLabel, changeTotalAcreage,
    changeSelectedProduct, changeSelectedIndicator, changeStatsColor} from './selectionSlice';
 import Select from 'react-select'
 
@@ -55,6 +55,8 @@ const Dashboard = () => {
     const [isDrawerOpen2, setIsDrawerOpen2] = useState(true);
     const [stats_figures, setstats_figures] = useState([])
     const [stats_labels, setstats_labels] = useState([])
+    const [acreage_label, setacreage_label] = useState([])
+    const [total_acreage, settotal_acreage] = useState([])
 
 
     const [color_array, setcolor_array] = useState([])
@@ -185,7 +187,7 @@ const Dashboard = () => {
       setSoil(e.target.value)
 
       //update the selected_region value using dispatch changeSelelcted region reducer
-      dispatch(changeSoilProduct(e.target.value))
+      // dispatch(changeSoilProduct(e.target.value))
     
   }
 
@@ -498,6 +500,9 @@ var taifa = country_name.current
     console.log('crop stats',response.data)
     var labels = Object.keys(response.data[0])
     var figures = Object.values(response.data[0])
+
+    var acerage_labels = Object.keys(response.data[1])
+    var acerage = Object.values(response.data[1])
     console.log('stats figures and labels', figures, labels)
     setstats_figures(figures)
     dispatch(changeStatsFigures(figures))
@@ -505,6 +510,15 @@ var taifa = country_name.current
 
     setstats_labels(labels)
     dispatch(changeStatsLabels(labels))
+
+    setacreage_label(acerage_labels)
+    dispatch(changeAcreageLabel(acerage_labels))
+
+
+    settotal_acreage(total_acreage)
+    dispatch(changeTotalAcreage(acerage))
+    
+
   } catch (error) {
     
   }
@@ -518,6 +532,9 @@ const fetchAGBStats = async () => {
     console.log('crop stats',response.data)
     var labels = Object.keys(response.data[0])
     var figures = Object.values(response.data[0])
+
+    var acerage_labels = Object.keys(response.data[1])
+    var acerage = Object.values(response.data[1])
     console.log('stats figures and labels', figures, labels)
     setstats_figures(figures)
     dispatch(changeStatsFigures(figures))
@@ -525,6 +542,13 @@ const fetchAGBStats = async () => {
 
     setstats_labels(labels)
     dispatch(changeStatsLabels(labels))
+
+    setacreage_label(acerage_labels)
+    dispatch(changeAcreageLabel(acerage_labels))
+
+
+    settotal_acreage(total_acreage)
+    dispatch(changeTotalAcreage(acerage))
   } catch (error) {
     
   }
@@ -991,19 +1015,106 @@ map.current.createPane("pane400").style.zIndex = 200;
   }
 
 }
-const fetchSoilData = (e) => {
+const fetchSoilDataa = (e) => {
   console.log('soil',e)
+  dispatch(changeSoilProduct(e))
+  const soil_product = e
 
-}
-const fetchLandUse = () => {
+
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
-// map.current.createPane("pane400").style.zIndex = 200;
-  if(clicked_link === 'Land Use' && current_geojson.current != null) {
+map.current.createPane("pane400").style.zIndex = 200;
+
+
+
+  if(clicked_link === 'Soil Fertility' && soil_product  ) {
     wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
       pane: 'pane400',
+      layers: `Landinvestment_datasets:${soil_product}_Crop_Production_Soil`,
+      crs:L.CRS.EPSG4326,
+      styles: '',
+      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+    
+      format: 'image/png',
+      transparent: true,
+      opacity:1.0
+      
+      
+     
+ });
+
+ wmsLayer.current.addTo(map.current);
+
+  //add legend
+  // const addSoilLegend = () => {
+  //   if(climate_legend.current)map.current.removeControl(climate_legend.current)
+  //   if(crop_legend.current)map.current.removeControl(crop_legend.current)
+  //   if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  //   if(wmsLayer.current){
+  //     var legend = L.control({position:'bottomright'});
+  //     climate_legend.current = legend
+
+  //     climate_legend.current.onAdd = function(map) {
+  //   var div = L.DomUtil.create("div", "legend");
+        
+  //   div.innerHTML += (`<p>${dashboardSlice.selected_district} ${soil_product}</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${soil_product}_Crop_Production_Soil&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+
+        
+  //   let draggable = new L.Draggable(div); //the legend can be dragged around the div
+  //   draggable.enable();
+
+  //   return div;
+  //   };
+
+  //   climate_legend.current.addTo(map.current);
+  //   }
+
+  //  }
+  //  addSoilLegend()
+
+
+
+  //  const fetchSoilStats = async () => {
+ 
+  //   try {
+  //     // console.log(climate_name,'selected climate')
+  //     const response = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_statistics/?data_name=${soil_product}&district_name=${district.name}&country_name=Malawi`);
+  //     console.log('climate stats',response.data)
+  //     var labels = Object.keys(response.data[0])
+  //     var figures = Object.values(response.data[0])
+  //     console.log('stats figures and labels', figures, labels)
+  //     setstats_figures(figures)
+  //     dispatch(changeStatsFigures(figures))
+  
+  
+  //     setstats_labels(labels)
+  //     dispatch(changeStatsLabels(labels))
+  //   } catch (error) {
+      
+  //   }
+  
+  // }
+
+
+  //   fetchSoilStats()
+  //   handleDrawerToggle()
+
+   
+ 
+
+  }
+
+}
+// const fetchLandUse = () => {
+  if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+
+  if(clicked_link === 'Land Use' && current_geojson.current != null) {
+    map.current.createPane("pane400").style.zIndex = 200;
+    console.log('lAND USE')
+    wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+      // pane: 'pane400',
       layers: `Landinvestment_datasets:Land_Use_Crop_Production_Soil`,
       crs:L.CRS.EPSG4326,
-      // styles: `Climate_and_Geography_Climate_${climate_name}_${district.name}`,
+      styles:'',
       // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
     
       format: 'image/png',
@@ -1019,7 +1130,7 @@ const fetchLandUse = () => {
   
 
   
-}
+// }
 
 // fetchLandUse()
 
@@ -1444,7 +1555,7 @@ className='fetch_button'
     fontSize:'14px'
               }}>
       <CustomSoil 
-      fetchSoilData={fetchSoilData}
+      fetchSoilData={fetchSoilDataa}
       />
          
     </div>

@@ -6,6 +6,7 @@ import './SideNavDrawer.css';
 
 
 import CropBar from '../components/charts/CropBar';
+import CropPie from './charts/CropPie';
 
 const SideNavDrawer = ({ isOpen, onClose }) => {
   const dashboardselections = useSelector(dashboardSelections)
@@ -23,6 +24,20 @@ const SideNavDrawer = ({ isOpen, onClose }) => {
         datasets: [
           {
             data: dashboardSlice.stats_figures,
+    
+            backgroundColor:dashboardSlice.stats_color,
+            barThickness: 40,
+         
+         
+          },
+        ],
+      }
+
+      let cropChartData = {
+        labels: dashboardSlice.acreage_label,
+        datasets: [
+          {
+            data: dashboardSlice.total_acreage,
     
             backgroundColor:dashboardSlice.stats_color,
             barThickness: 40,
@@ -55,7 +70,7 @@ const sliderfunc = (e)  => {
 // }, [color_array])
 
   return (
-    <div className={`side-nav-drawer ${isOpen ? 'open' : ''}`}>
+    <div className={`side-nav-drawer ${isOpen ? 'open' : ''}`}  >
 
       { dashboardSlice.selected_indicator === 'Crop Production' ?
        <> 
@@ -69,7 +84,33 @@ const sliderfunc = (e)  => {
       <div className="side-nav-content">
         { dashboardSlice.selected_product === 'Crop Suitability' ||   dashboardSlice.selected_product === 'Agricultural Productivity' ?
 
-        <CropBar data={lulcChartData} />
+<>
+<div  className="pie_chart_container" style={{ height: '300px', display:'flex',
+             flexDirection:'column',
+justifyContent:'center', 
+               alignItems:'center'}}>
+                <CropPie data={lulcChartData} />
+               </div>
+
+
+<span style={{fontFamily:'cursive', marginTop:'10vh'}}> { dashboardSlice.selected_product === 'Crop Suitability' ?
+       `${dashboardSlice.selected_district}  ${dashboardSlice.selected_crop} Total Acreage (Ha)` :
+       dashboardSlice.selected_product === 'Agricultural Productivity' ? `${dashboardSlice.selected_district} Above Ground Biomass Total Acreage (Ha)` : ''
+      
+      }</span>
+
+      
+      <CropBar data={cropChartData} />
+
+      
+
+      
+
+
+</>
+        
+
+        
         : 
 
         ''

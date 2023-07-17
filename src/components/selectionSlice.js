@@ -51,7 +51,9 @@ const initialState = {
     ancil_data:['Road Network', 'Towns', 'Market Accessibility', 'Economic Activity', "Demographics"],
     stats_figures:[],
     stats_labels:[],
-    stats_color:[]
+    stats_color:[],
+    acreage_label:[],
+    total_acreage:[]
 }
 
 
@@ -130,6 +132,12 @@ const dashboardSelectionSlice = createSlice({
         },
         changeStatsColor:(state, action) => {
             state.stats_color = action.payload
+        },
+        changeAcreageLabel:(state, action) => {
+            state.acreage_label = action.payload
+        },
+        changeTotalAcreage:(state, action) => {
+            state.total_acreage = action.payload
         }
        
 
@@ -139,5 +147,5 @@ const dashboardSelectionSlice = createSlice({
 
 export const dashboardSelections = (state) => state.dashboardselections;
 export const { changeSelectedCountry, changeSelectedDistrict, 
-    changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels, changeStatsColor, changeSelectedProduct, changeSelectedIndicator} = dashboardSelectionSlice.actions
+    changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels, changeStatsColor, changeAcreageLabel, changeTotalAcreage, changeSelectedProduct, changeSelectedIndicator} = dashboardSelectionSlice.actions
 export default dashboardSelectionSlice.reducer
