@@ -978,7 +978,7 @@ const fetchLandUse = () => {
         fontFamily:'sans-serif',
         fontSize:'14px'
     }}>
-      <img src={close} alt="" style={{ marginLeft:'19.5vw', marginTop:'3px'}}  onClick={ close_selection} />
+      <img className='close_selection_panel' src={close} alt="" style={{ marginLeft:'19.5vw', marginTop:'3px'}}  onClick={ close_selection} />
         {
             clicked_link === 'Crop Production' ?
             
@@ -1037,7 +1037,7 @@ const fetchLandUse = () => {
         {
             selected_radio === 'Crop Suitability' ? 
             <div 
-           
+           className='crop_selection'
             style={{
                 // position:'absolute',
                 // top:'12vh',
@@ -1066,6 +1066,7 @@ const fetchLandUse = () => {
         }
 
 <button type='button' 
+className='fetch_button'
                  style={{
                   width: '100px', 
                   height:'30px',

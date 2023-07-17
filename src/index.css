@@ -525,28 +525,43 @@ div.legend2 .leaflet-control{
     gap: 2.5rem;
     height: 30px;
     margin-left: 49vw;
-    margin-top: 9px;
+    margin-top: 15px;
   }
   .selections{
-    top: 14vh !important;
+    top: 12vh !important;
+  }
+  .selection_panel{
+    width:350px !important;
+    height:305px !important;
+    left: 7.3vw !important;
+    top: 36vh !important;
+  }
+  .close_selection_panel{
+    margin-left: 24vw !important;
+  }
+  .crop_selection{
+    margin-left: 40px !important;
+  }
+  .fetch_button{
+    margin-left: 120px !important;
   }
   #region_selection{
    height: 30px !important;
   }
   .left_side_panel{
     /* word-break: break-word; */
- height: 460px !important;
- width: 100px;
+ height: 400px !important;
+ width: 95px;
 
- top: 20.5vh;
+ top: 34.5vh;
  font-size: 12px;
   }
   .left_side_icons{
-    gap: 1.2rem !important;
+    gap: 1rem !important;
   width: 10px !important;
   }
   .left_side_links{
-    gap: 2.4rem !important;
+    gap: 1.9rem !important;
     word-break: break-word;
   }
   .subnav{
