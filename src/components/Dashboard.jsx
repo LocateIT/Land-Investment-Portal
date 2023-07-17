@@ -712,6 +712,7 @@ const fetchCrop = () => {
 
     //add legend
     const addCropLegend = () => {
+      if(climate_legend.current)map.current.removeControl(climate_legend.current)
       if(crop_legend.current)map.current.removeControl(crop_legend.current)
       if(agb_legend.current)map.current.removeControl(agb_legend.current)
       if(wmsLayer.current){
@@ -1104,14 +1105,14 @@ map.current.createPane("pane400").style.zIndex = 200;
   }
 
 }
-// const fetchLandUse = () => {
+const fetchLandUse = () => {
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
 
   if(clicked_link === 'Land Use' && current_geojson.current != null) {
     map.current.createPane("pane400").style.zIndex = 200;
     console.log('lAND USE')
     wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
-      // pane: 'pane400',
+      pane: 'pane400',
       layers: `Landinvestment_datasets:Land_Use_Crop_Production_Soil`,
       crs:L.CRS.EPSG4326,
       styles:'',
@@ -1130,9 +1131,9 @@ map.current.createPane("pane400").style.zIndex = 200;
   
 
   
-// }
+}
 
-// fetchLandUse()
+
 
 
 
@@ -1178,6 +1179,7 @@ map.current.createPane("pane400").style.zIndex = 200;
         top:'12.4vh',
         zIndex:100
     }}>
+      {/* <button onClick={fetchLandUse}>Land</button> */}
         {/* <select  id="region_selection"
     placeholder=''
     value={country}
@@ -1425,7 +1427,7 @@ className='fetch_button'
                   
                     }}>Fetch </button>
 
-                    : current_country_geojson.current != null ?
+                    : current_country_geojson.current != null ? 
                     <button type='button' 
 className='fetch_button'
                  style= {{
