@@ -365,11 +365,8 @@ const fetchOptions = async() => {
       try {   
         if(current_country_geojson.current) map.current.removeLayer(current_country_geojson.current)
         if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
-        // console.log(current_name.current, 'curent name')
-        // var basin = current_name.current
-        // console.log(basin, 'basin current')
-// console.log('chosen country',dashboardSlice.selected_country)
-var taifa = country_name.current
+        
+        var taifa = country_name.current
 
         const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL&country_name=${taifa}`);
         console.log(wms.data)
@@ -1132,12 +1129,6 @@ const fetchLandUse = () => {
 
   
 }
-
-
-
-
-
-
 
 
 

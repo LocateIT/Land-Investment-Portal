@@ -25,8 +25,17 @@ export const options = {
     responsive: true,
     plugins: {
       legend: {
-        display: false
-        // position: 'top',
+        display: true,
+        position: 'right',
+        align: 'center',
+        marginLeft: 150,
+        labels: {
+          fontSize: 12,
+          fontColor: 'red',
+          borderColor:'none',
+          boxWidth: 20, // This sets the width of each legend item box
+      padding: 15,  // This sets the margin between the legend items
+        },
       },
       title: {
         display: false,

@@ -76,7 +76,7 @@ const sliderfunc = (e)  => {
        <> 
 
 
-<span style={{fontFamily:'cursive', marginTop:'10vh'}}> { dashboardSlice.selected_product === 'Crop Suitability' ?
+<span style={{fontFamily:'cursive', marginTop:'10vh', marginLeft:'1vw'}}> { dashboardSlice.selected_product === 'Crop Suitability' ?
        `${dashboardSlice.selected_district}  ${dashboardSlice.selected_crop} Suitability` :
        dashboardSlice.selected_product === 'Agricultural Productivity' ? `${dashboardSlice.selected_district} Above Ground Biomass` : ''
       
@@ -85,10 +85,11 @@ const sliderfunc = (e)  => {
         { dashboardSlice.selected_product === 'Crop Suitability' ||   dashboardSlice.selected_product === 'Agricultural Productivity' ?
 
 <>
-<div  className="pie_chart_container" style={{ height: '300px', display:'flex',
+<div  className="pie_chart_container" style={{ height: '350px', display:'flex',
              flexDirection:'column',
 justifyContent:'center', 
-               alignItems:'center'}}>
+               alignItems:'center',
+               marginTop:'-6vh'}}>
                 <CropPie data={lulcChartData} />
                </div>
 
