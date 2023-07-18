@@ -76,7 +76,7 @@ const sliderfunc = (e)  => {
        <> 
 
 
-<span style={{fontFamily:'cursive', marginTop:'10vh', marginLeft:'1vw'}}> { dashboardSlice.selected_product === 'Crop Suitability' ?
+<span style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F', marginTop:'-12vh', marginLeft:'1vw'}}> { dashboardSlice.selected_product === 'Crop Suitability' ?
        `${dashboardSlice.selected_district}  ${dashboardSlice.selected_crop} Suitability` :
        dashboardSlice.selected_product === 'Agricultural Productivity' ? `${dashboardSlice.selected_district} Above Ground Biomass` : ''
       
@@ -88,20 +88,26 @@ const sliderfunc = (e)  => {
 <div  className="pie_chart_container" style={{ height: '350px', display:'flex',
              flexDirection:'column',
 justifyContent:'center', 
+// backgroundColor:'#f0f0f0',
+padding:'10px',
                alignItems:'center',
                marginTop:'-6vh'}}>
                 <CropPie data={lulcChartData} />
                </div>
 
 
-<span style={{fontFamily:'cursive', marginTop:'10vh'}}> { dashboardSlice.selected_product === 'Crop Suitability' ?
+<span style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F', marginTop:'10vh'}}> { dashboardSlice.selected_product === 'Crop Suitability' ?
        `${dashboardSlice.selected_district}  ${dashboardSlice.selected_crop} Total Acreage (Ha)` :
        dashboardSlice.selected_product === 'Agricultural Productivity' ? `${dashboardSlice.selected_district} Above Ground Biomass Total Acreage (Ha)` : ''
       
       }</span>
 
+<div className="pie_chart_container" style={{ height: '350px', 
+// backgroundColor:'#f0f0f0',
+ padding:'10px'}}>
+<CropBar data={cropChartData} /> </div>
       
-      <CropBar data={cropChartData} />
+      
 
       
 
@@ -128,7 +134,7 @@ justifyContent:'center',
        <> 
 
 
-<span className='chart_title' style={{fontFamily:'cursive', marginTop:'10vh'}}> { dashboardSlice.selected_climate === 'Elevation' ?
+<span className='chart_title' style={{fontFamily:'sans-serif', marginTop:'10vh'}}> { dashboardSlice.selected_climate === 'Elevation' ?
        `${dashboardSlice.selected_district}  ${dashboardSlice.selected_climate} (meters)`  :
 
        dashboardSlice.selected_climate === 'Precipitation' ?
@@ -159,14 +165,14 @@ justifyContent:'center',
 
 
       
-<p  style={{ fontFamily:'cursive'}}>Filter for Elevation</p>
+<p  style={{ fontFamily:'sans-serif'}}>Filter for Elevation</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
 <input type="range" name="slider" id="slider" onInput={sliderfunc} min={0} max={4000} step={100}/>
 <p className='label' >{slider_value}</p>
 
 </div>
 
-<p  style={{ fontFamily:'cursive'}}>Filter for Temperature</p>
+<p  style={{ fontFamily:'sans-serif'}}>Filter for Temperature</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
 <input type="range" name="slider" id="slider" onInput={sliderfunc} min={0} max={4000} step={100}/>
 <p className='label' >{slider_value}</p>
@@ -174,7 +180,7 @@ justifyContent:'center',
 </div>
 
 
-<p  style={{ fontFamily:'cursive'}}>Filter for Precipitation</p>
+<p  style={{ fontFamily:'sans-serif'}}>Filter for Precipitation</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
 <input type="range" name="slider" id="slider" onInput={sliderfunc} min={0} max={4000} step={100}/>
 <p className='label' >{slider_value}</p>

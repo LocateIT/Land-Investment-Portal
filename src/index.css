@@ -225,6 +225,73 @@ div.legend2 .leaflet-control{
     top:'50vh'
 }
 
+.base_map_ctrl_selections {
+  position: absolute;
+  z-index: 401;
+  /* margin-top: 5%; */
+  top: 15vh;
+  left:90%;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  padding: 5px;
+  display: none;
+  
+}
+.base_map_name {
+  font-size: 15px;
+  cursor: pointer;
+  border-bottom: #080808 solid 3px;
+}
+.base_map_name:hover {
+  background-color: #858585;
+}
+
+.map_controls {
+  position:absolute;
+        top:13.1vh;
+         z-index: 102;
+        right:1.5vw;
+        display:flex;
+         flex-direction: row; 
+         gap:1rem;
+        }
+        
+a.leaflet-control-layers-toggle{
+  background-color: transparent;
+  height: 30px !important;
+  width: 30px !important;
+  background-image: url('./assets/layers.svg');
+  position: absolute;
+  right: 5.8vw;
+}
+
+/* 
+a.leaflet-control-layers-toggle:hover  {
+ 
+                
+                
+
+} */
+.leaflet-control-layers-expanded{
+  background-color: #003247;
+  color: #fff;
+  padding: 15px;
+  position: absolute;
+  right: 6.2vw;
+  width: 120px;
+  
+ 
+
+
+  
+ 
+}
+
+
+.leaflet-control-layers-selector > span{
+  color: red;
+}
+
 
 @media (min--moz-device-pixel-ratio: 1.1),
        (-o-min-device-pixel-ratio: 11/10), 

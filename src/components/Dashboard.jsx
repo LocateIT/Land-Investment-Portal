@@ -30,6 +30,9 @@ import ancil from '../assets/ancil.svg'
 import close from '../assets/close_.svg'
 import open_icon from '../assets/open.svg'
 import close_icon from '../assets/close_icon.svg'
+import add from '../assets/add.svg'
+import minus from '../assets/minus.svg'
+import layers from '../assets/layers.svg'
 const Dashboard = () => {
   
     const dispatch = useDispatch()
@@ -57,6 +60,9 @@ const Dashboard = () => {
     const [stats_labels, setstats_labels] = useState([])
     const [acreage_label, setacreage_label] = useState([])
     const [total_acreage, settotal_acreage] = useState([])
+    const [baseMaps, setbaseMaps] = useState({})
+    // const [clicked_basemap, setclicked_basemap] = useState('')
+    const [currentBasemap, setCurrentBasemap] = useState(null);
 
 
     const [color_array, setcolor_array] = useState([])
@@ -79,6 +85,10 @@ const Dashboard = () => {
     let agb_legend = useRef(null)
     let crop_legend = useRef(null)
     let climate_legend = useRef(null)
+    // let baseMaps = useRef(null)
+    let clicked_basemap = useRef('')
+    let base_map_ctrl_selections = useRef(false)
+    let base_map_ctrl_cliked = useRef(false) 
 
     const handleDrawerToggle = () => {
       setIsDrawerOpen(true);
@@ -232,6 +242,8 @@ const districtOptions = dashboardselections.districts.map( selection => (
 </option>
 ))
 
+
+
 const snack_options = [
   { value: 'chocolate', label: 'Chocolate' },
   { value: 'strawberry', label: 'Strawberry' },
@@ -298,11 +310,12 @@ console.log(district_option, 'district option')
          );
 
 
-         var baseMaps = {
+         var basemaps_object = {
             MapBoxLight: mapboxLight,
             MapBox: mapbox,
             MapBoxSatellite: mapboxSatellite,
           };
+          setbaseMaps(basemaps_object)
 
     //       var container = L.DomUtil.get('map');
     //   if(container != null){
@@ -321,10 +334,10 @@ console.log(district_option, 'district option')
             zoom: 7,
             // measureControl: true,
             // defaultExtentControl: true,
-            layers: [mapboxSatellite]
+            layers:[mapboxSatellite]
           }); // add the basemaps to the controls
       
-          L.control.layers(baseMaps).addTo(map.current);
+          L.control.layers(basemaps_object).addTo(map.current);
     }
 
 const fetchOptions = async() => {
@@ -1130,6 +1143,50 @@ const fetchLandUse = () => {
   
 }
 
+const zoomin = () => {
+  map.current.setZoom(map.current.getZoom() + 1)
+}
+
+const zoomout = () => {
+  map.current.setZoom(map.current.getZoom() - 1)
+}
+const basemaps_mouseover = () => {
+  base_map_ctrl_selections.current = true 
+  base_map_ctrl_cliked.current = true
+}
+
+const basemaps_mouseleave = () => {
+  base_map_ctrl_selections.current = false 
+   base_map_ctrl_cliked.current = false
+}
+
+const layers_mouseover = () => {
+  base_map_ctrl_selections.current = true
+}
+
+const handleBaseLayers = () => {
+  setTimeout(() => {
+    if (base_map_ctrl_cliked.current === false)
+      base_map_ctrl_selections.current = false;
+  }, 500);
+}
+const change_base_map = (item) => {
+  // setCurrentBasemap(item)
+  // const index = Object.keys(baseMaps).indexOf(item);
+  // console.log(currentBasemap, 'basemaps item')
+  // setclicked_basemap(item)
+  clicked_basemap.current = item
+  console.log(clicked_basemap.current, 'clicked basemap')
+  
+
+  // let layerControlElement = document.getElementsByClassName(
+  //   "leaflet-control-layers"
+  // )[0];
+  // console.log(layerControlElement, 'layer control element')
+  // // console.log(layerControlElement.getElementsByTagName("input")[index].click(), 'layer methods')
+  // layerControlElement.getElementsByTagName("input")[index].click();
+}
+
 
 
     useEffect(() => {
@@ -1296,6 +1353,46 @@ const fetchLandUse = () => {
         // backgroundColor:'pink',
         zIndex:99
     }}></div>
+
+    <div className={ 'map_controls' } >
+      <img src={add} alt="" onClick={zoomin}/> 
+       <img src={minus} onClick={zoomout} alt="" />
+       {/* <img src={layers} alt="" onMouseOver={layers_mouseover} onMouseLeave={handleBaseLayers} /> */}
+
+    </div>
+
+    {
+      base_map_ctrl_selections ?
+      <div className='base_map_ctrl_selections'
+      onMouseOver={basemaps_mouseover}
+      onMouseLeave={basemaps_mouseleave}
+      
+      >
+        {
+          Object.keys(baseMaps).map((item) => 
+          // console.log(Object.keys(baseMaps), 'ITTTEEEEEEMM')
+          
+          <div className='base_map' key={item} 
+          
+          // onClick={ () =>
+          //  change_base_map(item)
+          //  }
+           
+           >
+            <div className='base_map_name'>{item}</div>
+          </div>
+          )
+        }
+
+
+      </div>
+
+      : ''
+
+
+    }
+
+    
 
 
 {

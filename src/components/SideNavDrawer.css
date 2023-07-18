@@ -4,7 +4,7 @@
   position: absolute;
   top: 12vh;
   right: -550px;
-  background-color: #f0f0f0;
+  background-color: #ffffff;
   transition: margin-left 0.7s ease-in-out;
   z-index: 103;
 }

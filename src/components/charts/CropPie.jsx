@@ -31,7 +31,7 @@ export const options = {
         marginLeft: 150,
         labels: {
           fontSize: 12,
-          fontColor: 'red',
+          fontColor: '#fff',
           borderColor:'none',
           boxWidth: 20, // This sets the width of each legend item box
       padding: 15,  // This sets the margin between the legend items
