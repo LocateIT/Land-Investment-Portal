@@ -2,6 +2,7 @@ import React from 'react'
 import home_image from '../assets/homepage.jpg'
 import './homepage.css'
 import { useNavigate } from 'react-router-dom'
+import Navbar from './Navbar'
 
 const HomePage = () => {
     const navigate = useNavigate() //navigate programmatically onclick
@@ -11,6 +12,11 @@ const HomePage = () => {
 justifyContent:'center', 
       alignItems:'center'}}>
         <img src={home_image} alt="" style={{height:'100vh', width:'100vw', marginLeft:'0', marginTop:'-0.4vw', zIndex:50}}/>
+        <div className="navbar" style={{  zIndex:120, position:'absolute',
+              top:'2vh', marginLeft:'0.1vw'}}>
+        <Navbar />
+        </div>
+      
         <div 
         style={{
              display:'flex',

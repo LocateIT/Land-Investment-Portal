@@ -17,6 +17,7 @@ const Navbar = () => {
     <div className='navbar'>
         <img className="logo" src={logo} />
         <img className="proj_name" src={proj_name} />
+        {/* <span>deliver ideas and actions for an empowered and transformed Africa</span> */}
         <div className="link_icons">
             {/* {
                 link_icons.map( (icon) => 
@@ -24,7 +25,7 @@ const Navbar = () => {
                 )
             } */}
             <img src={home} alt="" onClick={() => navigate('/')}/>
-            <img src={dashboard} alt="" />
+            <img src={dashboard} alt="" onClick={() => navigate('dashboard')} />
             <img src={about} alt="" />
             <img src={language} alt="" />
         </div>
