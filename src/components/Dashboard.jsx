@@ -1402,8 +1402,8 @@ const change_base_map = (item) => {
         left:'6.4vw',
         top:'30.2vh',
         backgroundColor:'#fff',
-        width:'400px',
-        height:'355px',
+        width:'350px',
+        height:'270px',
         zIndex:100,
         borderRadius:'10px',
         color:'#1E4B5F',
@@ -1420,25 +1420,26 @@ const change_base_map = (item) => {
             style={{
               
                
-                display:'flex',
-                flexDirection:'row',
-                gap:'0.5rem',
-                marginTop: '20px'
+                // display:'flex',
+                // flexDirection:'row',
+                // gap:'4rem',
+                marginTop: '1px'
             }}
             >
                 <div className="labels"
                  style={{ display:'flex',
                 flexDirection:'row',
-                gap:'2rem' }}
+                gap:'3rem',
+                marginTop: '10px'}}
                 >
 
                 <input type="radio" name="" id="crop_suitability"
                 value={dashboardSlice.products[1]}
                 checked={selected_radio === dashboardSlice.products[1]}
                 onChange={onRadioChange}
-                 style={{height:'30px', outline: "none"}} />
+                 style={{height:'30px', outline: "none", marginLeft:'1vw'}} />
 
-                <label htmlFor="">{dashboardSlice.products[1]}</label>
+                <label style={{marginLeft:'-2.5vw', marginTop: '10px'}} htmlFor="">{dashboardSlice.products[1]}</label>
 
                 <input type="radio" name="" id="agricultural_productivity"
                  value={dashboardSlice.products[0]}
@@ -1446,7 +1447,7 @@ const change_base_map = (item) => {
                  onChange={onRadioChange}  
                  style={{height:'30px', outline: "none"}}/> 
 
-                <label htmlFor="">{dashboardSlice.products[0]}</label>
+                <label style={{marginLeft:'-2.5vw', marginTop: '10px'}} htmlFor="">{dashboardSlice.products[0]}</label>
                 
 
 
@@ -1478,8 +1479,8 @@ const change_base_map = (item) => {
                 // height: '30px',
                 color:'white',
                 borderRadius:'10px',
-                marginTop:'25px',
-                marginLeft:'70px',
+                marginTop:'10px',
+                marginLeft:'40px',
                 outline:'none',zIndex:101
                 
                 
@@ -1506,7 +1507,7 @@ className='fetch_button'
                   width: '100px', 
                   height:'30px',
                   marginTop:'8vh',  
-                  marginLeft:'140px', 
+                  marginLeft:'120px', 
                   borderRadius:'10px', 
                   backgroundColor:'#1E4B5F',
                   color:'#fff',
@@ -1522,7 +1523,7 @@ className='fetch_button'
                   width: '100px', 
                   height:'30px',
                   marginTop:'8vh',  
-                  marginLeft:'140px', 
+                  marginLeft:'120px', 
                   borderRadius:'10px', 
                   backgroundColor:'#1E4B5F',
                   color:'#fff',

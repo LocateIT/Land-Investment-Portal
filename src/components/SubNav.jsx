@@ -17,15 +17,21 @@ const SubNav = () => {
         backgroundColor:'#1E4B5F',
         position:'absolute',
         top:'7.8vh',
+        left:'-0.2vw',
         width:'100vw',
         height: '4vh',
         alignItems:'center',
         color:'#fff',
         fontSize:'18px',
-        fontFamily:'sans-serif'
+        fontFamily:'sans-serif',
+        paddingLeft:'15px'
+
         
-        }}>
-            <span>LIP</span>
+        }}> 
+        
+    
+          
+        <span>LIP</span>
             |
             <span>{dashboardSlice.selected_country}</span>
             {/* {dashboardSlice.selected_country} */}
@@ -33,6 +39,9 @@ const SubNav = () => {
             <span>{dashboardSlice.selected_district}</span>
             <img src={right} alt="" className='right_icon' /> 
             <span>{dashboardSlice.selected_indicator}</span>
+
+        
+            
 
     </div>
   )

@@ -82,10 +82,12 @@ button:focus-visible {
   display: flex;
   flex-direction: row;
   gap: 2rem;
+  margin-left: -0.1vw;
 }
 .logo{
   height: 50px;
   margin-top: 12px;
+  margin-left: 10px;
 }
 .proj_name{
   height: 50px;
@@ -279,6 +281,7 @@ a.leaflet-control-layers-toggle:hover  {
   position: absolute;
   right: 6.2vw;
   width: 120px;
+  /* font-family: sans-serif; */
   
  
 
