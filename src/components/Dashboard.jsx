@@ -1192,27 +1192,11 @@ const change_base_map = (item) => {
     useEffect(() => {
         setLeafletMap()
         
-        // fetchRegion()
-        // store.dispatch(setRegion())
-        // eeInitialize();
-        // fetchEarthEngine()
-       
         
     
       
     }, [])
     useEffect(() => {
-      // setLeafletMap()
-      
-      // fetchRegion()
-      // store.dispatch(setRegion())
-      // eeInitialize();
-      // fetchEarthEngine()
-     
-     
-      
-  
-    
   }, [district_option, district.name, color_array, climate])
 
   return (
