@@ -9,7 +9,8 @@ import "leaflet/dist/leaflet.css"
 import  axios from 'axios'
 
 import { dashboardSelections } from './selectionSlice';
-import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels, changeAcreageLabel, changeTotalAcreage,
+import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct, 
+  changeStatsFigures, changeStatsLabels, changeAcreageLabel, changeTotalAcreage,
    changeSelectedProduct, changeSelectedIndicator, changeStatsColor} from './selectionSlice';
 import Select from 'react-select'
 
@@ -89,6 +90,9 @@ const Dashboard = () => {
     let clicked_basemap = useRef('')
     let base_map_ctrl_selections = useRef(false)
     let base_map_ctrl_cliked = useRef(false) 
+
+    let country_code = useRef(null)
+    let bounds = useRef([])
 
     const handleDrawerToggle = () => {
       setIsDrawerOpen(true);
@@ -390,30 +394,82 @@ const fetchOptions = async() => {
         // const district_cql2 = cql_fiter_column + "=" +country
         const country_filter = wms_resp['country_details']['country_id']
         console.log('COUNTRY FILTER',country_filter)
-        const resp = await axios.get("http://139.84.229.39:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=Landinvestment_datasets:District&outputFormat=application/json&CQL_FILTER=country_id="+country_filter);
+        // const resp = await axios.get("http://139.84.229.39:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=Landinvestment_datasets:District&outputFormat=application/json&CQL_FILTER=country_id="+country_filter);
        
-        var aoi_data = resp.data
-        console.log(aoi_data, 'aoi response')
-        current_response.current = aoi_data
-        console.log(current_response.current, 'current aoi')
+        // var aoi_data = resp.data
+        // console.log(aoi_data, 'aoi response')
+        // current_response.current = aoi_data
+        // console.log(current_response.current, 'current aoi')
     
-        console.log(current_response.current.features[0].geometry.coordinates, 'multipolygon')
-           // map.createPane("pane1000").style.zIndex = 300;
-           current_country_geojson.current = L.geoJSON(current_response.current, {
-            style: {
-              color: "black",
-              opacity: 1,
-              fillOpacity:0,
-              weight: 4
-            }
-            // pane: 'pane1000'
-          })
-          current_country_geojson.current.addTo(map.current)
+        // console.log(current_response.current.features[0].geometry.coordinates, 'multipolygon')
+        //    // map.createPane("pane1000").style.zIndex = 300;
+        //    current_country_geojson.current = L.geoJSON(current_response.current, {
+        //     style: {
+        //       color: "black",
+        //       opacity: 1,
+        //       fillOpacity:0,
+        //       weight: 4
+        //     }
+        //     // pane: 'pane1000'
+        //   })
+          // current_country_geojson.current.addTo(map.current)
           
-          map.current.fitBounds(current_country_geojson.current.getBounds(), {
-                  padding: [50, 50],
-                });
+          // map.current.fitBounds(current_country_geojson.current.getBounds(), {
+          //         padding: [50, 50],
+          //       });
 
+
+                
+                const resp2 = await axios.get('http://139.84.229.39:8070/uneca-api-0.1/geojson/getcountryinfo/?country_names=ALL')
+                console.log(resp2.data.regions_info['Southern Africa']['country_code'], 'RESP2 DATA') 
+                // var country_code_object = resp2.data.regions_info['Southern Africa']['country_code']
+                // var country_code_array = country_code_object.map((item) => item.country_code)
+                // console.log(country_code_array, 'country_code_array')
+                // if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+                map.current.createPane("pane400").style.zIndex = 200;
+                 if(taifa === 'Malawi') {
+                  country_code.current = '152'
+                  bounds.current = [
+                    [ -17.1288105, 32.67395],
+                    [ -9.36754, 35.932 ]
+                   ]
+                 }
+                 if(taifa === 'Guinea') {
+                  country_code.current ='106'
+                  bounds.current = [
+                    [ 7.19355000004337, -15.0757013],
+                    [ 12.6762127721554, -7.64107 ]
+                   ]
+                 }
+                 if(taifa === 'Madagascar') {
+                  country_code.current ='150'
+                  bounds.current = [
+                    [ -25.6071002, 43.188156],
+                    [-11.9497945, 50.4921515 ]
+                   ]
+                  
+                 }
+
+                 console.log(country_code.current)
+               
+   wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+        pane: 'pane400',
+        layers: `Landinvestment_datasets:geoportal_adminlevelzero`,
+        crs:L.CRS.EPSG4326,
+        CQL_FILTER: `country_code=${country_code.current}`,
+        // styles: `Crop_Production_Crop_Suitability_${dashboardSlice.selected_crop}_${district.name}`,
+        // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+      
+        format: 'image/png',
+        transparent: true,
+        opacity:1.0
+        
+        
+       
+   });
+   wmsLayer.current.addTo(map.current)
+
+   map.current.flyToBounds(bounds.current)
 
 
 
@@ -1142,6 +1198,74 @@ const fetchLandUse = () => {
 
   
 }
+const fetchDemographics = (e) => {
+  // if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  // map.current.createPane("pane400").style.zIndex = 200;
+
+  console.log(e, 'input event')
+
+  // if(clicked_link === 'Ancillary Data' ) {
+    
+  //     wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+  //       pane: 'pane400',
+  //       layers: `Landinvestment_datasets:Population_Density_Population_&_Demographics_Population`,
+  //       crs:L.CRS.EPSG4326,
+  //       styles: `Population_&_Demographics_Population_Population_Density_Balaka_${district.name}`,
+  //       // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+      
+  //       format: 'image/png',
+  //       transparent: true,
+  //       opacity:1.0
+        
+        
+       
+  //  });
+  
+  //  wmsLayer.current.addTo(map.current);
+
+  //   //add legend
+  //   // const addCropLegend = () => {
+  //   //   if(climate_legend.current)map.current.removeControl(climate_legend.current)
+  //   //   if(crop_legend.current)map.current.removeControl(crop_legend.current)
+  //   //   if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  //   //   if(wmsLayer.current){
+  //   //     var legend = L.control({position:'bottomright'});
+  //   //     crop_legend.current = legend
+  
+  //   //     crop_legend.current.onAdd = function(map) {
+  //   //       var div = L.DomUtil.create("div", `${isDrawerOpen ? 'legend2' : 'legend'}`)
+  //   //       // if( isDrawerOpen == true) {
+  //   //       //   var div = L.DomUtil.create("div", 'legend')
+  //   //       // } else{
+  //   //       //   var div = L.DomUtil.create("div", 'legend2')
+  //   //       // }
+          
+       
+          
+  //   //   div.innerHTML += (`<p>${dashboardSlice.selected_district} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+  
+          
+  //   //   let draggable = new L.Draggable(div); //the legend can be dragged around the div
+  //   //   draggable.enable();
+  
+  //   //   return div;
+  //   //   };
+  
+  //   //   crop_legend.current.addTo(map.current);
+  //   //   }
+  
+  //   //  }
+  //   //  addCropLegend()
+
+
+  //   //  fetchCropStats()
+  //   //  color_func()
+  
+  //   }
+
+   
+  
+}
 
 const zoomin = () => {
   map.current.setZoom(map.current.getZoom() + 1)
@@ -1149,42 +1273,6 @@ const zoomin = () => {
 
 const zoomout = () => {
   map.current.setZoom(map.current.getZoom() - 1)
-}
-const basemaps_mouseover = () => {
-  base_map_ctrl_selections.current = true 
-  base_map_ctrl_cliked.current = true
-}
-
-const basemaps_mouseleave = () => {
-  base_map_ctrl_selections.current = false 
-   base_map_ctrl_cliked.current = false
-}
-
-const layers_mouseover = () => {
-  base_map_ctrl_selections.current = true
-}
-
-const handleBaseLayers = () => {
-  setTimeout(() => {
-    if (base_map_ctrl_cliked.current === false)
-      base_map_ctrl_selections.current = false;
-  }, 500);
-}
-const change_base_map = (item) => {
-  // setCurrentBasemap(item)
-  // const index = Object.keys(baseMaps).indexOf(item);
-  // console.log(currentBasemap, 'basemaps item')
-  // setclicked_basemap(item)
-  clicked_basemap.current = item
-  console.log(clicked_basemap.current, 'clicked basemap')
-  
-
-  // let layerControlElement = document.getElementsByClassName(
-  //   "leaflet-control-layers"
-  // )[0];
-  // console.log(layerControlElement, 'layer control element')
-  // // console.log(layerControlElement.getElementsByTagName("input")[index].click(), 'layer methods')
-  // layerControlElement.getElementsByTagName("input")[index].click();
 }
 
 
@@ -1345,36 +1433,8 @@ const change_base_map = (item) => {
 
     </div>
 
-    {
-      base_map_ctrl_selections ?
-      <div className='base_map_ctrl_selections'
-      onMouseOver={basemaps_mouseover}
-      onMouseLeave={basemaps_mouseleave}
-      
-      >
-        {
-          Object.keys(baseMaps).map((item) => 
-          // console.log(Object.keys(baseMaps), 'ITTTEEEEEEMM')
-          
-          <div className='base_map' key={item} 
-          
-          // onClick={ () =>
-          //  change_base_map(item)
-          //  }
-           
-           >
-            <div className='base_map_name'>{item}</div>
-          </div>
-          )
-        }
-
-
-      </div>
-
-      : ''
-
-
-    }
+ 
+    
 
     
 
@@ -1395,7 +1455,7 @@ const change_base_map = (item) => {
         fontFamily:'sans-serif',
         fontSize:'14px'
     }}>
-      <img className='close_selection_panel' src={close} alt="" style={{ marginLeft:'19.5vw', marginTop:'3px'}}  onClick={ close_selection} />
+      <img className='close_selection_panel' src={close} alt="" style={{ marginLeft:'17vw', marginTop:'3px'}}  onClick={ close_selection} />
         {
             clicked_link === 'Crop Production' ?
             
@@ -1663,7 +1723,7 @@ className='fetch_button'
          
         
         <div style={{ display: 'flex', flexDirection:'row', gap:'0.1rem', padding:'4px', marginTop:'5px'}}>
-        <input type="checkbox" name="" id="" key={item} />
+        <input type="checkbox" name="" id="" key={item} onChange={fetchDemographics} />
         <span >{item}</span>
         </div>
         </>

@@ -50,6 +50,8 @@ justifyContent:'center',
 <br />
 <div className="indicators" style={{ fontFamily:'sans-serif'}}>
 <p style={{fontWeight:'bold'}}>Background Information</p>
+<p> The Land Investment Portal is built so as to aid the government and Land Investors in decision making when it comes to agricultural Investment.</p>
+<p>The portal utilizes data from various online repositories as well as those provided by the partners for visualization</p>
                 <p>
 The dashboard consists of major indicators: </p>
   <div className="headings" style={{display:'flex', flexDirection:'column', gap:'1rem', fontFamily:'sans-serif', fontWeight:'bold'}}>
@@ -57,7 +59,7 @@ The dashboard consists of major indicators: </p>
 <span>Climate:</span> 
  <span>Soil Data:</span> 
  
-<span>Ancilliary data:</span>
+<span>Ancillary data:</span>
 
 {/* <span>Land Use</span>
 <span>Night-time Light</span> */}
