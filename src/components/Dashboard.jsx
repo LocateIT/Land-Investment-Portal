@@ -75,6 +75,7 @@ const Dashboard = () => {
     const [color_array, setcolor_array] = useState([])
     const crop_color = ['blue',"#a8a800","#0c7437","#6aff4e","#ccc","#bd6860","green","#fff1d2"]
     const agb_color = ["#f2f2a3", "#ffff00", "#ff0000", "#b007ed", "#071dad"]
+    const agb_color2 = ["magenta", "magenta", "magenta", "red", "purple"]
     const precip_color = ["#c6cdd4", "#d1c8b0", "#d0bf90", "#7ba7b3", "#2871b0", "#08306b"]
     const temperature_color = ["#3aee5b", "#49883f", "#b8e38b", "#dbe5b3", "#e77d1a", "#f90f49"]
     const elevation_color = ['#ee7245','#fdad61', '#fffebe', "#acd9e9","#2e7cb7", "#2c7bb6"]
@@ -220,7 +221,7 @@ const Dashboard = () => {
   const onRadioChange = e => {
     setSelected_radio(e.target.value)
     console.log(e.target.value) //logs agri prod, crop suitabbility
-    // dispatch(changeSelectedProduct(e.target.value))
+    dispatch(changeSelectedProduct(e.target.value))
 
   }
 
@@ -442,7 +443,7 @@ const fetchOptions = async() => {
                 // var country_code_array = country_code_object.map((item) => item.country_code)
                 // console.log(country_code_array, 'country_code_array')
                 // if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
-                map.current.createPane("pane400").style.zIndex = 200;
+                map.current.createPane("pane400").style.zIndex = 400;
                  if(taifa === 'Malawi') {
                   country_code.current = '152'
                   bounds.current = [
@@ -639,15 +640,16 @@ const fetchAGBStats = async () => {
 }
 
 const color_func = () => {
-  if(dashboardSlice.selected_product === 'Crop Suitability' ) {
-    setcolor_array(crop_color) 
-    dispatch(changeStatsColor(crop_color))
-  }
   if(dashboardSlice.selected_product === 'Agricultural Productivity'  ) {
     setcolor_array(agb_color)
     dispatch(changeStatsColor(agb_color))
 
   }
+  if(dashboardSlice.selected_product === 'Crop Suitability' ) {
+    setcolor_array(crop_color) 
+    dispatch(changeStatsColor(crop_color))
+  }
+
 
   
 
@@ -679,8 +681,10 @@ const fetchCountryCrop = () => {
 
   //add legend
   const addCropLegend = () => {
+    if(climate_legend.current)map.current.removeControl(climate_legend.current)
     if(crop_legend.current)map.current.removeControl(crop_legend.current)
     if(agb_legend.current)map.current.removeControl(agb_legend.current)
+    
     if(wmsLayer.current){
       var legend = L.control({position:'bottomright'});
       crop_legend.current = legend
@@ -895,21 +899,21 @@ const fetchCountryClimate = (e) => {
   setClimate(climate_name)
 
 
-  if( climate_name === 'Precipitation' ) {
-    setcolor_array(precip_color)
-    dispatch(changeStatsColor(precip_color))
-  }
+  // if( climate_name === 'Precipitation' ) {
+  //   setcolor_array(precip_color)
+  //   dispatch(changeStatsColor(precip_color))
+  // }
           
-  if( climate_name === 'Elevation'){
-    setcolor_array(agb_color)
-    dispatch(changeStatsColor(elevation_color))
-  }
+  // if( climate_name === 'Elevation'){
+  //   setcolor_array(agb_color)
+  //   dispatch(changeStatsColor(elevation_color))
+  // }
   
-  if( climate_name === 'Temperature' ) {
-    setcolor_array(temperature_color)
-    dispatch(changeStatsColor(temperature_color))
+  // if( climate_name === 'Temperature' ) {
+  //   setcolor_array(temperature_color)
+  //   dispatch(changeStatsColor(temperature_color))
 
-  }
+  // }
   
 if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
 if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
@@ -1003,21 +1007,21 @@ const fetchClimate = (e) => {
   setClimate(climate_name)
 
 
-  if( climate_name === 'Precipitation' ) {
-    setcolor_array(precip_color)
-    dispatch(changeStatsColor(precip_color))
-  }
+  // if( climate_name === 'Precipitation' ) {
+  //   setcolor_array(precip_color)
+  //   dispatch(changeStatsColor(precip_color))
+  // }
           
-  if( climate_name === 'Elevation'){
-    setcolor_array(agb_color)
-    dispatch(changeStatsColor(elevation_color))
-  }
+  // if( climate_name === 'Elevation'){
+  //   setcolor_array(agb_color)
+  //   dispatch(changeStatsColor(elevation_color))
+  // }
   
-  if( climate_name === 'Temperature' ) {
-    setcolor_array(temperature_color)
-    dispatch(changeStatsColor(temperature_color))
+  // if( climate_name === 'Temperature' ) {
+  //   setcolor_array(temperature_color)
+  //   dispatch(changeStatsColor(temperature_color))
 
-  }
+  // }
   
 if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
 if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
@@ -1271,7 +1275,7 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
       pane: 'pane400',
       layers: `Landinvestment_datasets:Population_Density_Population_&_Demographics_Population`,
       crs:L.CRS.EPSG4326,
-      styles: 'Population_&_Demographics_Population_Population_Density_Balaka',
+      styles: `Population_&_Demographics_Population_Population_Density_${district.name}`,
       // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
     
       format: 'image/png',

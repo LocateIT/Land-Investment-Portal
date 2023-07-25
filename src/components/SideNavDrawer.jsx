@@ -77,11 +77,24 @@ const sliderfunc = (e)  => {
        <> 
 
 
-<span style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F', marginTop:'-12vh', marginLeft:'1vw'}}> { dashboardSlice.selected_product === 'Crop Suitability' ?
+<span style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F', marginTop:'-12vh', marginLeft:'1vw'}}>
+  
+   { dashboardSlice.selected_product === 'Crop Suitability' ?
        `${dashboardSlice.selected_district}  ${dashboardSlice.selected_crop} Suitability` :
-       dashboardSlice.selected_product === 'Agricultural Productivity' ? `${dashboardSlice.selected_district} Above Ground Biomass` : ''
+
+      null
       
       }</span>
+
+      <span style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F', marginTop:'-12vh', marginLeft:'1vw'}}>
+
+        {
+          dashboardSlice.selected_product === 'Agricultural Productivity' ?
+
+         
+        `${dashboardSlice.selected_district} Above Ground Biomass` : ''
+        }
+      </span>
       <div className="side-nav-content">
         { dashboardSlice.selected_product === 'Crop Suitability' ||   dashboardSlice.selected_product === 'Agricultural Productivity' ?
 
