@@ -296,7 +296,7 @@ console.log(district_option, 'district option')
             "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
             {
               attribution:
-                'Map data (c) <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+                'UNECA |Map data (c) <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
               // maxZoom: 18,
               id: "mapbox/light-v11",
               accessToken:
@@ -307,7 +307,7 @@ console.log(district_option, 'district option')
            "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}{r}?access_token={accessToken}",
            {
              attribution:
-               'Map data (c) <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+             ' UNECA | Map data (c) <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
       
              id: "mapbox/satellite-v9",
              accessToken:
@@ -319,7 +319,7 @@ console.log(district_option, 'district option')
            "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
            {
              attribution:
-               'Map data (c) <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+             ' UNECA | Map data (c) <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
              // maxZoom: 18,
              id: "mapbox/streets-v11",
              accessToken:
@@ -2014,14 +2014,14 @@ marginLeft:'75vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.
 <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Precipitation</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
 <input type="range" id="slider"  onInput={sliderfunc} min={400} max={717} step={10}/>
-<p className='label' >{slider_value}</p>
+<p className='label' >{slider_value} </p>
 
 </div>
 
 <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Temperature</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
 <input type="range" id="slider2"  onInput={sliderfunc2} min={26} max={34} step={1}/>
-<p className='label' >{temp_slider_value}</p>
+<p className='label' >{temp_slider_value} </p>
 
 </div>
 
