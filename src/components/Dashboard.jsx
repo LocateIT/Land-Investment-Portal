@@ -89,7 +89,7 @@ const Dashboard = () => {
     let wmsNTLLayer = useRef(null)
     let current_response = useRef(null)
     let current_geojson = useRef(null)
-     let current_country_geojson = useRef(null)
+    //  let wmsCountryLayer = useRef(null)
     let agb_legend = useRef(null)
     let crop_legend = useRef(null)
     let climate_legend = useRef(null)
@@ -102,6 +102,7 @@ const Dashboard = () => {
     let bounds = useRef([])
     let ancil_check = useRef(null)
     let climate_ref = useRef('')
+    let wmsCountryLayer = useRef(null)
 
 
     const handleDrawerToggle = () => {
@@ -394,7 +395,8 @@ const fetchOptions = async() => {
     const fetchRegion = async() => {
   
       try {   
-        if(current_country_geojson.current) map.current.removeLayer(current_country_geojson.current)
+        if(wmsCountryLayer.current) map.current.removeLayer(wmsCountryLayer.current)
+        if(current_geojson.current) map.current.removeLayer(current_geojson.current)
         if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
         
         var taifa = country_name.current
@@ -417,7 +419,7 @@ const fetchOptions = async() => {
     
         // console.log(current_response.current.features[0].geometry.coordinates, 'multipolygon')
         //    // map.createPane("pane1000").style.zIndex = 300;
-        //    current_country_geojson.current = L.geoJSON(current_response.current, {
+        //    wmsCountryLayer.current = L.geoJSON(current_response.current, {
         //     style: {
         //       color: "black",
         //       opacity: 1,
@@ -426,9 +428,9 @@ const fetchOptions = async() => {
         //     }
         //     // pane: 'pane1000'
         //   })
-          // current_country_geojson.current.addTo(map.current)
+          // wmsCountryLayer.current.addTo(map.current)
           
-          // map.current.fitBounds(current_country_geojson.current.getBounds(), {
+          // map.current.fitBounds(wmsCountryLayer.current.getBounds(), {
           //         padding: [50, 50],
           //       });
 
@@ -466,7 +468,7 @@ const fetchOptions = async() => {
 
                  console.log(country_code.current)
                
-   wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+   wmsCountryLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
         pane: 'pane400',
         layers: `Landinvestment_datasets:geoportal_adminlevelzero`,
         crs:L.CRS.EPSG4326,
@@ -481,7 +483,7 @@ const fetchOptions = async() => {
         
        
    });
-   wmsLayer.current.addTo(map.current)
+   wmsCountryLayer.current.addTo(map.current)
 
    map.current.flyToBounds(bounds.current)
 
@@ -504,8 +506,9 @@ const fetchOptions = async() => {
   
       try {   
         if(current_geojson.current) map.current.removeLayer(current_geojson.current)
-        if(current_country_geojson.current) map.current.removeLayer(current_country_geojson.current)
+        if(wmsCountryLayer.current) map.current.removeLayer(wmsCountryLayer.current)
         if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+        if(wmsCountryLayer.current)map.current.removeLayer(wmsCountryLayer.current)
         // console.log(current_name.current, 'curent name')
         // var basin = current_name.current
         // console.log(basin, 'basin current')
@@ -655,7 +658,7 @@ const fetchCountryCrop = () => {
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
   map.current.createPane("pane400").style.zIndex = 200;
 
-  if( current_country_geojson.current != null && clicked_link === 'Crop Production' && selected_radio === 'Crop Suitability') {
+  if( wmsCountryLayer.current != null && clicked_link === 'Crop Production' && selected_radio === 'Crop Suitability') {
     
     wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
       pane: 'pane400',
@@ -713,7 +716,7 @@ const fetchCountryCrop = () => {
 
   }
 
-  if( current_country_geojson.current != null && clicked_link === 'Crop Production' && selected_radio === 'Agricultural Productivity') {
+  if( wmsCountryLayer.current != null && clicked_link === 'Crop Production' && selected_radio === 'Agricultural Productivity') {
     
     wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
       pane: 'pane400',
@@ -758,8 +761,8 @@ const fetchCountryCrop = () => {
  }
  addAGBLegend()
 
-//  fetchAGBStats()
-//  color_func()
+ fetchAGBStats()
+ color_func()
 
   }
 }
@@ -909,9 +912,10 @@ const fetchCountryClimate = (e) => {
   }
   
 if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
 map.current.createPane("pane400").style.zIndex = 200;
 
-if(clicked_link === 'Climate' && climate_name && current_country_geojson.current != null ) {
+if(clicked_link === 'Climate' && climate_name && wmsCountryLayer.current != null ) {
   wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
     pane: 'pane400',
     layers: `Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate`,
@@ -1016,6 +1020,7 @@ const fetchClimate = (e) => {
   }
   
 if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
 map.current.createPane("pane400").style.zIndex = 200;
 
 
@@ -1222,6 +1227,7 @@ const fetchLandUse = () => {
 
   if(clicked_link === 'Night-time Light' && current_geojson.current != null) { 
      if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+     if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
     map.current.createPane("pane400").style.zIndex = 200;
     console.log('NTL')
     wmsNTLLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
@@ -1317,6 +1323,24 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
   //  color_func()
 
   }
+
+  if( clicked_link === 'Ancillary Data' && ancillary_selection !== 'Demographics' || 'Economic Activity' ) {
+  
+    wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+      pane: 'pane400',
+      layers: `Landinvestment_datasets:${ancillary_selection}`,
+      crs:L.CRS.EPSG4326,
+      // styles: '',
+      format: 'image/png',
+      transparent: true,
+      opacity:1.0
+      
+      
+     
+ });
+
+ wmsLayer.current.addTo(map.current);
+}
 
 
 }
@@ -1760,7 +1784,7 @@ className='fetch_button'
                   
                     }}>Fetch </button>
 
-                    : current_country_geojson.current != null ? 
+                    : wmsCountryLayer.current != null ? 
                     <button type='button' 
 className='fetch_button'
                  style= {{

@@ -49,7 +49,7 @@ const initialState = {
     climate_products:['Precipitation', 'Temperature', 'Elevation'],
     soil_products:['Soil Texture','Organic Carbon', 'Drainage', 'Cations', 'Nutrients'],
     selected_soil:'',
-    ancil_data:['Road Network', 'Towns', 'Market Accessibility', 'Economic Activity', "Demographics"],
+    ancil_data:['Roads', 'Towns', 'Markets', 'Economic Activity', "Demographics"],
     stats_figures:[],
     stats_labels:[],
     stats_color:[],
