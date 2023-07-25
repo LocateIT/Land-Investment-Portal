@@ -34,6 +34,7 @@ import close_icon from '../assets/close_icon.svg'
 import add from '../assets/add.svg'
 import minus from '../assets/minus.svg'
 import layers from '../assets/layers.svg'
+import CustomAncilSelect from './CustomAncil';
 const Dashboard = () => {
   
     const dispatch = useDispatch()
@@ -47,6 +48,7 @@ const Dashboard = () => {
     const [country, setCountry] = useState('')
     const [clicked_link, setClicked_link] = useState('')
     const [selected_radio, setSelected_radio] = useState(dashboardSlice.products[1])
+    const [selected_ancil, setSelected_ancil] = useState(dashboardSlice.ancil_data[4])
     const [crop_, setCrop] = useState('')
     const [indicator_, setIndicator] = useState('')
     const [open, setOpen] = useState(true)
@@ -64,6 +66,8 @@ const Dashboard = () => {
     const [baseMaps, setbaseMaps] = useState({})
     // const [clicked_basemap, setclicked_basemap] = useState('')
     const [currentBasemap, setCurrentBasemap] = useState(null);
+    
+  const [slider_value, setslider_value] = useState('')
 
 
     const [color_array, setcolor_array] = useState([])
@@ -80,6 +84,7 @@ const Dashboard = () => {
     let crop_name = useRef('')
     let indicator = useRef('')
     let wmsLayer = useRef(null)
+    let wmsNTLLayer = useRef(null)
     let current_response = useRef(null)
     let current_geojson = useRef(null)
      let current_country_geojson = useRef(null)
@@ -93,6 +98,9 @@ const Dashboard = () => {
 
     let country_code = useRef(null)
     let bounds = useRef([])
+    let ancil_check = useRef(null)
+    let climate_ref = useRef('')
+
 
     const handleDrawerToggle = () => {
       setIsDrawerOpen(true);
@@ -130,6 +138,7 @@ const Dashboard = () => {
       //update the selected_region value using dispatch changeSelelcted region reducer
       dispatch(changeSelectedCountry(changed_country.value))
      fetchRegion()
+    //  fetchNTL()
    
   
   
@@ -208,9 +217,12 @@ const Dashboard = () => {
   const onRadioChange = e => {
     setSelected_radio(e.target.value)
     console.log(e.target.value) //logs agri prod, crop suitabbility
-    dispatch(changeSelectedProduct(e.target.value))
+    // dispatch(changeSelectedProduct(e.target.value))
 
   }
+
+  
+ 
 
 
   const close_selection = () => {
@@ -872,6 +884,7 @@ const fetchCrop = () => {
 const fetchCountryClimate = (e) => {
   console.log(e, 'event')
   const climate_name = e
+  climate_ref.current = climate_name
   dispatch(changeClimateProduct(e))
   // console.log('climate data')
   setClimate(climate_name)
@@ -978,6 +991,7 @@ const addClimateLegend = () => {
 const fetchClimate = (e) => {
   console.log(e, 'event')
   const climate_name = e
+  climate_ref.current = climate_name
   dispatch(changeClimateProduct(e))
   // console.log('climate data')
   setClimate(climate_name)
@@ -1021,6 +1035,8 @@ map.current.createPane("pane400").style.zIndex = 200;
  });
 
  wmsLayer.current.addTo(map.current);
+
+
 
   //add legend
   const addClimateLegend = () => {
@@ -1198,74 +1214,138 @@ const fetchLandUse = () => {
 
   
 }
-const fetchDemographics = (e) => {
-  // if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
-  // map.current.createPane("pane400").style.zIndex = 200;
 
-  console.log(e, 'input event')
+// const fetchNTL = () => {
+  // if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
 
-  // if(clicked_link === 'Ancillary Data' ) {
+  if(clicked_link === 'Night-time Light' && current_geojson.current != null) { 
+     if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+    map.current.createPane("pane400").style.zIndex = 200;
+    console.log('NTL')
+    wmsNTLLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+      pane: 'pane400',
+      layers: `Landinvestment_datasets:Night_Time_Light_Socioeconomics_NTL`,
+      crs:L.CRS.EPSG4326,
+      styles:`Socioeconomics_NTL_Night_Time_Light_${district.name}`,
+      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
     
-  //     wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
-  //       pane: 'pane400',
-  //       layers: `Landinvestment_datasets:Population_Density_Population_&_Demographics_Population`,
-  //       crs:L.CRS.EPSG4326,
-  //       styles: `Population_&_Demographics_Population_Population_Density_Balaka_${district.name}`,
-  //       // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+      format: 'image/png',
+      transparent: true,
+      opacity:1.0
       
-  //       format: 'image/png',
-  //       transparent: true,
-  //       opacity:1.0
+      
+     
+ });
+
+ wmsNTLLayer.current.addTo(map.current);
+}
+  
+
+  
+// }
+
+
+
+const onAncilChange = e => {
+  setSelected_ancil(e)
+  console.log(e) 
+  ancil_check.current = e
+  var ancillary_selection = e
+  if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+map.current.createPane("pane400").style.zIndex = 200;
+console.log(ancillary_selection,'selected ancil')
+
+
+
+if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' ) {
+  
+    wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+      pane: 'pane400',
+      layers: `Landinvestment_datasets:Population_Density_Population_&_Demographics_Population`,
+      crs:L.CRS.EPSG4326,
+      styles: 'Population_&_Demographics_Population_Population_Density_Balaka',
+      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+    
+      format: 'image/png',
+      transparent: true,
+      opacity:1.0
+      
+      
+     
+ });
+
+ wmsLayer.current.addTo(map.current);
+
+  //add legend
+  // const addCropLegend = () => {
+  //   if(climate_legend.current)map.current.removeControl(climate_legend.current)
+  //   if(crop_legend.current)map.current.removeControl(crop_legend.current)
+  //   if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  //   if(wmsLayer.current){
+  //     var legend = L.control({position:'bottomright'});
+  //     crop_legend.current = legend
+
+  //     crop_legend.current.onAdd = function(map) {
+  //       var div = L.DomUtil.create("div", `${isDrawerOpen ? 'legend2' : 'legend'}`)
+  //       // if( isDrawerOpen == true) {
+  //       //   var div = L.DomUtil.create("div", 'legend')
+  //       // } else{
+  //       //   var div = L.DomUtil.create("div", 'legend2')
+  //       // }
         
+     
         
-       
-  //  });
-  
-  //  wmsLayer.current.addTo(map.current);
+  //   div.innerHTML += (`<p>${dashboardSlice.selected_district} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
 
-  //   //add legend
-  //   // const addCropLegend = () => {
-  //   //   if(climate_legend.current)map.current.removeControl(climate_legend.current)
-  //   //   if(crop_legend.current)map.current.removeControl(crop_legend.current)
-  //   //   if(agb_legend.current)map.current.removeControl(agb_legend.current)
-  //   //   if(wmsLayer.current){
-  //   //     var legend = L.control({position:'bottomright'});
-  //   //     crop_legend.current = legend
-  
-  //   //     crop_legend.current.onAdd = function(map) {
-  //   //       var div = L.DomUtil.create("div", `${isDrawerOpen ? 'legend2' : 'legend'}`)
-  //   //       // if( isDrawerOpen == true) {
-  //   //       //   var div = L.DomUtil.create("div", 'legend')
-  //   //       // } else{
-  //   //       //   var div = L.DomUtil.create("div", 'legend2')
-  //   //       // }
-          
-       
-          
-  //   //   div.innerHTML += (`<p>${dashboardSlice.selected_district} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
-  
-          
-  //   //   let draggable = new L.Draggable(div); //the legend can be dragged around the div
-  //   //   draggable.enable();
-  
-  //   //   return div;
-  //   //   };
-  
-  //   //   crop_legend.current.addTo(map.current);
-  //   //   }
-  
-  //   //  }
-  //   //  addCropLegend()
+        
+  //   let draggable = new L.Draggable(div); //the legend can be dragged around the div
+  //   draggable.enable();
 
+  //   return div;
+  //   };
 
-  //   //  fetchCropStats()
-  //   //  color_func()
-  
+  //   crop_legend.current.addTo(map.current);
   //   }
 
-   
-  
+  //  }
+  //  addCropLegend()
+
+
+  //  fetchCropStats()
+  //  color_func()
+
+  }
+
+
 }
+
+// const fetchFilteredPrec = (e) => {
+//   console.log(e.target.value, 'prec range filter')
+//   var prec_range_value = e.target.value
+
+//   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+// map.current.createPane("pane400").style.zIndex = 200;
+
+// if(clicked_link === 'Climate' && climate_ref.current === 'Precipitation' && current_geojson.current ) {
+//   wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+//     pane: 'pane400',
+//     layers: `Landinvestment_datasets:malawi_precipitation_uUTiNcB_Balakaclipped_filtere_less_91`,
+//     crs:L.CRS.EPSG4326,
+//     // styles: `Climate_and_Geography_Climate_${climate_name}_${district.name}`,
+//     // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+  
+//     format: 'image/png',
+//     transparent: true,
+//     opacity:1.0
+    
+    
+   
+// });
+
+// wmsLayer.current.addTo(map.current);
+// }
+
+// }
 
 const zoomin = () => {
   map.current.setZoom(map.current.getZoom() + 1)
@@ -1274,6 +1354,39 @@ const zoomin = () => {
 const zoomout = () => {
   map.current.setZoom(map.current.getZoom() - 1)
 }
+const sliderfunc = (e)  => {
+  console.log('input event',e.target.value)
+  // fetchFilteredData(e.target.value)
+  // const value = Number(input.value) / 100;
+  const value = e.target.value
+  setslider_value(value)
+  // input.style.setProperty("--thumb-rotate", `${value * 720}deg`);
+  // p.innerHTML = Math.round(value * 100);
+
+    if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+    console.log(climate_ref.current, 'climate selected')
+map.current.createPane("pane400").style.zIndex = 200;
+
+if(clicked_link === 'Climate' && climate_ref.current === 'Precipitation' && current_geojson.current ) {
+  console.log(value, 'value inside')
+  wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+    pane: 'pane400',
+    layers: `Landinvestment_datasets:malawi_precipitation_uUTiNcB_Balakaclipped_filtere_less_${value}`,
+    crs:L.CRS.EPSG4326,
+    // styles: `Climate_and_Geography_Climate_${climate_name}_${district.name}`, "Landinvestment_datasets:malawi_precipitation_uUTiNcB_Balakaclipped_filtere_less_600"
+    // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+  
+    format: 'image/png',
+    transparent: true,
+    opacity:1.0
+    
+    
+   
+});
+
+wmsLayer.current.addTo(map.current);
+}
+};
 
 
 
@@ -1705,7 +1818,7 @@ className='fetch_button'
       position:'absolute',
       left:'6.4vw',
       top:'77vh',
-      backgroundColor:'#fff',
+      backgroundColor:'transparent',
       width:'500px',
       height:'205px',
       zIndex:100,
@@ -1715,22 +1828,68 @@ className='fetch_button'
       fontFamily:'sans-serif',
       fontSize:'14px'
     }}>
-      <img src={close} alt="" style={{ marginLeft:'24.5vw', marginTop:'3px'}}  onClick={ close_selection} />
+      {/* <img src={close} alt="" style={{ marginLeft:'24.5vw', marginTop:'3px'}}  onClick={ close_selection} /> */}
      
-      {
+      {/* {
         ancil_data_list.map((item) => 
         <>
          
         
-        <div style={{ display: 'flex', flexDirection:'row', gap:'0.1rem', padding:'4px', marginTop:'5px'}}>
-        <input type="checkbox" name="" id="" key={item} onChange={fetchDemographics} />
-        <span >{item}</span>
-        </div>
+       
         </>
         
         )
 
-      }
+      } */}
+
+{/* <div style={{  padding:'4px', marginTop:'-15px'}} > */}
+        {/* <input type="radio" name="" id=""  
+        value={dashboardSlice.ancil_data[0]} 
+        checked={selected_ancil === dashboardSlice.ancil_data[0]}
+        onChange={onAncilChange} />
+        <label htmlFor="">{dashboardSlice.ancil_data[0]}</label>
+        <br /> <br />
+
+        <input type="radio" name="" id=""  
+        value={dashboardSlice.ancil_data[1]} 
+        checked={selected_ancil === dashboardSlice.ancil_data[1]}
+        onChange={onAncilChange} />
+        <label htmlFor="">{dashboardSlice.ancil_data[1]}</label>
+        <br />
+        <br />
+
+        <input type="radio" name="" id=""  
+        value={dashboardSlice.ancil_data[2]} 
+        checked={selected_ancil === dashboardSlice.ancil_data[2]}
+        onChange={onAncilChange} />
+        <label htmlFor="">{dashboardSlice.ancil_data[2]}</label>
+        <br />
+        <br />
+
+        <input type="radio" name="" id=""  
+        value={dashboardSlice.ancil_data[3]} 
+        checked={selected_ancil === dashboardSlice.ancil_data[3]}
+        onChange={onAncilChange} />
+        <label htmlFor="">{dashboardSlice.ancil_data[3]}</label>
+        <br />  <br />
+
+        <input type="radio" name="" id=""  
+        value={dashboardSlice.ancil_data[4]} 
+        checked={selected_ancil === dashboardSlice.ancil_data[4]}
+        onChange={onAncilChange} />
+        <label htmlFor="">{dashboardSlice.ancil_data[4]}</label> */}
+        <div className="anci" style={{color:'white'}}>
+        <CustomAncilSelect
+           fetchAncilData={ onAncilChange }
+            />
+
+        </div>
+
+
+
+        
+        {/* <span >{item}</span> */}
+        {/* </div> */}
 
 
 
@@ -1758,7 +1917,24 @@ onClick={ () => {isDrawerOpen == true? setIsDrawerOpen(false) : setIsDrawerOpen(
 }
 
 
-<SideNavDrawer isOpen={isDrawerOpen} onClose={handleDrawerToggle} />
+<SideNavDrawer isOpen={isDrawerOpen} onClose={handleDrawerToggle}  />
+
+{
+  clicked_link === 'Climate' ?
+  <div className="fil" style={{position:'absolute', top:'85vh', zIndex:105,
+marginLeft:'75vw', width:'24vw'}}>
+  <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Precipitation</p>
+<div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
+<input type="range" name="slider" id="slider"  onInput={sliderfunc} min={400} max={800} step={50}/>
+<p className='label' >{slider_value}</p>
+
+</div>
+
+</div> : ''
+}
+
+
+
 
 
 

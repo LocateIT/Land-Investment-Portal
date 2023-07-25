@@ -42,6 +42,7 @@ const initialState = {
     selected_product:'Crop Suitability',
     selected_crop:'',
     selected_climate:'',
+    selected_ancil:'',
     indicators:['Crop Production', 'Climate', 'Soil Fertility', 'Land Use', 'Night-time Light', 'Ancillary Data'],
     products:['Agricultural Productivity', 'Crop Suitability'],
     crops:['Maize', 'Groundnuts', 'Tobacco', 'Cranberry', 'Tea'],
@@ -116,6 +117,9 @@ const dashboardSelectionSlice = createSlice({
         changeSoilProduct:(state, action) => {
             state.selected_soil = action.payload
         },
+        changeAncilProduct:(state, action) => {
+            state.selected_ancil = action.payload
+        },
         fetchDistricts:(state, action) => {
             state.districts_2 = action.payload
         //   return option
@@ -147,5 +151,6 @@ const dashboardSelectionSlice = createSlice({
 
 export const dashboardSelections = (state) => state.dashboardselections;
 export const { changeSelectedCountry, changeSelectedDistrict, 
-    changeSelectedCrop, changeClimateProduct, changeSoilProduct, changeStatsFigures, changeStatsLabels, changeStatsColor, changeAcreageLabel, changeTotalAcreage, changeSelectedProduct, changeSelectedIndicator} = dashboardSelectionSlice.actions
+    changeSelectedCrop, changeClimateProduct, changeSoilProduct,changeAncilProduct,
+     changeStatsFigures, changeStatsLabels, changeStatsColor, changeAcreageLabel, changeTotalAcreage, changeSelectedProduct, changeSelectedIndicator} = dashboardSelectionSlice.actions
 export default dashboardSelectionSlice.reducer

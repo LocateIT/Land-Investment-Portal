@@ -8,7 +8,7 @@ import './SideNavDrawer.css';
 import CropBar from '../components/charts/CropBar';
 import CropPie from './charts/CropPie';
 
-const SideNavDrawer = ({ isOpen, onClose }) => {
+const SideNavDrawer = ({ isOpen, onClose , fetchFilteredData}) => {
   const dashboardselections = useSelector(dashboardSelections)
   //return the entire dashboard slice
   const dashboardSlice = useSelector((state) => state.dashboardselections)
@@ -53,6 +53,7 @@ const p = document.querySelector("label");
 
 const sliderfunc = (e)  => {
   console.log('input event',e.target.value)
+  fetchFilteredData(e.target.value)
   // const value = Number(input.value) / 100;
   const value = e.target.value
   setslider_value(value)
@@ -180,12 +181,12 @@ padding:'10px',
 </div>
 
 
-<p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Precipitation</p>
+{/* <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Precipitation</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
-<input type="range" name="slider" id="slider" onInput={sliderfunc} min={0} max={4000} step={100}/>
+<input type="range" name="slider" id="slider"  onChange={fetchFilteredData} onInput={sliderfunc} min={0} max={91} step={1}/>
 <p className='label' >{slider_value}</p>
 
-</div>
+</div> */}
 
 {/* <a className="twitter-link" href="https://twitter.com/phil_osophie" target="_blank" ></a> */}
       
