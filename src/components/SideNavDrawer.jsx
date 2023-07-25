@@ -166,7 +166,7 @@ padding:'10px',
 
 
       
-<p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F',}}>Filter for Elevation</p>
+{/* <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F',}}>Filter for Elevation</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
 <input type="range" name="slider" id="slider" onInput={sliderfunc} min={0} max={4000} step={100}/>
 <p className='label' >{slider_value}</p>
@@ -178,7 +178,7 @@ padding:'10px',
 <input type="range" name="slider" id="slider" onInput={sliderfunc} min={0} max={4000} step={100}/>
 <p className='label' >{slider_value}</p>
 
-</div>
+</div> */}
 
 
 {/* <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Precipitation</p>

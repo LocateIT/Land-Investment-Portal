@@ -68,6 +68,8 @@ const Dashboard = () => {
     const [currentBasemap, setCurrentBasemap] = useState(null);
     
   const [slider_value, setslider_value] = useState('')
+  const [temp_slider_value, settemp_slider_value] = useState('')
+  const [elevation_slider_value, set_elevation_slider_value] = useState('')
 
 
     const [color_array, setcolor_array] = useState([])
@@ -1354,28 +1356,32 @@ const zoomin = () => {
 const zoomout = () => {
   map.current.setZoom(map.current.getZoom() - 1)
 }
-const sliderfunc = (e)  => {
+const sliderfunc = async (e)  => {
   console.log('input event',e.target.value)
-  // fetchFilteredData(e.target.value)
-  // const value = Number(input.value) / 100;
+ 
   const value = e.target.value
   setslider_value(value)
-  // input.style.setProperty("--thumb-rotate", `${value * 720}deg`);
+ 
   // p.innerHTML = Math.round(value * 100);
+
+  const clim_filter= await axios.get('http://139.84.229.39:8700/uneca-api-0.1/data/get_min_max/?district_name=Balaka')
+  console.log(clim_filter.data, 'climate data values')
+ var selected_climate = climate_ref.current
+
+  const clim_filter2= await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_filterd_wms/?data_name=Precipitation&district_name=${district.name}&value=${value}`)
+  console.log(clim_filter2.data, 'clim filter 2')
+  var layer_filter = clim_filter2.data.layer_name
 
     if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
     console.log(climate_ref.current, 'climate selected')
 map.current.createPane("pane400").style.zIndex = 200;
 
-if(clicked_link === 'Climate' && climate_ref.current === 'Precipitation' && current_geojson.current ) {
+if(clicked_link === 'Climate' && climate_ref.current === 'Precipitation'  && current_geojson.current ) {
   console.log(value, 'value inside')
   wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
     pane: 'pane400',
-    layers: `Landinvestment_datasets:malawi_precipitation_uUTiNcB_Balakaclipped_filtere_less_${value}`,
+    layers: `Landinvestment_datasets:malawi_precipitation_uUTiNcB_${district.name}clipped_filtere_less_${value}`,
     crs:L.CRS.EPSG4326,
-    // styles: `Climate_and_Geography_Climate_${climate_name}_${district.name}`, "Landinvestment_datasets:malawi_precipitation_uUTiNcB_Balakaclipped_filtere_less_600"
-    // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
-  
     format: 'image/png',
     transparent: true,
     opacity:1.0
@@ -1386,6 +1392,87 @@ if(clicked_link === 'Climate' && climate_ref.current === 'Precipitation' && curr
 
 wmsLayer.current.addTo(map.current);
 }
+};
+
+const sliderfunc2 = async (e)  => {
+  if(climate_ref.current === 'Temperature') {
+    console.log('temperature event',e.target.value)
+ 
+  const value = e.target.value
+  settemp_slider_value(value)
+ 
+  // p.innerHTML = Math.round(value * 100);
+
+  const clim_filter= await axios.get('http://139.84.229.39:8700/uneca-api-0.1/data/get_min_max/?district_name=Balaka')
+  console.log(clim_filter.data, 'climate data values')
+ var selected_climate = climate_ref.current
+
+  const clim_filter2= await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_filterd_wms/?data_name=Temperature&district_name=${district.name}&value=${value}`)
+  console.log(clim_filter2.data, 'clim filter 2')
+  var layer_filter = clim_filter2.data.layer_name
+
+    if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+    console.log(climate_ref.current, 'climate selected')
+map.current.createPane("pane400").style.zIndex = 200;
+
+if(clicked_link === 'Climate' && climate_ref.current === 'Temperature'  && current_geojson.current ) {
+  console.log(value, 'value inside')
+  wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+    pane: 'pane400',
+    // layers:layer_filter,
+    layers: `Landinvestment_datasets:malawi_temprature_fBiSpPq_${district.name}clipped_filtere_less_${value}`,
+    crs:L.CRS.EPSG4326,
+    format: 'image/png',
+    transparent: true,
+    opacity:1.0
+    
+    
+   
+});
+
+wmsLayer.current.addTo(map.current);
+}
+  }
+};
+
+const sliderfunc3 = async (e)  => {
+ if(climate_ref.current === 'Elevation') {
+  console.log('ielevation event',e.target.value)
+ 
+  const value = e.target.value
+  set_elevation_slider_value(value)
+ 
+  // p.innerHTML = Math.round(value * 100);
+
+  const clim_filter= await axios.get('http://139.84.229.39:8700/uneca-api-0.1/data/get_min_max/?district_name=Balaka')
+  console.log(clim_filter.data, 'climate data values')
+ var selected_climate = climate_ref.current
+
+  const clim_filter2= await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_filterd_wms/?data_name=Elevation&district_name=${district.name}&value=${value}`)
+  console.log(clim_filter2.data, 'clim filter 2')
+  var layer_filter = clim_filter2.data.layer_name
+
+    if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+    console.log(climate_ref.current, 'climate selected')
+map.current.createPane("pane400").style.zIndex = 200;
+
+if(clicked_link === 'Climate' && climate_ref.current === 'Elevation'  && current_geojson.current ) {
+  console.log(value, 'value inside')
+  wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+    pane: 'pane400',
+    layers: `Landinvestment_datasets:malawi_elevation_XXC2nrw_${district.name}clipped_filtere_less_${value}`,
+    crs:L.CRS.EPSG4326,
+    format: 'image/png',
+    transparent: true,
+    opacity:1.0
+    
+    
+   
+});
+
+wmsLayer.current.addTo(map.current);
+}
+ }
 };
 
 
@@ -1920,13 +2007,29 @@ onClick={ () => {isDrawerOpen == true? setIsDrawerOpen(false) : setIsDrawerOpen(
 <SideNavDrawer isOpen={isDrawerOpen} onClose={handleDrawerToggle}  />
 
 {
-  clicked_link === 'Climate' ?
-  <div className="fil" style={{position:'absolute', top:'85vh', zIndex:105,
-marginLeft:'75vw', width:'24vw'}}>
-  <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Precipitation</p>
+  clicked_link === 'Climate' && isDrawerOpen ?
+  <div className="fil" style={{position:'absolute', top:'62vh', zIndex:105,
+marginLeft:'75vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.5rem'}}>
+
+<p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Precipitation</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
-<input type="range" name="slider" id="slider"  onInput={sliderfunc} min={400} max={800} step={50}/>
+<input type="range" id="slider"  onInput={sliderfunc} min={400} max={717} step={10}/>
 <p className='label' >{slider_value}</p>
+
+</div>
+
+<p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Temperature</p>
+<div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
+<input type="range" id="slider2"  onInput={sliderfunc2} min={26} max={34} step={1}/>
+<p className='label' >{temp_slider_value}</p>
+
+</div>
+
+  
+  <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Elevation</p>
+<div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
+<input type="range" id="slider3"  onInput={sliderfunc3} min={400} max={812} step={10}/>
+<p className='label' >{elevation_slider_value}</p>
 
 </div>
 
