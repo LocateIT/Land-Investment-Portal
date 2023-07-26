@@ -104,6 +104,7 @@ const Dashboard = () => {
     let ancil_check = useRef(null)
     let climate_ref = useRef('')
     let wmsCountryLayer = useRef(null)
+    let opacity_value = useRef('1')
 
 
     const handleDrawerToggle = () => {
@@ -1007,21 +1008,21 @@ const fetchClimate = (e) => {
   setClimate(climate_name)
 
 
-  // if( climate_name === 'Precipitation' ) {
-  //   setcolor_array(precip_color)
-  //   dispatch(changeStatsColor(precip_color))
-  // }
+  if( climate_name === 'Precipitation' ) {
+    setcolor_array(precip_color)
+    dispatch(changeStatsColor(precip_color))
+  }
           
-  // if( climate_name === 'Elevation'){
-  //   setcolor_array(agb_color)
-  //   dispatch(changeStatsColor(elevation_color))
-  // }
+  if( climate_name === 'Elevation'){
+    setcolor_array(agb_color)
+    dispatch(changeStatsColor(elevation_color))
+  }
   
-  // if( climate_name === 'Temperature' ) {
-  //   setcolor_array(temperature_color)
-  //   dispatch(changeStatsColor(temperature_color))
+  if( climate_name === 'Temperature' ) {
+    setcolor_array(temperature_color)
+    dispatch(changeStatsColor(temperature_color))
 
-  // }
+  }
   
 if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
 if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
@@ -1378,12 +1379,29 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
 // }
 
 const zoomin = () => {
-  map.current.setZoom(map.current.getZoom() + 1)
+  map.current.setZoom(map.current.getZoom() + 0.5)
 }
 
 const zoomout = () => {
   map.current.setZoom(map.current.getZoom() - 1)
 }
+
+const changeDefaultOpacity = (e) => {
+
+  //   $('#image-opacity').html(this.value); //i might revesit
+    console.log(e.target.value, 'opacity value')
+    opacity_value.current = e.target.value
+    
+ if(wmsLayer.current != null)wmsLayer.current.setOpacity(e.target.value)
+ if(wmsNTLLayer.current != null)wmsNTLLayer.current.setOpacity(e.target.value)
+                                    
+                                  
+                                   
+                                  
+                  
+                                
+}
+
 const sliderfunc = async (e)  => {
   console.log('input event',e.target.value)
  
@@ -1657,7 +1675,18 @@ wmsLayer.current.addTo(map.current);
     <div className={ 'map_controls' } >
       <img src={add} alt="" onClick={zoomin}/> 
        <img src={minus} onClick={zoomout} alt="" />
-       {/* <img src={layers} alt="" onMouseOver={layers_mouseover} onMouseLeave={handleBaseLayers} /> */}
+
+       <div className="opacity" style={{ zIndex:102, backgroundColor:'#1e4b5f', 
+       position:'absolute', left:'-22vw', width:'220px', height:'25px', color:'white',  paddingTop:'5px'}} >
+          <span id="opacity" >Opacity</span>
+         
+          <input type="range" id="sldOpacity" min="0" max="1" step="0.1" 
+          // value={opacity_value}
+          onChange={changeDefaultOpacity}
+          //  style={{ marginTop:'8px', marginLeft:'10px' }}
+            />
+         </div>
+       {/* <img src={layers} alt="" onMouseOver={layers_mouseover} onMouseLeave={handleBaseLayers}  backgroundColor:'#1e4b5f', /> */}
 
     </div>
 
@@ -2039,25 +2068,36 @@ onClick={ () => {isDrawerOpen == true? setIsDrawerOpen(false) : setIsDrawerOpen(
   <div className="fil" style={{position:'absolute', top:'62vh', zIndex:105,
 marginLeft:'75vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.5rem'}}>
 
-<p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Precipitation</p>
+<p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Precipitation (mm)</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
 <input type="range" id="slider"  onInput={sliderfunc} min={400} max={717} step={10}/>
-<p className='label' >{slider_value} </p>
+<p className='label' style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F',  fontSize:'14px' }} >{
+  slider_value ?
+  `${slider_value} mm ` :''
+
+}
+  </p>
 
 </div>
 
-<p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Temperature</p>
+<p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Temperature (°C)</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
-<input type="range" id="slider2"  onInput={sliderfunc2} min={26} max={34} step={1}/>
-<p className='label' >{temp_slider_value} </p>
+<input type="range" id="slider"  onInput={sliderfunc2} min={26} max={34} step={1}/>
+<p className='label' style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F',  fontSize:'14px'}} > {
+  temp_slider_value ?
+`${temp_slider_value}  °C` : ''
+} </p>
 
 </div>
 
   
-  <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Elevation</p>
+  <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Elevation (m)</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
-<input type="range" id="slider3"  onInput={sliderfunc3} min={400} max={812} step={10}/>
-<p className='label' >{elevation_slider_value}</p>
+<input type="range" id="slider"  onInput={sliderfunc3} min={400} max={812} step={10}/>
+<p className='label' style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F', fontSize:'14px' }} > {
+  elevation_slider_value ?
+`${elevation_slider_value} m` : ''
+}</p>
 
 </div>
 

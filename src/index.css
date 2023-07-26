@@ -295,6 +295,52 @@ a.leaflet-control-layers-toggle:hover  {
   color: red;
 }
 
+#opacity{
+  /* background-position: 0 0; */
+  /* margin-top: 10px !important; */
+  padding-left: 10px !important;
+  padding-right: 8px !important;
+}
+#sldOpacity {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  width: 7vw;
+  max-width: 7vw;
+  outline: none;
+  
+}
+
+#sldOpacity:focus,
+#sldOpacity:active,
+#sldOpacity::-moz-focus-inner,
+#sldOpacity::-moz-focus-outer {
+  border: 0;
+  outline: none;
+}
+#sldOpacity::-webkit-slider-runnable-track {
+  width: 5vw;
+  height: 5px;
+  background: #64818d;
+  border-radius: 10px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  margin-top: -10px;
+  -webkit-appearance: none;
+}
+#sldOpacity::-webkit-slider-thumb {
+  border: none;
+  height: 10px;
+  width: 10px;
+  background-color: transparent;
+  background-image: url('../src/assets/radio_opacity.svg');
+  background-position: 0 0;
+  background-size: cover;
+  transform: scale(1.9) rotateZ(var(--thumb-rotate, 0deg));
+  cursor: pointer;
+  margin-top: -1px;
+  -webkit-appearance: none;
+}
 
 @media (min--moz-device-pixel-ratio: 1.1),
        (-o-min-device-pixel-ratio: 11/10), 

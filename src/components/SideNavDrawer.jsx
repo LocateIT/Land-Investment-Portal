@@ -111,8 +111,8 @@ padding:'10px',
 
 
 <span style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F', marginTop:'10vh'}}> { dashboardSlice.selected_product === 'Crop Suitability' ?
-       `${dashboardSlice.selected_district}  ${dashboardSlice.selected_crop} Total Acreage (Ha)` :
-       dashboardSlice.selected_product === 'Agricultural Productivity' ? `${dashboardSlice.selected_district} Above Ground Biomass Total Acreage (Ha)` : ''
+       `${dashboardSlice.selected_district}  ${dashboardSlice.selected_crop} Total Acreage (sq Km)` :
+       dashboardSlice.selected_product === 'Agricultural Productivity' ? `${dashboardSlice.selected_district} Above Ground Biomass Total Acreage (sq Km)` : ''
       
       }</span>
 
