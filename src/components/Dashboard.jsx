@@ -94,6 +94,7 @@ const Dashboard = () => {
     let agb_legend = useRef(null)
     let crop_legend = useRef(null)
     let climate_legend = useRef(null)
+    let ntl_legend = useRef(null)
     // let baseMaps = useRef(null)
     let clicked_basemap = useRef('')
     let base_map_ctrl_selections = useRef(false)
@@ -1251,6 +1252,34 @@ const fetchLandUse = () => {
  });
 
  wmsNTLLayer.current.addTo(map.current);
+
+
+ const addNTLLegend = () => {
+  if(climate_legend.current)map.current.removeControl(climate_legend.current)
+  if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+  if(crop_legend.current)map.current.removeControl(crop_legend.current)
+  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  if(wmsNTLLayer.current){
+    var legend = L.control({position:'bottomright'});
+    ntl_legend.current = legend
+
+    ntl_legend.current.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+      
+  div.innerHTML += (`<p>${dashboardSlice.selected_district} Night-time Light</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:Night_Time_Light_Socioeconomics_NTL&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+
+      
+  let draggable = new L.Draggable(div); //the legend can be dragged around the div
+  draggable.enable();
+
+  return div;
+  };
+
+  ntl_legend.current.addTo(map.current);
+  }
+
+ }
+ addNTLLegend()
 }
   
 
@@ -1683,7 +1712,7 @@ wmsLayer.current.addTo(map.current);
           <input type="range" id="sldOpacity" min="0" max="1" step="0.1" 
           // value={opacity_value}
           onChange={changeDefaultOpacity}
-          //  style={{ marginTop:'8px', marginLeft:'10px' }}
+         
             />
          </div>
        {/* <img src={layers} alt="" onMouseOver={layers_mouseover} onMouseLeave={handleBaseLayers}  backgroundColor:'#1e4b5f', /> */}

@@ -300,6 +300,8 @@ a.leaflet-control-layers-toggle:hover  {
   /* margin-top: 10px !important; */
   padding-left: 10px !important;
   padding-right: 8px !important;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: small;
 }
 #sldOpacity {
   -webkit-appearance: none;
