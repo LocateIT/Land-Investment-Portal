@@ -74,6 +74,7 @@ const Dashboard = () => {
 
     const [color_array, setcolor_array] = useState([])
     const crop_color = ['blue',"#a8a800","#0c7437","#6aff4e","#ccc","#bd6860","green","#fff1d2"]
+    const tobacco_color = ['#e8c5be',"#f8a36b","#faaf17","#a6b036","#136300"]
     const agb_color = ["#f2f2a3", "#ffff00", "#ff0000", "#b007ed", "#071dad"]
     const agb_color2 = ["magenta", "magenta", "magenta", "red", "purple"]
     const precip_color = ["#c6cdd4", "#d1c8b0", "#d0bf90", "#7ba7b3", "#2871b0", "#08306b"]
@@ -401,6 +402,8 @@ const fetchOptions = async() => {
         if(wmsCountryLayer.current) map.current.removeLayer(wmsCountryLayer.current)
         if(current_geojson.current) map.current.removeLayer(current_geojson.current)
         if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+        if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+        // if(dashboardSlice.selected_district != null)map.current.removeLayer(wmsLayer.current)
         
         var taifa = country_name.current
 
@@ -651,6 +654,10 @@ const color_func = () => {
     setcolor_array(crop_color) 
     dispatch(changeStatsColor(crop_color))
   }
+  if(dashboardSlice.selected_product === 'Crop Suitability'  && dashboardSlice.selected_crop === 'Tobacco') {
+    setcolor_array(tobacco_color) 
+    dispatch(changeStatsColor(tobacco_color))
+  }
 
 
   
@@ -658,6 +665,7 @@ const color_func = () => {
 }
 
 const fetchCountryCrop = () => {
+
 
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
   map.current.createPane("pane400").style.zIndex = 200;
@@ -686,6 +694,7 @@ const fetchCountryCrop = () => {
     if(climate_legend.current)map.current.removeControl(climate_legend.current)
     if(crop_legend.current)map.current.removeControl(crop_legend.current)
     if(agb_legend.current)map.current.removeControl(agb_legend.current)
+    if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
     
     if(wmsLayer.current){
       var legend = L.control({position:'bottomright'});
@@ -745,6 +754,7 @@ const fetchCountryCrop = () => {
  const addAGBLegend = () => {
   if(agb_legend.current)map.current.removeControl(agb_legend.current)
   if(crop_legend.current)map.current.removeControl(crop_legend.current)
+  if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
   if(wmsLayer.current){
     var legend = L.control({position:'bottomright'});
     agb_legend.current = legend
@@ -776,6 +786,7 @@ const fetchCountryCrop = () => {
 //fetch crop data
 const fetchCrop = () => {
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
   map.current.createPane("pane400").style.zIndex = 200;
 
   
@@ -804,6 +815,7 @@ const fetchCrop = () => {
       if(climate_legend.current)map.current.removeControl(climate_legend.current)
       if(crop_legend.current)map.current.removeControl(crop_legend.current)
       if(agb_legend.current)map.current.removeControl(agb_legend.current)
+      if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
       if(wmsLayer.current){
         var legend = L.control({position:'bottomright'});
         crop_legend.current = legend
@@ -862,6 +874,7 @@ const fetchCrop = () => {
    const addAGBLegend = () => {
     if(agb_legend.current)map.current.removeControl(agb_legend.current)
     if(crop_legend.current)map.current.removeControl(crop_legend.current)
+    if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
     if(wmsLayer.current){
       var legend = L.control({position:'bottomright'});
       agb_legend.current = legend
@@ -1706,7 +1719,7 @@ wmsLayer.current.addTo(map.current);
        <img src={minus} onClick={zoomout} alt="" />
 
        <div className="opacity" style={{ zIndex:102, backgroundColor:'#1e4b5f', 
-       position:'absolute', left:'-22vw', width:'220px', height:'25px', color:'white',  paddingTop:'5px'}} >
+       position:'absolute', left:'-32vw', width:'220px', height:'25px', color:'white',  paddingTop:'5px'}} >
           <span id="opacity" >Opacity</span>
          
           <input type="range" id="sldOpacity" min="0" max="1" step="0.1" 
