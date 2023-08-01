@@ -275,7 +275,7 @@ a.leaflet-control-layers-toggle:hover  {
 
 } */
 .leaflet-control-layers-expanded{
-  background-color: #003247;
+  background-color: #1e4b5f;
   color: #fff;
   padding: 15px;
   position: absolute;
@@ -694,6 +694,16 @@ a.leaflet-control-layers-toggle:hover  {
     height: 88vh !important;
   }
  
+  a.leaflet-control-layers-toggle{
+    background-color: transparent;
+    height: 30px !important;
+    width: 30px !important;
+    background-image: url('./assets/layers.svg');
+    position: absolute;
+    top: -0.18vh;
+    right: 7.4vw !important;
+  }
+  
 }
 
 @media only screen and (width: 1366px) and (min-resolution: 125dpi), (min-resolution: 1.25dppx) {
