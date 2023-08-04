@@ -129,6 +129,7 @@ const Dashboard = () => {
 
       //update the selected_region value using dispatch changeSelelcted region reducer
       dispatch(changeSelectedCountry(changed_country.value))
+      if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
      fetchRegion()
     //  fetchNTL()
    
@@ -371,12 +372,14 @@ const fetchOptions = async() => {
     //fetch countries
     const fetchRegion = async() => {
   
-      try {   
+      try {  
+        // if(wmsNTLLayer.current)map.clearLayers()
+        if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current) 
         if(wmsCountryLayer.current) map.current.removeLayer(wmsCountryLayer.current)
         if(current_geojson.current) map.current.removeLayer(current_geojson.current)
         if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
-        if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
-        // if(dashboardSlice.selected_district != null)map.current.removeLayer(wmsLayer.current)
+        
+        // if(district.name != null)map.current.removeLayer(wmsNTLLayer.current)
         
         var taifa = country_name.current
 
@@ -442,6 +445,7 @@ const fetchOptions = async() => {
        
    });
    wmsCountryLayer.current.addTo(map.current)
+   if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current) 
 
    map.current.flyToBounds(bounds.current)
 
@@ -1090,7 +1094,7 @@ const fetchLandUse = () => {
      if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
     map.current.createPane("pane400").style.zIndex = 200;
     console.log('NTL')
-    wmsNTLLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
+    wmsNTLLayer.current = L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: `Landinvestment_datasets:Night_Time_Light_Socioeconomics_NTL`,
       crs:L.CRS.EPSG4326,

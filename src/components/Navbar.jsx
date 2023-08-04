@@ -24,10 +24,10 @@ const Navbar = () => {
                 <img src={icon} alt="" key={icon}  />
                 )
             } */}
-            <img src={home} alt="homepage" onClick={() => navigate('/')}/>
-            <img src={dashboard} alt="dashboard" onClick={() => navigate('dashboard')} />
-            <img src={about} alt="about" />
-            <img src={language} alt="language translation" />
+            <img src={home} alt="homepage" onClick={() => navigate('/')} title='Homepage'/>
+            <img src={dashboard} alt="dashboard" onClick={() => navigate('dashboard')} title='Dashboard' />
+            <img src={about} alt="about" title='About' />
+            <img src={language} alt="language translation" title='Translations' />
         </div>
 
 
