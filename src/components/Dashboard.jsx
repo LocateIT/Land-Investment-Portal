@@ -36,6 +36,7 @@ import minus from '../assets/minus.svg'
 import layers from '../assets/layers.svg'
 import CustomAncilSelect from './CustomAncil';
 const Dashboard = () => {
+  const baseurl = 'http://139.84.229.39'
   
     const dispatch = useDispatch()
     const dashboardselections = useSelector(dashboardSelections)
@@ -111,23 +112,7 @@ const Dashboard = () => {
 
     const handleDrawerToggle = () => {
       setIsDrawerOpen(true);
-      // setIsDrawerOpen(!isDrawerOpen) to toggle open and close
-      
-      // document.getElementsByClassName("leaflet-bottom.leaflet-right .leaflet-control").style.position = "absolute"
-
-    //  if(isDrawerOpen === true && crop_legend != null) {
-    //   document.querySelector(".leaflet-bottom.leaflet-right .leaflet-control").style.position = "absolute"
-    //   document.querySelector(".leaflet-bottom.leaflet-right .leaflet-control").style.right = "24.8vw"
-    //   document.querySelector(".leaflet-bottom.leaflet-right .leaflet-control").style.top = "-15vh"
-
-    //  }
-    
-    //     if(!isDrawerOpen && crop_legend != null) {
-    //       document.querySelector(".leaflet-bottom.leaflet-right .leaflet-control").style.position = "absolute"
-    //     document.querySelector(".leaflet-bottom.leaflet-right .leaflet-control").style.right = "0.2vw"
-    //     document.querySelector(".leaflet-bottom.leaflet-right .leaflet-control").style.top = "-17vh"
-
-    //     }
+     
       
      
     };
@@ -189,25 +174,13 @@ const Dashboard = () => {
 
       //update the selected_region value using dispatch changeSelelcted region reducer
       dispatch(changeSelectedCrop(e.target.value))
-    // fetchRegion()
-    // fetchRegion
+   
    
   
   
 
   }
-  // const onClimateChanged = e => {
-  //   const changed_climate = e.target.getAttribute("data-name")
-  //   console.log(changed_climate, 'changed_climate')
-  //   // climate.current = changed_climate
   
-
-  //     setClimate(e.target.getAttribute("data-name"))
-
-  //     //update the selected_region value using dispatch changeSelelcted region reducer
-  //     dispatch(changeClimateProduct(e.target.getAttribute("data-name")))
-    
-  // }
   const onSoilChanged = e => {
     const changed_soil = e.target.value
     console.log(changed_soil, 'changed_soil')
@@ -367,7 +340,7 @@ const fetchOptions = async() => {
   console.log(country_name.current, 'selected countryyyyyyyyyyyyyy')
   var taifa = country_name.current
   console.log(taifa, 'taifa')
-    const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL&country_name=${taifa}`);
+    const wms = await axios.get(`${baseurl}:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL&country_name=${taifa}`);
         console.log(wms.data)
         var wms_resp = wms.data
         const cql_fiter_column = wms_resp['wms']['cql_column']
@@ -407,7 +380,7 @@ const fetchOptions = async() => {
         
         var taifa = country_name.current
 
-        const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL&country_name=${taifa}`);
+        const wms = await axios.get(`${baseurl}:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL&country_name=${taifa}`);
         console.log(wms.data)
         var wms_resp = wms.data
         const cql_fiter_column = wms_resp['wms']['cql_column']
@@ -416,33 +389,12 @@ const fetchOptions = async() => {
         // const district_cql2 = cql_fiter_column + "=" +country
         const country_filter = wms_resp['country_details']['country_id']
         console.log('COUNTRY FILTER',country_filter)
-        // const resp = await axios.get("http://139.84.229.39:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=Landinvestment_datasets:District&outputFormat=application/json&CQL_FILTER=country_id="+country_filter);
-       
-        // var aoi_data = resp.data
-        // console.log(aoi_data, 'aoi response')
-        // current_response.current = aoi_data
-        // console.log(current_response.current, 'current aoi')
-    
-        // console.log(current_response.current.features[0].geometry.coordinates, 'multipolygon')
-        //    // map.createPane("pane1000").style.zIndex = 300;
-        //    wmsCountryLayer.current = L.geoJSON(current_response.current, {
-        //     style: {
-        //       color: "black",
-        //       opacity: 1,
-        //       fillOpacity:0,
-        //       weight: 4
-        //     }
-        //     // pane: 'pane1000'
-        //   })
-          // wmsCountryLayer.current.addTo(map.current)
-          
-          // map.current.fitBounds(wmsCountryLayer.current.getBounds(), {
-          //         padding: [50, 50],
-          //       });
+        // const resp = await axios.get("${baseurl}:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=Landinvestment_datasets:District&outputFormat=application/json&CQL_FILTER=country_id="+country_filter);
+      
 
 
                 
-                const resp2 = await axios.get('http://139.84.229.39:8070/uneca-api-0.1/geojson/getcountryinfo/?country_names=ALL')
+                const resp2 = await axios.get(`${baseurl}:8070/uneca-api-0.1/geojson/getcountryinfo/?country_names=ALL`)
                 console.log(resp2.data.regions_info['Southern Africa']['country_code'], 'RESP2 DATA') 
                 // var country_code_object = resp2.data.regions_info['Southern Africa']['country_code']
                 // var country_code_array = country_code_object.map((item) => item.country_code)
@@ -474,7 +426,7 @@ const fetchOptions = async() => {
 
                  console.log(country_code.current)
                
-   wmsCountryLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+   wmsCountryLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
         pane: 'pane400',
         layers: `Landinvestment_datasets:geoportal_adminlevelzero`,
         crs:L.CRS.EPSG4326,
@@ -515,22 +467,11 @@ const fetchOptions = async() => {
         if(wmsCountryLayer.current) map.current.removeLayer(wmsCountryLayer.current)
         if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
         if(wmsCountryLayer.current)map.current.removeLayer(wmsCountryLayer.current)
-        // console.log(current_name.current, 'curent name')
-        // var basin = current_name.current
-        // console.log(basin, 'basin current')
-
-     
-        // const mapped = id.map((item) => {
-        //   return ({ value: item.district_id, label:item.district_name}) 
-           
-        // })
-        // console.log(mapped, 'mapped object ids')
-
-        // console.log(id[0].district_id, 'idddddd') 
+        
         if(district_option != null) {
           console.log(district_option)
           var taifa = country_name.current
-          const wms = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL&country_name=${taifa}`);
+          const wms = await axios.get(`${baseurl}:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL&country_name=${taifa}`);
         console.log(wms.data)
         var wms_resp = wms.data
         const cql_fiter_column = wms_resp['wms']['cql_column']
@@ -541,10 +482,9 @@ const fetchOptions = async() => {
         // const country_filter = wms_resp['country_details']['country_id']
         
 
-        // const resp = await axios.get(`http://139.84.229.39:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=${wms_layer_name}&outputFormat=application/json`);
+        // const resp = await axios.get(`${baseurl}:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=${wms_layer_name}&outputFormat=application/json`);
         
-          const resp = await axios.get("http://139.84.229.39:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName="
-          +wms_layer_name+"&outputFormat=application/json&CQL_FILTER="+district_cql);
+          const resp = await axios.get(`${baseurl}:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=${wms_layer_name}&outputFormat=application/json&CQL_FILTER=${district_cql}`);
 
        
         var aoi_data = resp.data
@@ -585,7 +525,7 @@ const fetchOptions = async() => {
  const fetchCropStats = async () => {
  
   try {
-    const response = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_statistics/?data_name=${dashboardSlice.selected_crop}&district_name=${district.name}&country_name=Malawi`);
+    const response = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_statistics/?data_name=${dashboardSlice.selected_crop}&district_name=${district.name}&country_name=Malawi`);
     console.log('crop stats',response.data)
     var labels = Object.keys(response.data[0])
     var figures = Object.values(response.data[0])
@@ -617,7 +557,7 @@ const fetchOptions = async() => {
 const fetchAGBStats = async () => {
  
   try {
-    const response = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_statistics/?data_name=Above Ground Biomass&district_name=${district.name}&country_name=Malawi`);
+    const response = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_statistics/?data_name=Above Ground Biomass&district_name=${district.name}&country_name=Malawi`);
     console.log('crop stats',response.data)
     var labels = Object.keys(response.data[0])
     var figures = Object.values(response.data[0])
@@ -672,7 +612,7 @@ const fetchCountryCrop = () => {
 
   if( wmsCountryLayer.current != null && clicked_link === 'Crop Production' && selected_radio === 'Crop Suitability') {
     
-    wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+    wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: `Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability`,
       crs:L.CRS.EPSG4326,
@@ -702,15 +642,11 @@ const fetchCountryCrop = () => {
 
       crop_legend.current.onAdd = function(map) {
         var div = L.DomUtil.create("div", `${isDrawerOpen ? 'legend2' : 'legend'}`)
-        // if( isDrawerOpen == true) {
-        //   var div = L.DomUtil.create("div", 'legend')
-        // } else{
-        //   var div = L.DomUtil.create("div", 'legend2')
-        // }
+        
         
      
         
-    div.innerHTML += (`<p>${country_name.current} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+    div.innerHTML += (`<p>${country_name.current} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
 
         
     let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -733,7 +669,7 @@ const fetchCountryCrop = () => {
 
   if( wmsCountryLayer.current != null && clicked_link === 'Crop Production' && selected_radio === 'Agricultural Productivity') {
     
-    wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+    wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: `Landinvestment_datasets:Above_Ground_Biomass_Crop_Production_Agricultural_Productivity`,
       crs:L.CRS.EPSG4326,
@@ -762,7 +698,7 @@ const fetchCountryCrop = () => {
     agb_legend.current.onAdd = function(map) {
   var div = L.DomUtil.create("div", "legend");
       
-  div.innerHTML += (`<p>${country_name.current} Above Ground Biomass </p>`) + '<img src="' + "http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:Above_Ground_Biomass_Crop_Production_Agricultural_Productivity&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '" />' ;
+  div.innerHTML += (`<p>${country_name.current} Above Ground Biomass </p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:Above_Ground_Biomass_Crop_Production_Agricultural_Productivity&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150` + '" />' ;
 
       
   let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -793,7 +729,7 @@ const fetchCrop = () => {
 
   if(clicked_link === 'Crop Production' && selected_radio === 'Crop Suitability') {
     
-      wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+      wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
         pane: 'pane400',
         layers: `Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability`,
         crs:L.CRS.EPSG4326,
@@ -822,15 +758,10 @@ const fetchCrop = () => {
   
         crop_legend.current.onAdd = function(map) {
           var div = L.DomUtil.create("div", `${isDrawerOpen ? 'legend2' : 'legend'}`)
-          // if( isDrawerOpen == true) {
-          //   var div = L.DomUtil.create("div", 'legend')
-          // } else{
-          //   var div = L.DomUtil.create("div", 'legend2')
-          // }
-          
+      
        
           
-      div.innerHTML += (`<p>${dashboardSlice.selected_district} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+      div.innerHTML += (`<p>${dashboardSlice.selected_district} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
   
           
       let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -853,7 +784,7 @@ const fetchCrop = () => {
 
     if( clicked_link === 'Crop Production' && selected_radio === 'Agricultural Productivity') {
     
-      wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+      wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
         pane: 'pane400',
         layers: `Landinvestment_datasets:Above_Ground_Biomass_Crop_Production_Agricultural_Productivity`,
         crs:L.CRS.EPSG4326,
@@ -882,7 +813,7 @@ const fetchCrop = () => {
       agb_legend.current.onAdd = function(map) {
     var div = L.DomUtil.create("div", "legend");
         
-    div.innerHTML += (`<p>${dashboardSlice.selected_district} Above Ground Biomass </p>`) + '<img src="' + "http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:Above_Ground_Biomass_Crop_Production_Agricultural_Productivity&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '" />' ;
+    div.innerHTML += (`<p>${dashboardSlice.selected_district} Above Ground Biomass </p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:Above_Ground_Biomass_Crop_Production_Agricultural_Productivity&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150` + '" />' ;
 
         
     let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -914,28 +845,14 @@ const fetchCountryClimate = (e) => {
   setClimate(climate_name)
 
 
-  // if( climate_name === 'Precipitation' ) {
-  //   setcolor_array(precip_color)
-  //   dispatch(changeStatsColor(precip_color))
-  // }
-          
-  // if( climate_name === 'Elevation'){
-  //   setcolor_array(agb_color)
-  //   dispatch(changeStatsColor(elevation_color))
-  // }
-  
-  // if( climate_name === 'Temperature' ) {
-  //   setcolor_array(temperature_color)
-  //   dispatch(changeStatsColor(temperature_color))
-
-  // }
+ 
   
 if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
 if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
 map.current.createPane("pane400").style.zIndex = 200;
 
 if(clicked_link === 'Climate' && climate_name && wmsCountryLayer.current != null ) {
-  wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+  wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
     pane: 'pane400',
     layers: `Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate`,
     crs:L.CRS.EPSG4326,
@@ -964,7 +881,7 @@ const addClimateLegend = () => {
     climate_legend.current.onAdd = function(map) {
   var div = L.DomUtil.create("div", "legend");
       
-  div.innerHTML += (`<p>${country_name.current} ${climate_name}</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+  div.innerHTML += (`<p>${country_name.current} ${climate_name}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
 
       
   let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -981,30 +898,7 @@ const addClimateLegend = () => {
 
 
 
-//  const fetchClimateStats = async () => {
 
-//   try {
-//     console.log(climate_name,'selected climate')
-//     const response = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_statistics/?data_name=${climate_name}&district_name=${district.name}&country_name=Malawi`);
-//     console.log('climate stats',response.data)
-//     var labels = Object.keys(response.data[0])
-//     var figures = Object.values(response.data[0])
-//     console.log('stats figures and labels', figures, labels)
-//     setstats_figures(figures)
-//     dispatch(changeStatsFigures(figures))
-
-
-//     setstats_labels(labels)
-//     dispatch(changeStatsLabels(labels))
-//   } catch (error) {
-    
-//   }
-
-// }
-
-
-//   fetchClimateStats()
-  // handleDrawerToggle()
 
  
 
@@ -1045,7 +939,7 @@ map.current.createPane("pane400").style.zIndex = 200;
 
 
   if(clicked_link === 'Climate' && climate_name && current_geojson.current ) {
-    wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+    wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: `Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate`,
       crs:L.CRS.EPSG4326,
@@ -1076,7 +970,7 @@ map.current.createPane("pane400").style.zIndex = 200;
       climate_legend.current.onAdd = function(map) {
     var div = L.DomUtil.create("div", "legend");
         
-    div.innerHTML += (`<p>${dashboardSlice.selected_district} ${climate_name}</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+    div.innerHTML += (`<p>${dashboardSlice.selected_district} ${climate_name}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
 
         
     let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -1097,7 +991,7 @@ map.current.createPane("pane400").style.zIndex = 200;
  
     try {
       console.log(climate_name,'selected climate')
-      const response = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_statistics/?data_name=${climate_name}&district_name=${district.name}&country_name=Malawi`);
+      const response = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_statistics/?data_name=${climate_name}&district_name=${district.name}&country_name=Malawi`);
       console.log('climate stats',response.data)
       var labels = Object.keys(response.data[0])
       var figures = Object.values(response.data[0])
@@ -1136,7 +1030,7 @@ map.current.createPane("pane400").style.zIndex = 200;
 
 
   if(clicked_link === 'Soil Fertility' && soil_product  ) {
-    wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+    wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: `Landinvestment_datasets:${soil_product}_Crop_Production_Soil`,
       crs:L.CRS.EPSG4326,
@@ -1153,59 +1047,6 @@ map.current.createPane("pane400").style.zIndex = 200;
 
  wmsLayer.current.addTo(map.current);
 
-  //add legend
-  // const addSoilLegend = () => {
-  //   if(climate_legend.current)map.current.removeControl(climate_legend.current)
-  //   if(crop_legend.current)map.current.removeControl(crop_legend.current)
-  //   if(agb_legend.current)map.current.removeControl(agb_legend.current)
-  //   if(wmsLayer.current){
-  //     var legend = L.control({position:'bottomright'});
-  //     climate_legend.current = legend
-
-  //     climate_legend.current.onAdd = function(map) {
-  //   var div = L.DomUtil.create("div", "legend");
-        
-  //   div.innerHTML += (`<p>${dashboardSlice.selected_district} ${soil_product}</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${soil_product}_Crop_Production_Soil&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
-
-        
-  //   let draggable = new L.Draggable(div); //the legend can be dragged around the div
-  //   draggable.enable();
-
-  //   return div;
-  //   };
-
-  //   climate_legend.current.addTo(map.current);
-  //   }
-
-  //  }
-  //  addSoilLegend()
-
-
-
-  //  const fetchSoilStats = async () => {
- 
-  //   try {
-  //     // console.log(climate_name,'selected climate')
-  //     const response = await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_statistics/?data_name=${soil_product}&district_name=${district.name}&country_name=Malawi`);
-  //     console.log('climate stats',response.data)
-  //     var labels = Object.keys(response.data[0])
-  //     var figures = Object.values(response.data[0])
-  //     console.log('stats figures and labels', figures, labels)
-  //     setstats_figures(figures)
-  //     dispatch(changeStatsFigures(figures))
-  
-  
-  //     setstats_labels(labels)
-  //     dispatch(changeStatsLabels(labels))
-  //   } catch (error) {
-      
-  //   }
-  
-  // }
-
-
-  //   fetchSoilStats()
-  //   handleDrawerToggle()
 
    
  
@@ -1219,7 +1060,7 @@ const fetchLandUse = () => {
   if(clicked_link === 'Land Use' && current_geojson.current != null) {
     map.current.createPane("pane400").style.zIndex = 200;
     console.log('lAND USE')
-    wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+    wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: `Landinvestment_datasets:Land_Use_Crop_Production_Soil`,
       crs:L.CRS.EPSG4326,
@@ -1249,7 +1090,7 @@ const fetchLandUse = () => {
      if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
     map.current.createPane("pane400").style.zIndex = 200;
     console.log('NTL')
-    wmsNTLLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+    wmsNTLLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: `Landinvestment_datasets:Night_Time_Light_Socioeconomics_NTL`,
       crs:L.CRS.EPSG4326,
@@ -1279,7 +1120,7 @@ const fetchLandUse = () => {
     ntl_legend.current.onAdd = function(map) {
   var div = L.DomUtil.create("div", "legend");
       
-  div.innerHTML += (`<p>${dashboardSlice.selected_district} Night-time Light</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:Night_Time_Light_Socioeconomics_NTL&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+  div.innerHTML += (`<p>${dashboardSlice.selected_district} Night-time Light</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:Night_Time_Light_Socioeconomics_NTL&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
 
       
   let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -1314,7 +1155,7 @@ console.log(ancillary_selection,'selected ancil')
 
 if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' ) {
   
-    wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+    wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: `Landinvestment_datasets:Population_Density_Population_&_Demographics_Population`,
       crs:L.CRS.EPSG4326,
@@ -1331,49 +1172,13 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
 
  wmsLayer.current.addTo(map.current);
 
-  //add legend
-  // const addCropLegend = () => {
-  //   if(climate_legend.current)map.current.removeControl(climate_legend.current)
-  //   if(crop_legend.current)map.current.removeControl(crop_legend.current)
-  //   if(agb_legend.current)map.current.removeControl(agb_legend.current)
-  //   if(wmsLayer.current){
-  //     var legend = L.control({position:'bottomright'});
-  //     crop_legend.current = legend
-
-  //     crop_legend.current.onAdd = function(map) {
-  //       var div = L.DomUtil.create("div", `${isDrawerOpen ? 'legend2' : 'legend'}`)
-  //       // if( isDrawerOpen == true) {
-  //       //   var div = L.DomUtil.create("div", 'legend')
-  //       // } else{
-  //       //   var div = L.DomUtil.create("div", 'legend2')
-  //       // }
-        
-     
-        
-  //   div.innerHTML += (`<p>${dashboardSlice.selected_district} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
-
-        
-  //   let draggable = new L.Draggable(div); //the legend can be dragged around the div
-  //   draggable.enable();
-
-  //   return div;
-  //   };
-
-  //   crop_legend.current.addTo(map.current);
-  //   }
-
-  //  }
-  //  addCropLegend()
-
-
-  //  fetchCropStats()
-  //  color_func()
+  
 
   }
 
   if( clicked_link === 'Ancillary Data' && ancillary_selection !== 'Demographics' || 'Economic Activity' ) {
   
-    wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+    wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: `Landinvestment_datasets:${ancillary_selection}`,
       crs:L.CRS.EPSG4326,
@@ -1392,33 +1197,7 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
 
 }
 
-// const fetchFilteredPrec = (e) => {
-//   console.log(e.target.value, 'prec range filter')
-//   var prec_range_value = e.target.value
 
-//   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
-// map.current.createPane("pane400").style.zIndex = 200;
-
-// if(clicked_link === 'Climate' && climate_ref.current === 'Precipitation' && current_geojson.current ) {
-//   wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
-//     pane: 'pane400',
-//     layers: `Landinvestment_datasets:malawi_precipitation_uUTiNcB_Balakaclipped_filtere_less_91`,
-//     crs:L.CRS.EPSG4326,
-//     // styles: `Climate_and_Geography_Climate_${climate_name}_${district.name}`,
-//     // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
-  
-//     format: 'image/png',
-//     transparent: true,
-//     opacity:1.0
-    
-    
-   
-// });
-
-// wmsLayer.current.addTo(map.current);
-// }
-
-// }
 
 const zoomin = () => {
   map.current.setZoom(map.current.getZoom() + 0.5)
@@ -1452,11 +1231,11 @@ const sliderfunc = async (e)  => {
  
   // p.innerHTML = Math.round(value * 100);
 
-  const clim_filter= await axios.get('http://139.84.229.39:8700/uneca-api-0.1/data/get_min_max/?district_name=Balaka')
+  const clim_filter= await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_min_max/?district_name=Balaka`)
   console.log(clim_filter.data, 'climate data values')
  var selected_climate = climate_ref.current
 
-  const clim_filter2= await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_filterd_wms/?data_name=Precipitation&district_name=${district.name}&value=${value}`)
+  const clim_filter2= await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_filterd_wms/?data_name=Precipitation&district_name=${district.name}&value=${value}`)
   console.log(clim_filter2.data, 'clim filter 2')
   var layer_filter = clim_filter2.data.layer_name
 
@@ -1466,7 +1245,7 @@ map.current.createPane("pane400").style.zIndex = 200;
 
 if(clicked_link === 'Climate' && climate_ref.current === 'Precipitation'  && current_geojson.current ) {
   console.log(value, 'value inside')
-  wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+  wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
     pane: 'pane400',
     layers: `Landinvestment_datasets:malawi_precipitation_uUTiNcB_${district.name}clipped_filtere_less_${value}`,
     crs:L.CRS.EPSG4326,
@@ -1491,11 +1270,11 @@ const sliderfunc2 = async (e)  => {
  
   // p.innerHTML = Math.round(value * 100);
 
-  const clim_filter= await axios.get('http://139.84.229.39:8700/uneca-api-0.1/data/get_min_max/?district_name=Balaka')
+  const clim_filter= await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_min_max/?district_name=Balaka`)
   console.log(clim_filter.data, 'climate data values')
  var selected_climate = climate_ref.current
 
-  const clim_filter2= await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_filterd_wms/?data_name=Temperature&district_name=${district.name}&value=${value}`)
+  const clim_filter2= await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_filterd_wms/?data_name=Temperature&district_name=${district.name}&value=${value}`)
   console.log(clim_filter2.data, 'clim filter 2')
   var layer_filter = clim_filter2.data.layer_name
 
@@ -1505,7 +1284,7 @@ map.current.createPane("pane400").style.zIndex = 200;
 
 if(clicked_link === 'Climate' && climate_ref.current === 'Temperature'  && current_geojson.current ) {
   console.log(value, 'value inside')
-  wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+  wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
     pane: 'pane400',
     // layers:layer_filter,
     layers: `Landinvestment_datasets:malawi_temprature_fBiSpPq_${district.name}clipped_filtere_less_${value}`,
@@ -1532,11 +1311,11 @@ const sliderfunc3 = async (e)  => {
  
   // p.innerHTML = Math.round(value * 100);
 
-  const clim_filter= await axios.get('http://139.84.229.39:8700/uneca-api-0.1/data/get_min_max/?district_name=Balaka')
+  const clim_filter= await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_min_max/?district_name=Balaka`)
   console.log(clim_filter.data, 'climate data values')
  var selected_climate = climate_ref.current
 
-  const clim_filter2= await axios.get(`http://139.84.229.39:8700/uneca-api-0.1/data/get_filterd_wms/?data_name=Elevation&district_name=${district.name}&value=${value}`)
+  const clim_filter2= await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_filterd_wms/?data_name=Elevation&district_name=${district.name}&value=${value}`)
   console.log(clim_filter2.data, 'clim filter 2')
   var layer_filter = clim_filter2.data.layer_name
 
@@ -1546,7 +1325,7 @@ map.current.createPane("pane400").style.zIndex = 200;
 
 if(clicked_link === 'Climate' && climate_ref.current === 'Elevation'  && current_geojson.current ) {
   console.log(value, 'value inside')
-  wmsLayer.current =  L.tileLayer.wms("http://139.84.229.39:8080/geoserver/wms?", {
+  wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
     pane: 'pane400',
     layers: `Landinvestment_datasets:malawi_elevation_XXC2nrw_${district.name}clipped_filtere_less_${value}`,
     crs:L.CRS.EPSG4326,
@@ -1587,23 +1366,7 @@ wmsLayer.current.addTo(map.current);
         top:'12.4vh',
         zIndex:100
     }}>
-      {/* <button onClick={fetchLandUse}>Land</button> */}
-        {/* <select  id="region_selection"
-    placeholder=''
-    value={country}
-    onChange={onCountryChanged}
-    style={{
-        // position:'absolute',
-        // top:'12vh',
-        width: '170px',
-        height: '40px',
-        
-
-    }}>
-         <option value="" >Select Country</option>
-         { countryOptions }
-       
-    </select> */}
+   
 
 <Select 
     defaultValue={'Select Country'}
@@ -1612,25 +1375,7 @@ wmsLayer.current.addTo(map.current);
     placeholder={'Select Country'}
     />
 
-    {/* <select name="" id="district_selection"
-  
    
-    onChange={onDistrictChanged}
-    style={{
-      borderRadius: '10px',
-      border: '1px solid #8A8888',
-      backgroundColor: '#F0EFEF',
-      outline: "none",
-        width: '170px',
-        height: '40px',
-        
-
-    }}
-    >
-        
-                <option value="" hidden>Select District</option>
-         {customoptions(district_option)}
-    </select> */}
 
 
     <Select 
@@ -1723,12 +1468,12 @@ wmsLayer.current.addTo(map.current);
           <span id="opacity" >Opacity</span>
          
           <input type="range" id="sldOpacity" min="0" max="1" step="0.1" 
-          // value={opacity_value}
+       
           onChange={changeDefaultOpacity}
          
             />
          </div>
-       {/* <img src={layers} alt="" onMouseOver={layers_mouseover} onMouseLeave={handleBaseLayers}  backgroundColor:'#1e4b5f', /> */}
+       
 
     </div>
 
@@ -1899,29 +1644,7 @@ className='fetch_button'
     
     clicked_link === 'Climate'? 
     <>
-    {/* <select name="" id="climate_selection"
-            placeholder=''
-            value={climate}
-            onChange={onClimateChanged}
-            style={{
-                position:'absolute',
-                top:'39.8vh',
-                left:'1.2vw',
-                width: '170px',
-                height: '35px',
-                borderRadius:'10px',
-                marginTop:'25px',
-                marginLeft:'100px',
-                outline:'none',
-                zIndex:100
-                
-                
-            
-            }}>
-                 <option value="" >Select Product</option>
-                 { climateOptions }
-               
-            </select> */}
+    
             <div id="climate_selection" 
             style={{
               position:'absolute',
@@ -1954,29 +1677,7 @@ className='fetch_button'
 
     clicked_link === 'Soil Fertility'? 
     <>
-    {/* <select name="" id="soil_selection"
-            placeholder=''
-            value={soil_}
-            onChange={onSoilChanged}
-            style={{
-                position:'absolute',
-                top:'49.8vh',
-                left:'1.2vw',
-                width: '170px',
-                height: '35px',
-                borderRadius:'10px',
-                marginTop:'25px',
-                marginLeft:'100px',
-                outline:'none',
-                zIndex:100
-                
-                
-            
-            }}>
-                 <option value="" >Select Product</option>
-                 { soilOptions }
-               
-            </select> */}
+   
 
 <div className="landuse" 
     style={{ position:'absolute',
@@ -2014,56 +1715,9 @@ className='fetch_button'
       fontFamily:'sans-serif',
       fontSize:'14px'
     }}>
-      {/* <img src={close} alt="" style={{ marginLeft:'24.5vw', marginTop:'3px'}}  onClick={ close_selection} /> */}
-     
-      {/* {
-        ancil_data_list.map((item) => 
-        <>
-         
-        
-       
-        </>
-        
-        )
+      
 
-      } */}
 
-{/* <div style={{  padding:'4px', marginTop:'-15px'}} > */}
-        {/* <input type="radio" name="" id=""  
-        value={dashboardSlice.ancil_data[0]} 
-        checked={selected_ancil === dashboardSlice.ancil_data[0]}
-        onChange={onAncilChange} />
-        <label htmlFor="">{dashboardSlice.ancil_data[0]}</label>
-        <br /> <br />
-
-        <input type="radio" name="" id=""  
-        value={dashboardSlice.ancil_data[1]} 
-        checked={selected_ancil === dashboardSlice.ancil_data[1]}
-        onChange={onAncilChange} />
-        <label htmlFor="">{dashboardSlice.ancil_data[1]}</label>
-        <br />
-        <br />
-
-        <input type="radio" name="" id=""  
-        value={dashboardSlice.ancil_data[2]} 
-        checked={selected_ancil === dashboardSlice.ancil_data[2]}
-        onChange={onAncilChange} />
-        <label htmlFor="">{dashboardSlice.ancil_data[2]}</label>
-        <br />
-        <br />
-
-        <input type="radio" name="" id=""  
-        value={dashboardSlice.ancil_data[3]} 
-        checked={selected_ancil === dashboardSlice.ancil_data[3]}
-        onChange={onAncilChange} />
-        <label htmlFor="">{dashboardSlice.ancil_data[3]}</label>
-        <br />  <br />
-
-        <input type="radio" name="" id=""  
-        value={dashboardSlice.ancil_data[4]} 
-        checked={selected_ancil === dashboardSlice.ancil_data[4]}
-        onChange={onAncilChange} />
-        <label htmlFor="">{dashboardSlice.ancil_data[4]}</label> */}
         <div className="anci" style={{color:'white'}}>
         <CustomAncilSelect
            fetchAncilData={ onAncilChange }
@@ -2071,11 +1725,6 @@ className='fetch_button'
 
         </div>
 
-
-
-        
-        {/* <span >{item}</span> */}
-        {/* </div> */}
 
 
 
@@ -2147,13 +1796,6 @@ marginLeft:'75vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.
 }
 
 
-
-
-
-
-
-
-    
     
     </>
   )

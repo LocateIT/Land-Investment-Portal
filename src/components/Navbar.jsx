@@ -15,8 +15,8 @@ const Navbar = () => {
     let link_icons = [home, dashboard, about, language]
   return (
     <div className='navbar'>
-        <img className="logo" src={logo} />
-        <img className="proj_name" src={proj_name} />
+        <img className="logo" src={logo}  alt='The United Nations Economic Commission for Africa'/>
+        <img className="proj_name" src={proj_name} alt='Land Investment Portal for Malawi, Guinea and Madagascar' />
         {/* <span>deliver ideas and actions for an empowered and transformed Africa</span> */}
         <div className="link_icons">
             {/* {
@@ -24,10 +24,10 @@ const Navbar = () => {
                 <img src={icon} alt="" key={icon}  />
                 )
             } */}
-            <img src={home} alt="" onClick={() => navigate('/')}/>
-            <img src={dashboard} alt="" onClick={() => navigate('dashboard')} />
-            <img src={about} alt="" />
-            <img src={language} alt="" />
+            <img src={home} alt="homepage" onClick={() => navigate('/')}/>
+            <img src={dashboard} alt="dashboard" onClick={() => navigate('dashboard')} />
+            <img src={about} alt="about" />
+            <img src={language} alt="language translation" />
         </div>
 
 

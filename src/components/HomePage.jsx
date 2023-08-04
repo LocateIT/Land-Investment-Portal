@@ -1,5 +1,5 @@
 import React from 'react'
-import home_image from '../assets/homepage.jpg'
+import home_image from '../assets/agri.jpg'
 import info from '../assets/about_.svg'
 import './homepage.css'
 import { useNavigate } from 'react-router-dom'
@@ -71,7 +71,7 @@ The dashboard consists of major indicators: </p>
  <span style={{marginLeft:'-4.5vw'}}>The data displayed is of elevation, evapotranspiration and soil carbon content</span>
  <span style={{marginLeft:'-4vw'}}>The data inclides soil texture, Organic carbon, drainage, cations, nutrients</span>
  
- <span style={{marginLeft:'-1.5vw'}}>Contains visualization of market accessibility, economic activity (Inactive and active) by gender, road network, towns and demographics, which is the total employment count and settlement aggregated by gender and population count by education level, displayed as bar graphs
+ <span style={{marginLeft:'-1.5vw'}}>Contains visualization of market accessibility, economic activity by gender, road network, towns and demographics.
 
 </span> 
 

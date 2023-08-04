@@ -148,7 +148,7 @@ padding:'10px',
        <> 
 
 
-<span className='chart_title' style={{fontFamily:'sans-serif', marginTop:'10vh',fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F',}}> { dashboardSlice.selected_climate === 'Elevation' ?
+<span className='chart_title' style={{ marginTop:'10vh',fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F',}}> { dashboardSlice.selected_climate === 'Elevation' ?
        `${dashboardSlice.selected_district}  ${dashboardSlice.selected_climate} (meters)`  :
 
        dashboardSlice.selected_climate === 'Precipitation' ?
@@ -179,37 +179,13 @@ padding:'10px',
 
 
       
-{/* <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F',}}>Filter for Elevation</p>
-<div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
-<input type="range" name="slider" id="slider" onInput={sliderfunc} min={0} max={4000} step={100}/>
-<p className='label' >{slider_value}</p>
 
-</div>
-
-<p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Temperature</p>
-<div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
-<input type="range" name="slider" id="slider" onInput={sliderfunc} min={0} max={4000} step={100}/>
-<p className='label' >{slider_value}</p>
-
-</div> */}
-
-
-{/* <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Precipitation</p>
-<div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
-<input type="range" name="slider" id="slider"  onChange={fetchFilteredData} onInput={sliderfunc} min={0} max={91} step={1}/>
-<p className='label' >{slider_value}</p>
-
-</div> */}
-
-{/* <a className="twitter-link" href="https://twitter.com/phil_osophie" target="_blank" ></a> */}
       
        
        </> 
        : ''}
      
-      {/* <button className="close-btn" onClick={onClose}>
-        Close
-      </button> */}
+      
     </div>
   );
 };

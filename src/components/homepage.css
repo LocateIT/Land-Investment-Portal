@@ -1,8 +1,8 @@
 .homepage{
-  background-image: url('../src/assets/homepage.jpg');
+  
   height:'100vh';
    width:'100vw';
-   /* box-shadow: inset 0 0 0 50px */
+  
 }
 
 .button_slide {
