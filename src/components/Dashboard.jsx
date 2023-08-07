@@ -7,6 +7,9 @@ import "leaflet"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
 import  axios from 'axios'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 import { dashboardSelections } from './selectionSlice';
 import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct, 
@@ -457,6 +460,7 @@ const fetchOptions = async() => {
         
       } catch (error) {
         console.log( error)
+        toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
         
       }
 
@@ -553,6 +557,7 @@ const fetchOptions = async() => {
     
 
   } catch (error) {
+    toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
     
   }
 
@@ -583,6 +588,7 @@ const fetchAGBStats = async () => {
     settotal_acreage(total_acreage)
     dispatch(changeTotalAcreage(acerage))
   } catch (error) {
+    toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
     
   }
 
@@ -610,7 +616,7 @@ const color_func = () => {
 
 const fetchCountryCrop = () => {
 
-
+try {
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
   map.current.createPane("pane400").style.zIndex = 200;
 
@@ -721,6 +727,13 @@ const fetchCountryCrop = () => {
  color_func()
 
   }
+  
+} catch (error) {
+  console.log(error)
+  toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
+  
+}
+ 
 }
 
 //fetch crop data
@@ -731,7 +744,8 @@ const fetchCrop = () => {
 
   
 
-  if(clicked_link === 'Crop Production' && selected_radio === 'Crop Suitability') {
+  try {
+    if(clicked_link === 'Crop Production' && selected_radio === 'Crop Suitability') {
     
       wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
         pane: 'pane400',
@@ -837,6 +851,11 @@ const fetchCrop = () => {
   
     }
 
+    
+  } catch (error) {
+    toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
+    
+  }
   
 }
 
@@ -1368,7 +1387,8 @@ wmsLayer.current.addTo(map.current);
         gap:'0.2rem',
         position:'absolute',
         top:'12.4vh',
-        zIndex:100
+        zIndex:100,
+        fontFamily:'sans-serif',
     }}>
    
 
@@ -1390,16 +1410,22 @@ wmsLayer.current.addTo(map.current);
     />
 
     </div>
+
+    <div className="
+    ">
+      <ToastContainer />
+    </div>
     
 
-    <div className="left_side_panel" >
+    <div className="left_side_panel"  >
 
         <div className="left_side_icons"
          style={{
           
             display:'flex',
             flexDirection: 'column',
-            gap:'2.6rem'
+            gap:'2.6rem',
+            fontFamily:'sans-serif',
         }}>
         {
             left_panel_icons.map((icon) => 
@@ -1419,11 +1445,13 @@ wmsLayer.current.addTo(map.current);
         </div>
 
         <div className="left_side_links"
-    style={{
+        style={{
         position:'absolute',
         display:'flex',
         flexDirection: 'column',
-        gap:'3.3rem'
+        gap:'3.3rem',
+        fontFamily:'sans-serif',
+        fontSize:'16px'
     }}>
         
     {

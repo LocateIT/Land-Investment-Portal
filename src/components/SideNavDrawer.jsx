@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { dashboardSelections } from './selectionSlice';
@@ -19,6 +19,8 @@ const SideNavDrawer = ({ isOpen, onClose , fetchFilteredData}) => {
   const agb_color = ['#ee7245','#fdad61', '#fffebe', "#acd9e9","#2e7cb7", "#2c7bb6"]
   const precip_color = ["#c6cdd4", "#d1c8b0", "#d0bf90", "#7ba7b3", "#2871b0", "#08306b"]
   const temperature_color = ["#3aee5b", "#49883f", "#b8e38b", "#dbe5b3", "#e77d1a", "#f90f49"]
+
+  let ctx = useRef(null)
     let lulcChartData = {
         labels: dashboardSlice.stats_labels,
         datasets: [
@@ -46,6 +48,105 @@ const SideNavDrawer = ({ isOpen, onClose , fetchFilteredData}) => {
           },
         ],
       }
+      const data = {
+        labels: ['Red', 'Blue', 'Yellow'],
+        datasets: [
+          {
+            data: [300, 50, 100],
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+            hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+          },
+        ],
+      };
+      const optionss = {
+        responsive: true,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'right',
+              align: 'center',
+              marginLeft: 150,
+              labels: {
+                fontSize: 12,
+                fontColor: '#fff',
+                borderColor:'none',
+                boxWidth: 20, // This sets the width of each legend item box
+            padding: 15,  // This sets the margin between the legend items
+              },
+            },
+            title: {
+              display: false,
+              // text: 'Land Cover Chart',
+            },
+          },
+        tooltips: {
+          callbacks: {
+            label: function (tooltipItem, data) {
+              const dataset = data.datasets[tooltipItem.datasetIndex];
+              const total = dataset.data.reduce((previousValue, currentValue) => previousValue + currentValue);
+              const currentValue = dataset.data[tooltipItem.index];
+              const percentage = ((currentValue / total) * 100).toFixed(2);
+              return `${data.labels[tooltipItem.index]}: ${currentValue} (${percentage}%)`;
+            },
+          },
+        },
+      };
+
+      let options_ = {
+
+        tooltips: {
+          enabled:true,
+          // callbacks: {
+          //   label: (tooltipItem, lulcChartData) => {
+               
+          //     const dataset = lulcChartData.datasets[tooltipItem.datasetIndex];
+          //     const total = dataset.data.reduce((previousValue, currentValue) => previousValue + currentValue);
+          //     const currentValue = dataset.data[tooltipItem.index];
+          //     const percentage = Math.floor(((currentValue / total) * 100).toFixed(2)) ;
+          //     console.log(`${lulcChartData.labels[tooltipItem.index]}: ${currentValue} (${percentage}%)`, 'pperrrrrrrrrrrrcentage')
+          //     return `${lulcChartData.labels[tooltipItem.index]}: ${currentValue} (${percentage}%)`;
+          //   },
+          //   title:function(tooltipItem, lulcChartData) {
+          //     return lulcChartData.labels[tooltipItem[0].index];
+          //   }
+          // },
+        },
+          responsive: true,
+          plugins: {
+            datalabels: {
+              formatter: (value, ctx) => {
+        
+                let sum = ctx.dataset._meta[0].total;
+                let percentage = (value * 100 / sum).toFixed(2) + "%";
+                return percentage;
+        
+        
+              },
+              color: '#fff',
+            },
+            legend: {
+              display: true,
+              position: 'right',
+              align: 'center',
+              marginLeft: 150,
+              labels: {
+                fontSize: 12,
+                fontColor: '#fff',
+                borderColor:'none',
+                boxWidth: 20, // This sets the width of each legend item box
+            padding: 15,  // This sets the margin between the legend items
+              },
+            },
+            title: {
+              display: false,
+              // text: 'Land Cover Chart',
+            },
+          },
+        };
+
+       ctx.current = document.getElementById("pie-chart")
+        //  .getContext('2d');
+      
 
 
       const input = document.querySelector("input");
@@ -106,7 +207,7 @@ justifyContent:'center',
 padding:'10px',
                alignItems:'center',
                marginTop:'-6vh'}}>
-                <CropPie data={lulcChartData} />
+                <CropPie data={lulcChartData} options={options_} />
                </div>
 
 

@@ -83,7 +83,7 @@ The dashboard consists of major indicators: </p>
 
 
                 <br />
-                    <button type='button' class="button_slide slide_right" id='visit_dash'
+                    <button type='button' className="button_slide slide_right" id='visit_dash'
                      style={{borderRadius:'20px',
                 height: '40px',
                 width:'200px', border:'none', color:'#fff', backgroundColor:'#164b75', marginTop:'2vh'}}
