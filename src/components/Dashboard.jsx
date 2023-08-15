@@ -100,6 +100,7 @@ const Dashboard = () => {
     let crop_legend = useRef(null)
     let climate_legend = useRef(null)
     let ntl_legend = useRef(null)
+    let lulc_legend = useRef(null)
     // let baseMaps = useRef(null)
     let clicked_basemap = useRef('')
     let base_map_ctrl_selections = useRef(false)
@@ -111,6 +112,7 @@ const Dashboard = () => {
     let climate_ref = useRef('')
     let wmsCountryLayer = useRef(null)
     let opacity_value = useRef('1')
+    let wmsLULC = useRef(null)
 
 
     const handleDrawerToggle = () => {
@@ -378,6 +380,7 @@ const fetchOptions = async() => {
       try {  
         // if(wmsNTLLayer.current)map.clearLayers()
         if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current) 
+        if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
         if(wmsCountryLayer.current) map.current.removeLayer(wmsCountryLayer.current)
         if(current_geojson.current) map.current.removeLayer(current_geojson.current)
         if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
@@ -471,10 +474,12 @@ const fetchOptions = async() => {
     const fetchDistricts = async(id) => {
   
       try {   
+        if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
         if(current_geojson.current) map.current.removeLayer(current_geojson.current)
         if(wmsCountryLayer.current) map.current.removeLayer(wmsCountryLayer.current)
         if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
         if(wmsCountryLayer.current)map.current.removeLayer(wmsCountryLayer.current)
+      
         
         if(district_option != null) {
           console.log(district_option)
@@ -1086,14 +1091,46 @@ map.current.createPane("pane400").style.zIndex = 200;
 
 }
 // const fetchLandUse = () => {
+
+const addLULCLegend = () => {
+  if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+  if(climate_legend.current)map.current.removeControl(climate_legend.current)
+  if(crop_legend.current)map.current.removeControl(crop_legend.current)
+  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  if(wmsLayer.current){
+    var legend = L.control({position:'bottomright'});
+    lulc_legend.current = legend
+
+    lulc_legend.current.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+
+  var taifa = country_name.current
+      
+  div.innerHTML += (`<p>${dashboardSlice.selected_district} Land Use</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${taifa}_Land_Use_Socioeconomics_Otherlayers&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+
+      
+  let draggable = new L.Draggable(div); //the legend can be dragged around the div
+  draggable.enable();
+
+  return div;
+  };
+
+  lulc_legend.current.addTo(map.current);
+  }
+
+ }
+ addLULCLegend()
   
 
   if(clicked_link === 'Land Use' && wmsCountryLayer.current != null ) {
     if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+    if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+    
+    // current_geojson.current = null
     var taifa = country_name.current
     map.current.createPane("pane400").style.zIndex = 200;
     console.log('lAND USE')
-    wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
+    wmsLULC.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: `Landinvestment_datasets:${taifa}_Land_Use_Socioeconomics_Otherlayers`,
       crs:L.CRS.EPSG4326,
@@ -1106,11 +1143,12 @@ map.current.createPane("pane400").style.zIndex = 200;
      
  });
 
- wmsLayer.current.addTo(map.current);
+ wmsLULC.current.addTo(map.current);
 }
 
 
 if(clicked_link === 'Land Use' && current_geojson.current != null ) {
+  if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
   var taifa = country_name.current
   map.current.createPane("pane400").style.zIndex = 200;
@@ -1131,7 +1169,6 @@ if(clicked_link === 'Land Use' && current_geojson.current != null ) {
 wmsLayer.current.addTo(map.current);
 }
 
-  
 
   
 // }
