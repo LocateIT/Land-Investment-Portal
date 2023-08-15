@@ -961,83 +961,91 @@ map.current.createPane("pane400").style.zIndex = 200;
 
 
 
-  if(clicked_link === 'Climate' && climate_name && current_geojson.current ) {
-    wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
-      pane: 'pane400',
-      layers: `Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate`,
-      crs:L.CRS.EPSG4326,
-      styles: `Climate_and_Geography_Climate_${climate_name}_${district.name}`,
-      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
-    
-      format: 'image/png',
-      transparent: true,
-      opacity:1.0
+  try {
+    if(clicked_link === 'Climate' && climate_name && current_geojson.current ) {
+      wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
+        pane: 'pane400',
+        layers: `Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate`,
+        crs:L.CRS.EPSG4326,
+        styles: `Climate_and_Geography_Climate_${climate_name}_${district.name}`,
+        // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
       
-      
-     
- });
-
- wmsLayer.current.addTo(map.current);
-
-
-
-  //add legend
-  const addClimateLegend = () => {
-    if(climate_legend.current)map.current.removeControl(climate_legend.current)
-    if(crop_legend.current)map.current.removeControl(crop_legend.current)
-    if(agb_legend.current)map.current.removeControl(agb_legend.current)
-    if(wmsLayer.current){
-      var legend = L.control({position:'bottomright'});
-      climate_legend.current = legend
-
-      climate_legend.current.onAdd = function(map) {
-    var div = L.DomUtil.create("div", "legend");
+        format: 'image/png',
+        transparent: true,
+        opacity:1.0
         
-    div.innerHTML += (`<p>${dashboardSlice.selected_district} ${climate_name}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
-
         
-    let draggable = new L.Draggable(div); //the legend can be dragged around the div
-    draggable.enable();
-
-    return div;
-    };
-
-    climate_legend.current.addTo(map.current);
-    }
-
-   }
-   addClimateLegend()
-
-
-
-   const fetchClimateStats = async () => {
- 
-    try {
-      console.log(climate_name,'selected climate')
-      const response = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_statistics/?data_name=${climate_name}&district_name=${district.name}&country_name=Malawi`);
-      console.log('climate stats',response.data)
-      var labels = Object.keys(response.data[0])
-      var figures = Object.values(response.data[0])
-      console.log('stats figures and labels', figures, labels)
-      setstats_figures(figures)
-      dispatch(changeStatsFigures(figures))
+       
+   });
+  
+   wmsLayer.current.addTo(map.current);
   
   
-      setstats_labels(labels)
-      dispatch(changeStatsLabels(labels))
-    } catch (error) {
-      
-    }
   
-  }
-
-
-    fetchClimateStats()
-    handleDrawerToggle()
-
+    //add legend
+    const addClimateLegend = () => {
+      if(climate_legend.current)map.current.removeControl(climate_legend.current)
+      if(crop_legend.current)map.current.removeControl(crop_legend.current)
+      if(agb_legend.current)map.current.removeControl(agb_legend.current)
+      if(wmsLayer.current){
+        var legend = L.control({position:'bottomright'});
+        climate_legend.current = legend
+  
+        climate_legend.current.onAdd = function(map) {
+      var div = L.DomUtil.create("div", "legend");
+          
+      div.innerHTML += (`<p>${dashboardSlice.selected_district} ${climate_name}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+  
+          
+      let draggable = new L.Draggable(div); //the legend can be dragged around the div
+      draggable.enable();
+  
+      return div;
+      };
+  
+      climate_legend.current.addTo(map.current);
+      }
+  
+     }
+     addClimateLegend()
+  
+  
+  
+     const fetchClimateStats = async () => {
    
- 
+      try {
+        console.log(climate_name,'selected climate')
+        const response = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_statistics/?data_name=${climate_name}&district_name=${district.name}&country_name=Malawi`);
+        console.log('climate stats',response.data)
+        var labels = Object.keys(response.data[0])
+        var figures = Object.values(response.data[0])
+        console.log('stats figures and labels', figures, labels)
+        setstats_figures(figures)
+        dispatch(changeStatsFigures(figures))
+    
+    
+        setstats_labels(labels)
+        dispatch(changeStatsLabels(labels))
+      } catch (error) {
+        toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
+        
+      }
+    
+    }
+  
+  
+      fetchClimateStats()
+      handleDrawerToggle()
+  
+     
+   
+  
+    }
+    
+  } catch (error) {
+    toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
 
+    
   }
 
 }
@@ -1077,19 +1085,19 @@ map.current.createPane("pane400").style.zIndex = 200;
   }
 
 }
-const fetchLandUse = () => {
-  if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+// const fetchLandUse = () => {
+  
 
-  if(clicked_link === 'Land Use' && current_geojson.current != null) {
+  if(clicked_link === 'Land Use' && wmsCountryLayer.current != null ) {
+    if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+    var taifa = country_name.current
     map.current.createPane("pane400").style.zIndex = 200;
     console.log('lAND USE')
     wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
-      layers: `Landinvestment_datasets:Land_Use_Crop_Production_Soil`,
+      layers: `Landinvestment_datasets:${taifa}_Land_Use_Socioeconomics_Otherlayers`,
       crs:L.CRS.EPSG4326,
-      styles:'',
-      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
-    
+      styles:`Socioeconomics_Otherlayers_Land_Use_${taifa}`,
       format: 'image/png',
       transparent: true,
       opacity:1.0
@@ -1100,10 +1108,33 @@ const fetchLandUse = () => {
 
  wmsLayer.current.addTo(map.current);
 }
+
+
+if(clicked_link === 'Land Use' && current_geojson.current != null ) {
+  if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  var taifa = country_name.current
+  map.current.createPane("pane400").style.zIndex = 200;
+  console.log('lAND USE')
+  wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
+    pane: 'pane400',
+    layers: `Landinvestment_datasets:${taifa}_Land_Use_Socioeconomics_Otherlayers`,
+    crs:L.CRS.EPSG4326,
+    styles:`Socioeconomics_Otherlayers_Land_Use_${district.name}`,
+    format: 'image/png',
+    transparent: true,
+    opacity:1.0
+    
+    
+   
+});
+
+wmsLayer.current.addTo(map.current);
+}
+
   
 
   
-}
+// }
 
 // const fetchNTL = () => {
   // if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
@@ -1392,7 +1423,7 @@ wmsLayer.current.addTo(map.current);
     }}>
    
 
-<Select 
+  <Select 
     defaultValue={'Select Country'}
     onChange={onCountryChanged}
     options={countryOptions}
@@ -1411,8 +1442,7 @@ wmsLayer.current.addTo(map.current);
 
     </div>
 
-    <div className="
-    ">
+    <div className="">
       <ToastContainer />
     </div>
     
