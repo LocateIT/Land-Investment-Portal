@@ -113,6 +113,7 @@ const Dashboard = () => {
     let wmsCountryLayer = useRef(null)
     let opacity_value = useRef('1')
     let wmsLULC = useRef(null)
+    let wmsDistrictLULC = useRef(null)
 
 
     const handleDrawerToggle = () => {
@@ -1061,18 +1062,22 @@ const fetchSoilDataa = (e) => {
 
 
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
 map.current.createPane("pane400").style.zIndex = 200;
 
+const soilTexture = soil_product;
+const separatedSoilTexture = soilTexture.split(' ').join('_');
+console.log(separatedSoilTexture, 'soil texture underscore'); 
 
+var taifa = country_name.current
 
-  if(clicked_link === 'Soil Fertility' && soil_product  ) {
+  if(clicked_link === 'Soil Fertility' && separatedSoilTexture != 'Organic_Carbon' && current_geojson.current != null ) {
     wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
-      layers: `Landinvestment_datasets:${soil_product}_Crop_Production_Soil`,
+      layers: `Landinvestment_datasets:${taifa}_${separatedSoilTexture}_Crop_Production_Soil`,
       crs:L.CRS.EPSG4326,
-      styles: '',
+      styles: `Crop_Production_Soil_${separatedSoilTexture}_${district.name}`,
       // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
-    
       format: 'image/png',
       transparent: true,
       opacity:1.0
@@ -1097,7 +1102,7 @@ const addLULCLegend = () => {
   if(climate_legend.current)map.current.removeControl(climate_legend.current)
   if(crop_legend.current)map.current.removeControl(crop_legend.current)
   if(agb_legend.current)map.current.removeControl(agb_legend.current)
-  if(wmsLayer.current){
+  if(wmsDistrictLULC.current){
     var legend = L.control({position:'bottomright'});
     lulc_legend.current = legend
 
@@ -1149,11 +1154,11 @@ const addLULCLegend = () => {
 
 if(clicked_link === 'Land Use' && current_geojson.current != null ) {
   if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
-  if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
   var taifa = country_name.current
   map.current.createPane("pane400").style.zIndex = 200;
   console.log('lAND USE')
-  wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
+  wmsDistrictLULC.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
     pane: 'pane400',
     layers: `Landinvestment_datasets:${taifa}_Land_Use_Socioeconomics_Otherlayers`,
     crs:L.CRS.EPSG4326,
@@ -1166,7 +1171,7 @@ if(clicked_link === 'Land Use' && current_geojson.current != null ) {
    
 });
 
-wmsLayer.current.addTo(map.current);
+wmsDistrictLULC.current.addTo(map.current);
 }
 
 
