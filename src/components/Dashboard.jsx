@@ -101,6 +101,7 @@ const Dashboard = () => {
     let climate_legend = useRef(null)
     let ntl_legend = useRef(null)
     let lulc_legend = useRef(null)
+    let soil_legend = useRef(null)
     // let baseMaps = useRef(null)
     let clicked_basemap = useRef('')
     let base_map_ctrl_selections = useRef(false)
@@ -114,6 +115,7 @@ const Dashboard = () => {
     let opacity_value = useRef('1')
     let wmsLULC = useRef(null)
     let wmsDistrictLULC = useRef(null)
+    let separated_soil_product = useRef(null)
 
 
     const handleDrawerToggle = () => {
@@ -1055,10 +1057,43 @@ map.current.createPane("pane400").style.zIndex = 200;
   }
 
 }
+
+const addSoilLegend = () => {
+  if(soil_legend.current)map.current.removeControl(soil_legend.current)
+  if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+  if(climate_legend.current)map.current.removeControl(climate_legend.current)
+  if(crop_legend.current)map.current.removeControl(crop_legend.current)
+  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  if(wmsLayer.current){
+    var legend = L.control({position:'bottomright'});
+    soil_legend.current = legend
+
+    soil_legend.current.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+
+  var taifa = country_name.current
+  var soil = separated_soil_product.current 
+  const separatedSoilTexture = soil.split('_').join(' ');
+      
+  div.innerHTML += (`<p>${dashboardSlice.selected_district} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${taifa}_${soil}_Crop_Production_Soil&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+
+      
+  let draggable = new L.Draggable(div); //the legend can be dragged around the div
+  draggable.enable();
+
+  return div;
+  };
+
+  soil_legend.current.addTo(map.current);
+  }
+
+ }
+ 
 const fetchSoilDataa = (e) => {
   console.log('soil',e)
-  dispatch(changeSoilProduct(e))
+  
   const soil_product = e
+  dispatch(changeSoilProduct(soil_product))
 
 
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
@@ -1068,6 +1103,7 @@ map.current.createPane("pane400").style.zIndex = 200;
 const soilTexture = soil_product;
 const separatedSoilTexture = soilTexture.split(' ').join('_');
 console.log(separatedSoilTexture, 'soil texture underscore'); 
+separated_soil_product.current = separatedSoilTexture
 
 var taifa = country_name.current
 
@@ -1077,6 +1113,30 @@ var taifa = country_name.current
       layers: `Landinvestment_datasets:${taifa}_${separatedSoilTexture}_Crop_Production_Soil`,
       crs:L.CRS.EPSG4326,
       styles: `Crop_Production_Soil_${separatedSoilTexture}_${district.name}`,
+      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+      format: 'image/png',
+      transparent: true,
+      opacity:1.0
+      
+      
+     
+ });
+
+ wmsLayer.current.addTo(map.current);
+ addSoilLegend()
+
+
+   
+ 
+
+  }
+
+  if(clicked_link === 'Soil Fertility' && separatedSoilTexture === 'Organic_Carbon' && current_geojson.current != null ) {
+    wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
+      pane: 'pane400',
+      layers: `Landinvestment_datasets:${taifa}_Organiccarbon_Crop_Production_Otherlayers`,
+      crs:L.CRS.EPSG4326,
+      styles: `Crop_Production_Otherlayers_Organiccarbon_${district.name}`,
       // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
       format: 'image/png',
       transparent: true,
