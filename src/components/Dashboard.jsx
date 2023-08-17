@@ -1524,8 +1524,8 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
 
   }
 
-  if( clicked_link === 'Ancillary Data' && ancillary_selection !== 'Demographics' || 'Economic Activity' ) {
-  
+  if( clicked_link === 'Ancillary Data' && ancillary_selection !== 'Demographics' || 'Economic Activity' || 'Market Accessibility' ) {
+    var taifa = country_name.current
     wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: `Landinvestment_datasets:${ancillary_selection}`,
@@ -1540,6 +1540,25 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
  });
 
  wmsLayer.current.addTo(map.current);
+}
+
+if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Market Accessibility' ) {
+  var taifa = country_name.current
+  
+  wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
+    pane: 'pane400',
+    layers: `Landinvestment_datasets:${taifa}_Market_Accessibility_Socioeconomics_Accessibility`,
+    crs:L.CRS.EPSG4326,
+    styles: `Socioeconomics_Accessibility_Market_Accessibility_${taifa}`,
+    format: 'image/png',
+    transparent: true,
+    opacity:1.0
+    
+    
+   
+});
+
+wmsLayer.current.addTo(map.current);
 }
 
 
