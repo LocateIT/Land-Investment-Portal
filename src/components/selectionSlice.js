@@ -49,7 +49,7 @@ const initialState = {
     climate_products:['Precipitation', 'Temperature', 'Elevation'],
     soil_products:['Soil Texture','Organic Carbon', 'Soil Drainage', 'Soil Cations', 'Soil Fertility'],
     selected_soil:'',
-    ancil_data:['Roads', 'Towns', 'Markets', 'Economic Activity', "Demographics"],
+    ancil_data:['Roads', 'Towns', 'Markets', 'Market Accessibility', 'Economic Activity', "Demographics"],
     stats_figures:[],
     stats_labels:[],
     stats_color:[],
@@ -64,6 +64,12 @@ const dashboardSelectionSlice = createSlice({
     reducers:{
         changeSelectedCountry:(state, action) => {
             state.selected_country = action.payload
+            if(state.selected_country === 'Guinea'){
+                state.crops = ['Cassava', 'Groundnuts', 'Rice']
+            }
+            if(state.selected_country === 'Madagascar'){
+                state.crops = ['Cassava', 'Sweet Potato', 'Rice']
+            }
            
         },
         // showDistrictOptions:async (state, action) => {

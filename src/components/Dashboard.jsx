@@ -540,6 +540,16 @@ const fetchOptions = async() => {
         
       }
     }
+
+    // const clearLegends = () =>{
+    //   if(pop_legend.current)map.current.removeControl(pop_legend.current)
+    //   if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+    //   if(soil_legend.current)map.current.removeControl(soil_legend.current)
+    //   if(climate_legend.current)map.current.removeControl(climate_legend.current)
+    //   if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+    //   if(crop_legend.current)map.current.removeControl(crop_legend.current)
+    //   if(agb_legend.current)map.current.removeControl(agb_legend.current)
+    // }
 //fetch stats
  const fetchCropStats = async () => {
  
@@ -625,6 +635,39 @@ const color_func = () => {
 
 }
 
+const addCropLegend = () => {
+  // clearLegends()
+
+  if(climate_legend.current)map.current.removeControl(climate_legend.current)
+  if(crop_legend.current)map.current.removeControl(crop_legend.current)
+  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+  
+  // if(wmsLayer.current){
+    var legend = L.control({position:'bottomright'});
+    crop_legend.current = legend
+
+    crop_legend.current.onAdd = function(map) {
+      var div = L.DomUtil.create("div", `${isDrawerOpen ? 'legend2' : 'legend'}`)
+      // var div = L.DomUtil.create("div", "legend");
+      
+      
+   
+      
+  div.innerHTML += (`<p>${country_name.current} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+
+      
+  let draggable = new L.Draggable(div); //the legend can be dragged around the div
+  draggable.enable();
+
+  return div;
+  };
+
+  crop_legend.current.addTo(map.current);
+  // }
+
+ }
+
 const fetchCountryCrop = () => {
 
 try {
@@ -636,7 +679,7 @@ var taifa = country_name.current
     
     wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
-      layers: `Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability`,
+      layers: `Landinvestment_datasets:${taifa}_${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability`,
       crs:L.CRS.EPSG4326,
       styles: '',
       // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
@@ -652,35 +695,7 @@ var taifa = country_name.current
  wmsLayer.current.addTo(map.current);
 
   //add legend
-  const addCropLegend = () => {
-    if(climate_legend.current)map.current.removeControl(climate_legend.current)
-    if(crop_legend.current)map.current.removeControl(crop_legend.current)
-    if(agb_legend.current)map.current.removeControl(agb_legend.current)
-    if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
-    
-    if(wmsLayer.current){
-      var legend = L.control({position:'bottomright'});
-      crop_legend.current = legend
-
-      crop_legend.current.onAdd = function(map) {
-        var div = L.DomUtil.create("div", `${isDrawerOpen ? 'legend2' : 'legend'}`)
-        
-        
-     
-        
-    div.innerHTML += (`<p>${country_name.current} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
-
-        
-    let draggable = new L.Draggable(div); //the legend can be dragged around the div
-    draggable.enable();
-
-    return div;
-    };
-
-    crop_legend.current.addTo(map.current);
-    }
-
-   }
+ 
    addCropLegend()
 
 
@@ -710,9 +725,11 @@ var taifa = country_name.current
 
  //add legend
  const addAGBLegend = () => {
-  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  // clearLegends()
+ if(agb_legend.current)map.current.removeControl(agb_legend.current)
   if(crop_legend.current)map.current.removeControl(crop_legend.current)
   if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+
   if(wmsLayer.current){
     var legend = L.control({position:'bottomright'});
     agb_legend.current = legend
@@ -753,7 +770,7 @@ const fetchCrop = () => {
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
   if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
   map.current.createPane("pane400").style.zIndex = 200;
-
+  var taifa = country_name.current
   
 
   try {
@@ -761,7 +778,7 @@ const fetchCrop = () => {
     
       wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
         pane: 'pane400',
-        layers: `Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability`,
+        layers: `Landinvestment_datasets:${taifa}_${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability`,
         crs:L.CRS.EPSG4326,
         styles: `Crop_Production_Crop_Suitability_${dashboardSlice.selected_crop}_${district.name}`,
         // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
@@ -773,38 +790,44 @@ const fetchCrop = () => {
         
        
    });
+   addCropLegend()
   
    wmsLayer.current.addTo(map.current);
 
     //add legend
-    const addCropLegend = () => {
-      if(climate_legend.current)map.current.removeControl(climate_legend.current)
-      if(crop_legend.current)map.current.removeControl(crop_legend.current)
-      if(agb_legend.current)map.current.removeControl(agb_legend.current)
-      if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
-      if(wmsLayer.current){
-        var legend = L.control({position:'bottomright'});
-        crop_legend.current = legend
+    // const addCropLegend = () => {
+    //   // clearLegends()
+    //   if(pop_legend.current)map.current.removeControl(pop_legend.current)
+    //   if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+    //   if(soil_legend.current)map.current.removeControl(soil_legend.current)
+    //   if(climate_legend.current)map.current.removeControl(climate_legend.current)
+    //   if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+    //   if(crop_legend.current)map.current.removeControl(crop_legend.current)
+    //   if(agb_legend.current)map.current.removeControl(agb_legend.current)
+
+    //   if(wmsLayer.current){
+    //     var legend = L.control({position:'bottomright'});
+    //     crop_legend.current = legend
   
-        crop_legend.current.onAdd = function(map) {
-          var div = L.DomUtil.create("div", `${isDrawerOpen ? 'legend2' : 'legend'}`)
+    //     crop_legend.current.onAdd = function(map) {
+    //       var div = L.DomUtil.create("div", `${isDrawerOpen ? 'legend2' : 'legend'}`)
       
        
-          
-      div.innerHTML += (`<p>${dashboardSlice.selected_district} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+    //       div.innerHTML += (`<p>${dashboardSlice.selected_district} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+    //   // div.innerHTML += (`<p>${dashboardSlice.selected_district} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
   
           
-      let draggable = new L.Draggable(div); //the legend can be dragged around the div
-      draggable.enable();
+    //   let draggable = new L.Draggable(div); //the legend can be dragged around the div
+    //   draggable.enable();
   
-      return div;
-      };
+    //   return div;
+    //   };
   
-      crop_legend.current.addTo(map.current);
-      }
+    //   crop_legend.current.addTo(map.current);
+    //   }
   
-     }
-     addCropLegend()
+    //  }
+    
 
 
      fetchCropStats()
@@ -813,10 +836,11 @@ const fetchCrop = () => {
     }
 
     if( clicked_link === 'Crop Production' && selected_radio === 'Agricultural Productivity') {
+      var taifa = country_name.current
     
       wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
         pane: 'pane400',
-        layers: `Landinvestment_datasets:Above_Ground_Biomass_Crop_Production_Agricultural_Productivity`,
+        layers: `Landinvestment_datasets:${taifa}_Above_Ground_Biomass_Crop_Production_Agricultural_Productivity`,
         crs:L.CRS.EPSG4326,
         styles: `Crop_Production_Agricultural_Productivity_Above_Ground_Biomass_${district.name}`,
         // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
@@ -833,9 +857,15 @@ const fetchCrop = () => {
 
    //add legend
    const addAGBLegend = () => {
-    if(agb_legend.current)map.current.removeControl(agb_legend.current)
-    if(crop_legend.current)map.current.removeControl(crop_legend.current)
-    if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+    // clearLegends()
+    if(pop_legend.current)map.current.removeControl(pop_legend.current)
+      if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+      if(soil_legend.current)map.current.removeControl(soil_legend.current)
+      if(climate_legend.current)map.current.removeControl(climate_legend.current)
+      if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+      if(crop_legend.current)map.current.removeControl(crop_legend.current)
+      if(agb_legend.current)map.current.removeControl(agb_legend.current)
+
     if(wmsLayer.current){
       var legend = L.control({position:'bottomright'});
       agb_legend.current = legend
@@ -865,7 +895,7 @@ const fetchCrop = () => {
 
     
   } catch (error) {
-    toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
+    // toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
     
   }
   
@@ -906,9 +936,15 @@ wmsLayer.current.addTo(map.current);
 
 //add legend
 const addClimateLegend = () => {
-  if(climate_legend.current)map.current.removeControl(climate_legend.current)
-  if(crop_legend.current)map.current.removeControl(crop_legend.current)
-  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  // clearLegends()
+  if(pop_legend.current)map.current.removeControl(pop_legend.current)
+      if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+      if(soil_legend.current)map.current.removeControl(soil_legend.current)
+      if(climate_legend.current)map.current.removeControl(climate_legend.current)
+      if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+      if(crop_legend.current)map.current.removeControl(crop_legend.current)
+      if(agb_legend.current)map.current.removeControl(agb_legend.current)
+
   if(wmsLayer.current){
     var legend = L.control({position:'bottomright'});
     climate_legend.current = legend
@@ -975,13 +1011,12 @@ map.current.createPane("pane400").style.zIndex = 200;
 
   try {
     if(clicked_link === 'Climate' && climate_name && current_geojson.current ) {
+      var taifa = country_name.current
       wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
         pane: 'pane400',
-        layers: `Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate`,
+        layers: `Landinvestment_datasets:${taifa}_${climate_name}_Climate_and_Geography_Climate`,
         crs:L.CRS.EPSG4326,
         styles: `Climate_and_Geography_Climate_${climate_name}_${district.name}`,
-        // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
-      
         format: 'image/png',
         transparent: true,
         opacity:1.0
@@ -996,17 +1031,24 @@ map.current.createPane("pane400").style.zIndex = 200;
   
     //add legend
     const addClimateLegend = () => {
+      // clearLegends()
+      if(pop_legend.current)map.current.removeControl(pop_legend.current)
+      if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+      if(soil_legend.current)map.current.removeControl(soil_legend.current)
       if(climate_legend.current)map.current.removeControl(climate_legend.current)
+      if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
       if(crop_legend.current)map.current.removeControl(crop_legend.current)
       if(agb_legend.current)map.current.removeControl(agb_legend.current)
-      if(wmsLayer.current){
+
+      // if(wmsLayer.current){
         var legend = L.control({position:'bottomright'});
         climate_legend.current = legend
   
         climate_legend.current.onAdd = function(map) {
       var div = L.DomUtil.create("div", "legend");
+      var taifa = country_name.current
           
-      div.innerHTML += (`<p>${dashboardSlice.selected_district} ${climate_name}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${climate_name}_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+      div.innerHTML += (`<p>${dashboardSlice.selected_district} ${climate_name}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${taifa}_${climate_name}_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
   
           
       let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -1016,7 +1058,7 @@ map.current.createPane("pane400").style.zIndex = 200;
       };
   
       climate_legend.current.addTo(map.current);
-      }
+      // }
   
      }
      addClimateLegend()
@@ -1062,6 +1104,7 @@ map.current.createPane("pane400").style.zIndex = 200;
 
 }
 
+ 
 const addSoilLegend = () => {
   if(soil_legend.current)map.current.removeControl(soil_legend.current)
   if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
@@ -1117,7 +1160,6 @@ const addSoilLegend = () => {
   }
 
  }
- 
 const fetchSoilDataa = (e) => {
   console.log('soil',e)
   
@@ -1136,12 +1178,34 @@ separated_soil_product.current = separatedSoilTexture
 
 var taifa = country_name.current
 
-if(clicked_link === 'Soil Fertility' && separatedSoilTexture != 'Organic_Carbon' &&  wmsCountryLayer.current != null ) {
+if(clicked_link === 'Soil Fertility' && separatedSoilTexture != 'Organic_Carbon' && current_geojson.current != null ) {
   wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
     pane: 'pane400',
     layers: `Landinvestment_datasets:${taifa}_${separatedSoilTexture}_Crop_Production_Soil`,
     crs:L.CRS.EPSG4326,
-    styles: `Crop_Production_Soil_${separatedSoilTexture}_${taifa}`,
+    styles: `Crop_Production_Soil_${separatedSoilTexture}_${district.name}`,
+    // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+    format: 'image/png',
+    transparent: true,
+    opacity:1.0
+    
+    
+   
+});
+
+wmsLayer.current.addTo(map.current);
+addSoilLegend()
+
+
+}
+
+
+if(clicked_link === 'Soil Fertility' && separatedSoilTexture === 'Organic_Carbon' && current_geojson.current != null ) {
+  wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
+    pane: 'pane400',
+    layers: `Landinvestment_datasets:${taifa}_Organiccarbon_Crop_Production_Otherlayers`,
+    crs:L.CRS.EPSG4326,
+    styles: `Crop_Production_Otherlayers_Organiccarbon_${district.name}`,
     // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
     format: 'image/png',
     transparent: true,
@@ -1160,86 +1224,68 @@ addSoilLegend()
 
 }
 
-  if(clicked_link === 'Soil Fertility' && separatedSoilTexture != 'Organic_Carbon' && current_geojson.current != null ) {
-    wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
-      pane: 'pane400',
-      layers: `Landinvestment_datasets:${taifa}_${separatedSoilTexture}_Crop_Production_Soil`,
-      crs:L.CRS.EPSG4326,
-      styles: `Crop_Production_Soil_${separatedSoilTexture}_${district.name}`,
-      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
-      format: 'image/png',
-      transparent: true,
-      opacity:1.0
+// if(clicked_link === 'Soil Fertility' && separatedSoilTexture != 'Organic_Carbon' &&  country_name.current != null && wmsCountryLayer.current != null ) {
+//   wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
+//     pane: 'pane400',
+//     layers: `Landinvestment_datasets:${taifa}_${separatedSoilTexture}_Crop_Production_Soil`,
+//     crs:L.CRS.EPSG4326,
+//     styles: `Crop_Production_Soil_${separatedSoilTexture}_${taifa}`,
+//     // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+//     format: 'image/png',
+//     transparent: true,
+//     opacity:1.0
+    
+    
+   
+// });
+
+// wmsLayer.current.addTo(map.current);
+// addSoilLegend()
+
+
+// }
+
+ 
+
+//   if(clicked_link === 'Soil Fertility' && separatedSoilTexture === 'Organic_Carbon' && wmsCountryLayer.current != null ) {
+//     wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
+//       pane: 'pane400',
+//       layers: `Landinvestment_datasets:${taifa}_Organiccarbon_Crop_Production_Otherlayers`,
+//       crs:L.CRS.EPSG4326,
+//       styles: `Crop_Production_Otherlayers_Organiccarbon_${taifa}`,
+//       // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+//       format: 'image/png',
+//       transparent: true,
+//       opacity:1.0
       
       
      
- });
+//  });
 
- wmsLayer.current.addTo(map.current);
- addSoilLegend()
+//  wmsLayer.current.addTo(map.current);
+//  addSoilLegend()
 
 
    
  
 
-  }
-
-  if(clicked_link === 'Soil Fertility' && separatedSoilTexture === 'Organic_Carbon' && wmsCountryLayer.current != null ) {
-    wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
-      pane: 'pane400',
-      layers: `Landinvestment_datasets:${taifa}_Organiccarbon_Crop_Production_Otherlayers`,
-      crs:L.CRS.EPSG4326,
-      styles: `Crop_Production_Otherlayers_Organiccarbon_${taifa}`,
-      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
-      format: 'image/png',
-      transparent: true,
-      opacity:1.0
-      
-      
-     
- });
-
- wmsLayer.current.addTo(map.current);
- addSoilLegend()
+//   }
 
 
-   
- 
-
-  }
-
-  if(clicked_link === 'Soil Fertility' && separatedSoilTexture === 'Organic_Carbon' && current_geojson.current != null ) {
-    wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
-      pane: 'pane400',
-      layers: `Landinvestment_datasets:${taifa}_Organiccarbon_Crop_Production_Otherlayers`,
-      crs:L.CRS.EPSG4326,
-      styles: `Crop_Production_Otherlayers_Organiccarbon_${district.name}`,
-      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
-      format: 'image/png',
-      transparent: true,
-      opacity:1.0
-      
-      
-     
- });
-
- wmsLayer.current.addTo(map.current);
- addSoilLegend()
-
-
-   
- 
-
-  }
 
 }
 // const fetchLandUse = () => {
 
 const addLULCLegend = () => {
-  if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
-  if(climate_legend.current)map.current.removeControl(climate_legend.current)
-  if(crop_legend.current)map.current.removeControl(crop_legend.current)
-  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  // clearLegends()
+  if(pop_legend.current)map.current.removeControl(pop_legend.current)
+      if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+      if(soil_legend.current)map.current.removeControl(soil_legend.current)
+      if(climate_legend.current)map.current.removeControl(climate_legend.current)
+      if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+      if(crop_legend.current)map.current.removeControl(crop_legend.current)
+      if(agb_legend.current)map.current.removeControl(agb_legend.current)
+
   if(wmsDistrictLULC.current){
     var legend = L.control({position:'bottomright'});
     lulc_legend.current = legend
@@ -1268,6 +1314,7 @@ const addLULCLegend = () => {
   if(clicked_link === 'Land Use' && wmsCountryLayer.current != null ) {
     if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
     if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+    if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
     
     // current_geojson.current = null
     var taifa = country_name.current
@@ -1293,6 +1340,7 @@ const addLULCLegend = () => {
 if(clicked_link === 'Land Use' && current_geojson.current != null ) {
   if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
   if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
+  if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
   var taifa = country_name.current
   map.current.createPane("pane400").style.zIndex = 200;
   console.log('lAND USE')
@@ -1347,13 +1395,14 @@ wmsNTLLayer.current.addTo(map.current);
   if(clicked_link === 'Night-time Light' && current_geojson.current != null) { 
      if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
      if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+     var taifa = country_name.current
     map.current.createPane("pane400").style.zIndex = 200;
     console.log('NTL')
     wmsNTLLayer.current = L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
-      layers: `Landinvestment_datasets:Night_Time_Light_Socioeconomics_NTL`,
+      layers: `Landinvestment_datasets:${taifa}_Night_Time_Light_Socioeconomics_Ntl`,
       crs:L.CRS.EPSG4326,
-      styles:`Socioeconomics_NTL_Night_Time_Light_${district.name}`,
+      styles:`Socioeconomics_Ntl_Night_Time_Light_${district.name}`,
       // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
     
       format: 'image/png',
@@ -1368,10 +1417,15 @@ wmsNTLLayer.current.addTo(map.current);
 
 
  const addNTLLegend = () => {
-  if(climate_legend.current)map.current.removeControl(climate_legend.current)
-  if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
-  if(crop_legend.current)map.current.removeControl(crop_legend.current)
-  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  // clearLegends()
+  if(pop_legend.current)map.current.removeControl(pop_legend.current)
+      if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+      if(soil_legend.current)map.current.removeControl(soil_legend.current)
+      if(climate_legend.current)map.current.removeControl(climate_legend.current)
+      if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+      if(crop_legend.current)map.current.removeControl(crop_legend.current)
+      if(agb_legend.current)map.current.removeControl(agb_legend.current)
+
   if(wmsNTLLayer.current){
     var legend = L.control({position:'bottomright'});
     ntl_legend.current = legend
@@ -1400,13 +1454,17 @@ wmsNTLLayer.current.addTo(map.current);
 // }
 
 const addPopLegend = () => {
+  // clearLegends()
   if(pop_legend.current)map.current.removeControl(pop_legend.current)
-  if(climate_legend.current)map.current.removeControl(climate_legend.current)
-  if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
-  if(crop_legend.current)map.current.removeControl(crop_legend.current)
-  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+      if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+      if(soil_legend.current)map.current.removeControl(soil_legend.current)
+      if(climate_legend.current)map.current.removeControl(climate_legend.current)
+      if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+      if(crop_legend.current)map.current.removeControl(crop_legend.current)
+      if(agb_legend.current)map.current.removeControl(agb_legend.current)
+
  
-  if(wmsLayer.current && wmsCountryLayer != null){
+  if(wmsLayer.current && wmsCountryLayer.current != null){
     var taifa = country_name.current
     var legend = L.control({position:'bottomright'});
     pop_legend.current = legend
@@ -1505,6 +1563,8 @@ const changeDefaultOpacity = (e) => {
     
  if(wmsLayer.current != null)wmsLayer.current.setOpacity(e.target.value)
  if(wmsNTLLayer.current != null)wmsNTLLayer.current.setOpacity(e.target.value)
+ if(wmsDistrictLULC.current != null)wmsDistrictLULC.current.setOpacity(e.target.value)
+ if(wmsLULC.current != null)wmsLULC.current.setOpacity(e.target.value)
                                     
                                   
                                    
@@ -1968,6 +2028,15 @@ className='fetch_button'
             />
               
             </div>
+
+            {/* {
+              climate === 'Precipitation' ?
+              <img style={{zIndex:200,position:'absolute', left:'90vw',top:'82vh'}} src="http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:Malawi_Precipitation_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" alt="" />
+              
+              : ''
+            } */}
+
+
             
     </>
     
@@ -2059,7 +2128,7 @@ marginLeft:'75vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.
 
 <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Precipitation (mm)</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
-<input type="range" id="slider"  onInput={sliderfunc} min={400} max={717} step={10}/>
+<input type="range" id="slider"  onInput={sliderfunc} min={400} max={720} step={5}/>
 <p className='label' style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F',  fontSize:'14px' }} >{
   slider_value ?
   `${slider_value} mm ` :''

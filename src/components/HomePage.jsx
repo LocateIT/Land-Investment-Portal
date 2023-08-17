@@ -54,20 +54,20 @@ justifyContent:'center',
 <p>The portal utilizes data from various online repositories as well as those provided by the partners for visualization</p>
                 <p>
 The dashboard consists of major indicators: </p>
-  <div className="headings" style={{display:'flex', flexDirection:'column', gap:'1rem', fontFamily:'sans-serif', fontWeight:'bold'}}>
-  <span>Crop Productivity:</span>
-<span>Climate:</span> 
- <span>Soil Data:</span> 
+  <div className="headings" style={{display:'flex', flexDirection:'column', gap:'1rem', fontFamily:'sans-serif', }}>
+  <span>  <strong>Crop Productivity</strong>:Contains data on tea and cranberry suitability</span>
+<span>  <strong>Climate</strong>:Contains data on elevation, evapotranspiration and soil carbon content</span> 
+ <span> <strong>Soil Data</strong>:The data includes soil texture, Organic carbon, drainage, cations, nutrients</span> 
  
-<span>Ancillary data:</span>
+<span> <strong>Ancillary data</strong>:Contains visualization of market accessibility, economic activity by gender, road network, towns and demographics.</span>
 
 {/* <span>Land Use</span>
 <span>Night-time Light</span> */}
   </div>
 
 
-  <div className="sub_text" style={{display:'flex', flexDirection:'column', gap:'1rem', fontFamily:'sans-serif', marginTop:'-12.8vh', marginLeft:'8vw'}}>
- <span > Contains data on tea and cranberry suitability </span>
+  {/* <div className="sub_text" style={{display:'flex', flexDirection:'column', gap:'1rem', fontFamily:'sans-serif', marginTop:'-12.8vh', marginLeft:'8vw'}}>
+ <span >Contains data on tea and cranberry suitability </span>
  <span style={{marginLeft:'-4.5vw'}}>The data displayed is of elevation, evapotranspiration and soil carbon content</span>
  <span style={{marginLeft:'-4vw'}}>The data inclides soil texture, Organic carbon, drainage, cations, nutrients</span>
  
@@ -75,7 +75,7 @@ The dashboard consists of major indicators: </p>
 
 </span> 
 
-  </div>
+  </div> */}
   
 
 </div>
