@@ -103,6 +103,7 @@ const Dashboard = () => {
     let lulc_legend = useRef(null)
     let soil_legend = useRef(null)
     let pop_legend = useRef(null)
+    let accessibility_legend = useRef(null)
     // let baseMaps = useRef(null)
     let clicked_basemap = useRef('')
     let base_map_ctrl_selections = useRef(false)
@@ -1486,6 +1487,40 @@ const addPopLegend = () => {
 
  }
 
+ const addMarketAccessLegend = () => {
+  // clearLegends()
+  if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
+  if(pop_legend.current)map.current.removeControl(pop_legend.current)
+      if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+      if(soil_legend.current)map.current.removeControl(soil_legend.current)
+      if(climate_legend.current)map.current.removeControl(climate_legend.current)
+      if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+      if(crop_legend.current)map.current.removeControl(crop_legend.current)
+      if(agb_legend.current)map.current.removeControl(agb_legend.current)
+
+ 
+  if(wmsLayer.current && wmsCountryLayer.current != null){
+    var taifa = country_name.current
+    var legend = L.control({position:'bottomright'});
+    accessibility_legend.current = legend
+
+    accessibility_legend.current.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+      
+  div.innerHTML += (`<p>${taifa} Market Accessibility</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${taifa}_Market_Accessibility_Socioeconomics_Accessibility&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+
+      
+  let draggable = new L.Draggable(div); //the legend can be dragged around the div
+  draggable.enable();
+
+  return div;
+  };
+
+  accessibility_legend.current.addTo(map.current);
+  }
+
+ }
+
 
 
 const onAncilChange = e => {
@@ -1559,6 +1594,7 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Market Accessi
 });
 
 wmsLayer.current.addTo(map.current);
+addMarketAccessLegend()
 }
 
 
