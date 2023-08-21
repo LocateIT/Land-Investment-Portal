@@ -495,8 +495,133 @@ a.leaflet-control-layers-toggle:hover  {
 
        /* media queries for different resolutions */
        /* (1280x1024) SXGA Display */
-/* @media  screen and (max-width: 1280px) {
+@media only screen and (max-width: 1200px) {
   
+
+  .navbar{
+   
+    background-color:#003247 ;
+    margin-top: -10px;
+    width: 100vw;
+    height: 8vh;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
+  .logo{
+    height: 40px;
+    width: 100px;
+    margin-top: 15px !important;
+  }
+  .proj_name{
+    height: 50px;
+    width: 280px;
+    margin-top: 10px !important;
+  
+  }
+
+  .link_icons{
+    display: flex;
+    flex-direction: row;
+    gap: 2.5rem;
+    height: 30px;
+    margin-left: 39vw;
+    margin-top: 15px !important;
+  }
+  .selections{
+    top: 13.5vh !important;
+  }
+  #region_selection{
+   height: 30px !important;
+  }
+  .left_side_panel{
+   
+    width: 115px !important;
+    margin-top: 30px !important;
+    height: 420px !important;
+    /* padding: 5px; */
+    
+    top: 34.5vh;
+    font-size: 12px;
+  }
+  .left_side_icons{
+    gap: 2rem !important;
+  width: 20px !important;
+  }
+   .left_side_links{
+    gap: 2.4rem !important;
+    word-break: break-word;
+    font-size: 13px !important;
+    /* margin-top: 5px !important; */
+  }
+  
+  .subnav{
+    top:7.5vh !important;
+  height: 5vh !important;
+  font-size: 14px !important;
+  }
+  .right_icon{
+    height: 20px;
+  }
+  #map{
+    height: 87vh !important;
+  }
+  a.leaflet-control-layers-toggle{
+    background-color: transparent;
+    height: 30px !important;
+    width: 30px !important;
+    background-image: url('./assets/layers.svg');
+    position: absolute;
+    top: -0.1vh;
+    right: 8.4vw !important;
+  }
+
+  .selection_panel{
+    width:350px !important;
+    height:280px !important;
+    left: 10.3vw !important;
+    top: 38vh !important;
+  }
+  .close_selection_panel{
+    margin-left: 27vw !important;
+  }
+  .crop_selection{
+    margin-left: 40px !important;
+  }
+  .fetch_button{
+    margin-left: 120px !important;
+  }
+  #sldOpacity::-webkit-slider-runnable-track {
+    width: 10vw !important;
+    height: 5px;
+    background: #64818d;
+    border-radius: 10px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    margin-top: -10px;
+    -webkit-appearance: none;
+  }
+  #climate_selection{
+    top: 45vh !important;
+    left: 1.5vw !important;
+  }
+  .landuse{
+    top: 57vh !important;
+    left: 10.1vw !important;
+
+  }
+  .anci{
+    margin-top: -20px;
+    margin-left: 44px;
+    /* top: 60vh !important; */
+    /* left: 20.1vw !important; */
+
+  }
+}
+
+/* (1366x768) WXGA Display laptop */
+/* @media  screen and (max-width: 1366px)
+ {
 
   .navbar{
    
@@ -524,75 +649,7 @@ a.leaflet-control-layers-toggle:hover  {
     flex-direction: row;
     gap: 2.5rem;
     height: 30px;
-    margin-left: 45vw;
-    margin-top: 15px;
-  }
-  .selections{
-    top: 0.5vh;
-  }
-  #region_selection{
-   height: 30px !important;
-  }
-  .left_side_panel{
-    word-break: break-word;
- height: 720px;
- width: 120px;
-
- 
- font-size: 12px;
-  }
-  .left_side_icons{
-    gap: 4rem !important;
-  width: 20px !important;
-  }
-  .left_side_links{
-    gap: 5.5rem !important;
-    word-break: break-word;
-  }
-  .subnav{
-    top:7.5vh !important;
-  height: 5vh !important;
-  font-size: 14px !important;
-  }
-  .right_icon{
-    height: 20px;
-  }
-  #map{
-    height: 88vh !important;
-  }
-} */
-
-/* (1366x768) WXGA Display laptop */
-@media  screen and (max-width: 1366px)
- {
-  /* insert styles here */
-  .navbar{
-   
-    background-color:#003247 ;
-    margin-top: -10px;
-    width: 100vw;
-    height: 8vh;
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;
-  }
-  .logo{
-    height: 40px;
-    margin-top: 7px;
-  }
-  .proj_name{
-    height: 50px;
-    width: 280px;
-    margin-top: 5px;
-  
-  }
-
-  .link_icons{
-    display: flex;
-    flex-direction: row;
-    gap: 2.5rem;
-    height: 30px;
-    margin-left: 49vw;
+    margin-left: 46vw;
     margin-top: 15px;
   }
   .selections{
@@ -617,9 +674,10 @@ a.leaflet-control-layers-toggle:hover  {
    height: 30px !important;
   }
   .left_side_panel{
-    /* word-break: break-word; */
+    
  height: 400px !important;
- width: 95px;
+ width: 105px;
+ margin-top: 50px;
 
  top: 34.5vh;
  font-size: 12px;
@@ -627,10 +685,12 @@ a.leaflet-control-layers-toggle:hover  {
   .left_side_icons{
     gap: 1rem !important;
   width: 10px !important;
+  
   }
   .left_side_links{
     gap: 1.9rem !important;
     word-break: break-word;
+    font-size: 13px !important;
   }
   .subnav{
     top:7.5vh !important;
@@ -655,11 +715,10 @@ a.leaflet-control-layers-toggle:hover  {
     right: 7.4vw !important;
   }
   
-}
+} */
 
-@media only screen and (width: 1366px) and (min-resolution: 125dpi), (min-resolution: 1.25dppx) {
-  /* CSS rules for laptops with a pixel ratio of 1.25   only screen and (width: 1092.8px) and (min-resolution: 1.25dppx),*/
-  /* Add your styles here */
+/* @media only screen and (max-width: 1366px) and (min-resolution: 125dpi), (min-resolution: 1.25dppx) {
+  
 
   .navbar{
    
@@ -698,9 +757,11 @@ a.leaflet-control-layers-toggle:hover  {
    height: 30px !important;
   }
   .left_side_panel{
-    /* word-break: break-word; */
+   
  height: 356px !important;
  width: 100px;
+ width: 105px;
+ margin-top: 50px;
 
  top: 20.5vh;
  font-size: 12px;
@@ -712,6 +773,7 @@ a.leaflet-control-layers-toggle:hover  {
   .left_side_links{
     gap: 1.6rem !important;
     word-break: break-word;
+    font-size: 12px;
   }
   .subnav{
     top:7.5vh !important;
@@ -724,5 +786,5 @@ a.leaflet-control-layers-toggle:hover  {
   #map{
     height: 88vh !important;
   }
-}
+} */
 

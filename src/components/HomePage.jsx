@@ -22,7 +22,7 @@ justifyContent:'center',
         <Navbar />
         </div>
       
-        <div 
+        <div className='info_container'
         style={{
              display:'flex',
              flexDirection:'column',
@@ -39,8 +39,8 @@ justifyContent:'center',
                  paddingBottom:'60px',
                  borderRadius:'10px',
                  width:'60vw'}}>
-                    <p style={{fontFamily:'sans-serif', fontSize:'40px', fontWeight:'bolder', color:'#1e4b5f'}}>Land Investment Portal</p>
-                    <p style={{fontFamily:'sans-serif', fontSize:'18px', fontWeight:'lighter'}}>Facilitating sustainable decision making to identify land for agricultural investment</p>
+                    <p className='title' style={{fontFamily:'sans-serif', fontSize:'40px', fontWeight:'bolder', color:'#1e4b5f'}}>Land Investment Portal</p>
+                    <p  className='tagline' style={{fontFamily:'sans-serif', fontSize:'18px', fontWeight:'lighter'}}>Facilitating sustainable decision making to identify land for agricultural investment</p>
                     {/* <img src={info} alt="" style={{marginLeft:'20vw', marginTop:'2vh'}} /> */}
                     {/* <button style={{borderRadius:'20px',
                 height: '40px',
@@ -51,7 +51,7 @@ justifyContent:'center',
 <div className="indicators" style={{ fontFamily:'sans-serif'}}>
 <p style={{fontWeight:'bold'}}>Background Information</p>
 <p> The Land Investment Portal is built so as to aid the government and Land Investors in decision making when it comes to agricultural Investment.</p>
-<p>The portal utilizes data from various online repositories as well as those provided by the partners for visualization</p>
+<p>The portal utilizes data from various online repositories as well as those provided by UNECA and other partners for visualization</p>
                 <p>
 The dashboard consists of major indicators: </p>
   <div className="headings" style={{display:'flex', flexDirection:'column', gap:'1rem', fontFamily:'sans-serif', }}>
@@ -79,8 +79,6 @@ The dashboard consists of major indicators: </p>
   
 
 </div>
-
-
 
                 <br />
                     <button type='button' className="button_slide slide_right" id='visit_dash'

@@ -25,10 +25,66 @@
     box-shadow: inset 400px 0 0 0 #1481c3;
   }
 
-  @media  screen and (max-width: 1366px)
+  @media  screen and (max-width: 1280px)
+  
  {
+  .info_container{
+    height: 50vh !important;
+    margin-top: 8vh !important;
+    left: 20vw !important;
+  }
+  .title{
+    position: absolute;
+    top: -0.5vh;
+    font-size: 30px !important;
+    
+  }
+  .tagline{
+    position: absolute;
+    top: 7.5vh;
+    font-size: 18px !important;
+
+  }
+  .indicators{
+    position: absolute;
+    top: 15vh;
+    left: 15px;
+    font-size: 13px;
+  }
   #visit_dash {
-    /* margin-top: 5vw !important; */
-    height: 8vh !important;
+    position: absolute;
+    top:47vh;
+    height: 5vh !important;
   }
  }
+
+ /* @media only screen and (width: 1366px) and (min-resolution: 125dpi), (min-resolution: 1.25dppx) {
+  .info_container{
+    height: 50vh !important;
+    margin-top: 3vh !important;
+    left: 10vw !important;
+  }
+  .title{
+    position: absolute;
+    top: -0.5vh;
+    font-size: 30px !important;
+    
+  }
+  .tagline{
+    position: absolute;
+    top: 7.5vh;
+    font-size: 18px !important;
+
+  }
+  .indicators{
+    position: absolute;
+    top: 15vh;
+    font-size: 13px;
+  }
+  #visit_dash {
+    position: absolute;
+    top:47vh;
+    height: 5vh !important;
+  }
+
+ } */
