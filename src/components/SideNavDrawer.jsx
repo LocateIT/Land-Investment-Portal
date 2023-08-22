@@ -222,12 +222,7 @@ padding:'10px',
  padding:'10px'}}>
 <CropBar data={cropChartData} /> </div>
       
-      
-
-      
-
-      
-
+ 
 
 </>
         
@@ -250,7 +245,7 @@ padding:'10px',
 
 
 <span className='chart_title' style={{ marginTop:'10vh',fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F',}}> { dashboardSlice.selected_climate === 'Elevation' ?
-       `${dashboardSlice.selected_district}  ${dashboardSlice.selected_climate} (meters)`  :
+       `${dashboardSlice.selected_district}  ${dashboardSlice.selected_climate} (metres)`  :
 
        dashboardSlice.selected_climate === 'Precipitation' ?
        `${dashboardSlice.selected_district}  ${dashboardSlice.selected_climate} (mm)` :

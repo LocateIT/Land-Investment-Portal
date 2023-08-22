@@ -1518,6 +1518,7 @@ const addNTLLegend = () => {
 const addPopLegend = () => {
   // clearLegends()
   if(pop_legend.current)map.current.removeControl(pop_legend.current)
+  if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
       if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
       if(soil_legend.current)map.current.removeControl(soil_legend.current)
       if(climate_legend.current)map.current.removeControl(climate_legend.current)
@@ -2240,7 +2241,7 @@ onClick={ () => {isDrawerOpen == true? setIsDrawerOpen(false) : setIsDrawerOpen(
 {
   clicked_link === 'Climate' && isDrawerOpen ?
   <div className="fil" style={{position:'absolute', top:'62vh', zIndex:105,
-marginLeft:'75vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.5rem'}}>
+marginLeft:'76vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.5rem'}}>
 
 <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Precipitation (mm)</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
