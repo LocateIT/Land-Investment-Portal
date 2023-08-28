@@ -35,10 +35,27 @@ const SubNav = () => {
             |
             <span>{dashboardSlice.selected_country}</span>
             {/* {dashboardSlice.selected_country} */}
+
+            { dashboardSlice.selected_district != '' ?
+
+            <>
             <img src={right} alt="" className='right_icon' /> 
             <span>{dashboardSlice.selected_district}</span>
-            <img src={right} alt="" className='right_icon' /> 
+            </>
+            : ''
+             }
+
+
+{ dashboardSlice.selected_indicator != '' ? 
+
+<>
+<img src={right} alt="" className='right_icon' /> 
             <span>{dashboardSlice.selected_indicator}</span>
+
+</> : ''
+ }
+            
+            
 
         
             

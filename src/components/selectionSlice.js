@@ -37,7 +37,7 @@ const initialState = {
     ],
     districts_2:[],
     selected_country:'Malawi',
-    selected_district:'Balaka',
+    selected_district:'',
     selected_indicator:'',
     selected_product:'Crop Suitability',
     selected_crop:'',
@@ -66,11 +66,11 @@ const dashboardSelectionSlice = createSlice({
             state.selected_country = action.payload
             if(state.selected_country === 'Guinea'){
                 state.crops = ['Cassava', 'Groundnuts', 'Rice']
-                state.selected_district = 'Beyla'
+                // state.selected_district = 'Beyla'
             }
             if(state.selected_country === 'Madagascar'){
                 state.crops = ['Cassava', 'Sweet Potato', 'Rice']
-                state.selected_district = 'Androy'
+                // state.selected_district = 'Androy'
             }
            
         },
@@ -160,5 +160,6 @@ const dashboardSelectionSlice = createSlice({
 export const dashboardSelections = (state) => state.dashboardselections;
 export const { changeSelectedCountry, changeSelectedDistrict, 
     changeSelectedCrop, changeClimateProduct, changeSoilProduct,changeAncilProduct,
-     changeStatsFigures, changeStatsLabels, changeStatsColor, changeAcreageLabel, changeTotalAcreage, changeSelectedProduct, changeSelectedIndicator} = dashboardSelectionSlice.actions
+     changeStatsFigures, changeStatsLabels, changeStatsColor, changeAcreageLabel,
+      changeTotalAcreage, changeSelectedProduct, changeSelectedIndicator} = dashboardSelectionSlice.actions
 export default dashboardSelectionSlice.reducer
