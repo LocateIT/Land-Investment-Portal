@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,6 +10,9 @@ import  axios from 'axios'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
+// import { CachedTileLayer } from "@yaga/leaflet-cached-tile-layer"
+// import { Deck } from "@deck.gl/core"
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { dashboardSelections } from './selectionSlice';
 import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct, 
@@ -38,7 +41,7 @@ import add from '../assets/add.svg'
 import minus from '../assets/minus.svg'
 import layers from '../assets/layers.svg'
 import CustomAncilSelect from './CustomAncil';
-const Dashboard = () => {
+const Dashboard =  () => {
   const baseurl = 'http://139.84.229.39'
   
     const dispatch = useDispatch()
@@ -84,6 +87,7 @@ const Dashboard = () => {
     const precip_color = ["#c6cdd4", "#d1c8b0", "#d0bf90", "#7ba7b3", "#2871b0", "#08306b"]
     const temperature_color = ["#3aee5b", "#49883f", "#b8e38b", "#dbe5b3", "#e77d1a", "#f90f49"]
     const elevation_color = ['#ee7245','#fdad61', '#fffebe', "#acd9e9","#2e7cb7", "#2c7bb6"]
+    const [loader, setloader] = useState(false)
     
     const ancil_data_list = dashboardSlice.ancil_data
 
@@ -122,6 +126,7 @@ const Dashboard = () => {
     let wmsLULC = useRef(null)
     let wmsDistrictLULC = useRef(null)
     let separated_soil_product = useRef(null)
+    let loading = useRef(null)
 
 
     const handleDrawerToggle = () => {
@@ -288,6 +293,7 @@ console.log(district_option, 'district option')
     //map setup
 
     const setLeafletMap = () => {
+      
         const mapboxLight =  L.tileLayer(
             "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
             {
@@ -389,7 +395,9 @@ const fetchOptions = async() => {
     //fetch countries
     const fetchRegion = async() => {
   
+  
       try {  
+       
         
         if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current) 
         if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
@@ -464,6 +472,8 @@ const fetchOptions = async() => {
        
    });
    wmsCountryLayer.current.addTo(map.current)
+   
+        
    if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current) 
 
    map.current.flyToBounds(bounds.current)
@@ -478,6 +488,9 @@ const fetchOptions = async() => {
         console.log( error)
         toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
         
+      }
+      finally{
+     
       }
 
       fetchOptions()
@@ -667,11 +680,16 @@ var taifa = country_name.current
   const addCropLegend = () => {
     // clearLegends()
     
-  
     if(climate_legend.current)map.current.removeControl(climate_legend.current)
     if(crop_legend.current)map.current.removeControl(crop_legend.current)
+    if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
     if(agb_legend.current)map.current.removeControl(agb_legend.current)
     if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+    if(pop_legend.current)map.current.removeControl(pop_legend.current)
+      if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+      if(soil_legend.current)map.current.removeControl(soil_legend.current)
+  if(district_agb_legend.current)map.current.removeControl(district_agb_legend.current)
+    
     
     // if(wmsLayer.current){
       var legend = L.control({position:'bottomright'});
@@ -801,6 +819,10 @@ const fetchCrop = () => {
     if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
     if(agb_legend.current)map.current.removeControl(agb_legend.current)
     if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+    if(pop_legend.current)map.current.removeControl(pop_legend.current)
+      if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+      if(soil_legend.current)map.current.removeControl(soil_legend.current)
+  if(district_agb_legend.current)map.current.removeControl(district_agb_legend.current)
     
     // if(wmsLayer.current){
       var legend = L.control({position:'bottomright'});
@@ -1099,11 +1121,14 @@ map.current.createPane("pane400").style.zIndex = 200;
 
  
 const addSoilLegend = () => {
-  if(soil_legend.current)map.current.removeControl(soil_legend.current)
-  if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
-  if(climate_legend.current)map.current.removeControl(climate_legend.current)
-  if(crop_legend.current)map.current.removeControl(crop_legend.current)
-  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
+  if(pop_legend.current)map.current.removeControl(pop_legend.current)
+      if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+      if(soil_legend.current)map.current.removeControl(soil_legend.current)
+      if(climate_legend.current)map.current.removeControl(climate_legend.current)
+      if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+      if(crop_legend.current)map.current.removeControl(crop_legend.current)
+      if(agb_legend.current)map.current.removeControl(agb_legend.current)
   console.log(separated_soil_product.current)
   if(wmsLayer.current && separated_soil_product.current != 'Organic Carbon'){
     var legend = L.control({position:'bottomright'});
@@ -1212,12 +1237,9 @@ wmsLayer.current.addTo(map.current);
 addSoilLegend()
 
 
- 
-
-
 }
 
-// if(clicked_link === 'Soil Fertility' && separatedSoilTexture != 'Organic_Carbon' &&  country_name.current != null && wmsCountryLayer.current != null ) {
+// if(clicked_link === 'Soil Fertility' && separatedSoilTexture != 'Organic_Carbon' && wmsCountryLayer.current != null ) {
 //   wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
 //     pane: 'pane400',
 //     layers: `Landinvestment_datasets:${taifa}_${separatedSoilTexture}_Crop_Production_Soil`,
@@ -1273,6 +1295,11 @@ addSoilLegend()
   
 
   if(clicked_link === 'Land Use' && wmsCountryLayer.current != null ) {
+    // setloading(true)
+    // loading.current = true
+    console.log(loading.current , 'first Loading state')
+    
+    
     if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
     if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
     if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
@@ -1281,6 +1308,8 @@ addSoilLegend()
     var taifa = country_name.current
     map.current.createPane("pane400").style.zIndex = 200;
     console.log('lAND USE')
+
+    
     wmsLULC.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: `Landinvestment_datasets:${taifa}_Land_Use_Socioeconomics_Otherlayers`,
@@ -1293,8 +1322,13 @@ addSoilLegend()
       
      
  });
-
+ 
+ 
  wmsLULC.current.addTo(map.current);
+
+
+
+ 
 
  const addLULCLegend = () => {
   // clearLegends()
@@ -1306,6 +1340,7 @@ addSoilLegend()
       if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
       if(crop_legend.current)map.current.removeControl(crop_legend.current)
       if(agb_legend.current)map.current.removeControl(agb_legend.current)
+      if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
 
   // if(wmsDistrictLULC.current){
     var legend = L.control({position:'bottomright'});
@@ -1357,14 +1392,15 @@ wmsDistrictLULC.current.addTo(map.current);
 
 const addLULCLegend = () => {
   // clearLegends()
+  if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
   if(pop_legend.current)map.current.removeControl(pop_legend.current)
       if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
-      if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
       if(soil_legend.current)map.current.removeControl(soil_legend.current)
       if(climate_legend.current)map.current.removeControl(climate_legend.current)
       if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
       if(crop_legend.current)map.current.removeControl(crop_legend.current)
       if(agb_legend.current)map.current.removeControl(agb_legend.current)
+      if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
 
   // if(wmsDistrictLULC.current){
     var legend = L.control({position:'bottomright'});
@@ -1402,6 +1438,8 @@ const addLULCLegend = () => {
     var taifa = country_name.current
     if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
     if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+    if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+    if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
    map.current.createPane("pane400").style.zIndex = 200;
    console.log('NTL')
    wmsNTLLayer.current = L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
@@ -1429,6 +1467,7 @@ const addNTLLegend = () => {
       if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
       if(crop_legend.current)map.current.removeControl(crop_legend.current)
       if(agb_legend.current)map.current.removeControl(agb_legend.current)
+      if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
 
   if(wmsNTLLayer.current){
     var legend = L.control({position:'bottomright'});
@@ -1457,6 +1496,8 @@ const addNTLLegend = () => {
   if(clicked_link === 'Night-time Light' && current_geojson.current != null) { 
      if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
      if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+     if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+     if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
      var taifa = country_name.current
     map.current.createPane("pane400").style.zIndex = 200;
     console.log('NTL')
@@ -1517,14 +1558,15 @@ const addNTLLegend = () => {
 
 const addPopLegend = () => {
   // clearLegends()
-  if(pop_legend.current)map.current.removeControl(pop_legend.current)
   if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
+  if(pop_legend.current)map.current.removeControl(pop_legend.current)
       if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
       if(soil_legend.current)map.current.removeControl(soil_legend.current)
       if(climate_legend.current)map.current.removeControl(climate_legend.current)
       if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
       if(crop_legend.current)map.current.removeControl(crop_legend.current)
       if(agb_legend.current)map.current.removeControl(agb_legend.current)
+      if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
 
  
   if(wmsLayer.current && wmsCountryLayer.current != null){
@@ -1587,6 +1629,19 @@ const addPopLegend = () => {
 
 const onAncilChange = e => {
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+  if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+  if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
+  
+  if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
+  if(pop_legend.current)map.current.removeControl(pop_legend.current)
+      if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+      if(soil_legend.current)map.current.removeControl(soil_legend.current)
+      if(climate_legend.current)map.current.removeControl(climate_legend.current)
+      if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+      if(crop_legend.current)map.current.removeControl(crop_legend.current)
+      if(agb_legend.current)map.current.removeControl(agb_legend.current)
+      if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
   setSelected_ancil(e)
   console.log(e) 
   ancil_check.current = e
@@ -1598,7 +1653,9 @@ console.log(ancillary_selection,'selected ancil')
 
 
 if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' ) {
-  // if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+  if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
   var taifa = country_name.current
   
     wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
@@ -1640,6 +1697,11 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
 }
 
 if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Market Accessibility' ) {
+  if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+  if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+  if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
+
   var taifa = country_name.current
   
   wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
@@ -1813,6 +1875,9 @@ wmsLayer.current.addTo(map.current);
 
     useEffect(() => {
         setLeafletMap()
+        // setloading(false)
+       
+        
         
         
     
@@ -2279,10 +2344,16 @@ marginLeft:'76vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.
 </div> : ''
 }
 
+{/* {
+  loading.current == true ?  (<div style={{ position:'absolute', left: '50vw', top:'40vh',  zIndex:120}}
+  > <CircularProgress  /></div> )
+: loader == false ? '' : ''
+} */}
+
 
     
     </>
   )
-}
+} 
 
 export default Dashboard
