@@ -66,9 +66,11 @@ const dashboardSelectionSlice = createSlice({
             state.selected_country = action.payload
             if(state.selected_country === 'Guinea'){
                 state.crops = ['Cassava', 'Groundnuts', 'Rice']
+                state.selected_district = 'Beyla'
             }
             if(state.selected_country === 'Madagascar'){
                 state.crops = ['Cassava', 'Sweet Potato', 'Rice']
+                state.selected_district = 'Androy'
             }
            
         },
