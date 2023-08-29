@@ -298,7 +298,7 @@ console.log(district_option, 'district option')
             "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
             {
               attribution:
-                'UNECA |Map data (c) <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+                'UNECA ',
               // maxZoom: 18,
               id: "mapbox/light-v11",
               accessToken:
@@ -309,7 +309,7 @@ console.log(district_option, 'district option')
            "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}{r}?access_token={accessToken}",
            {
              attribution:
-             ' UNECA | Map data (c) <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+             ' UNECA ',
       
              id: "mapbox/satellite-v9",
              accessToken:
@@ -321,7 +321,7 @@ console.log(district_option, 'district option')
            "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
            {
              attribution:
-             ' UNECA | Map data (c) <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+             ' UNECA ',
              // maxZoom: 18,
              id: "mapbox/streets-v11",
              accessToken:
@@ -747,6 +747,16 @@ var taifa = country_name.current
   if(crop_legend.current)map.current.removeControl(crop_legend.current)
   if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
 
+  if(climate_legend.current)map.current.removeControl(climate_legend.current)
+  if(crop_legend.current)map.current.removeControl(crop_legend.current)
+  if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
+  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+  if(pop_legend.current)map.current.removeControl(pop_legend.current)
+    if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+    if(soil_legend.current)map.current.removeControl(soil_legend.current)
+if(district_agb_legend.current)map.current.removeControl(district_agb_legend.current)
+
   // if(wmsLayer.current){
     var legend = L.control({position:'bottomright'});
     agb_legend.current = legend
@@ -813,7 +823,7 @@ const fetchCrop = () => {
    const addCropLegend = () => {
     // clearLegends()
     
-  
+    if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
     if(climate_legend.current)map.current.removeControl(climate_legend.current)
     if(crop_legend.current)map.current.removeControl(crop_legend.current)
     if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
@@ -876,6 +886,7 @@ const fetchCrop = () => {
    //add legend
    const addAGBLegend = () => {
     // clearLegends()
+    if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
     if(pop_legend.current)map.current.removeControl(pop_legend.current)
       if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
       if(soil_legend.current)map.current.removeControl(soil_legend.current)
@@ -956,6 +967,8 @@ wmsLayer.current.addTo(map.current);
 //add legend
 const addClimateLegend = () => {
   // clearLegends()
+  if(district_agb_legend.current)map.current.removeControl(district_agb_legend.current)
+  if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
   if(pop_legend.current)map.current.removeControl(pop_legend.current)
   if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
   if(soil_legend.current)map.current.removeControl(soil_legend.current)
@@ -1046,6 +1059,8 @@ map.current.createPane("pane400").style.zIndex = 200;
     //add legend
     const addClimateLegend = () => {
       // clearLegends()
+      if(district_agb_legend.current)map.current.removeControl(district_agb_legend.current)
+      if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
       if(pop_legend.current)map.current.removeControl(pop_legend.current)
       if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
       if(soil_legend.current)map.current.removeControl(soil_legend.current)
