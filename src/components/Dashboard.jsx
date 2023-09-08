@@ -151,14 +151,26 @@ const Dashboard =  () => {
       if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
       if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
       if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+      
      fetchRegion()
     //  fetchNTL()
+    if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
    
   
   
 
   }
   const onDistrictChanged = e => {
+
+    if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+    if(current_geojson.current) map.current.removeLayer(current_geojson.current)
+    if(wmsCountryLayer.current) map.current.removeLayer(wmsCountryLayer.current)
+    if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+    if(wmsCountryLayer.current)map.current.removeLayer(wmsCountryLayer.current)
+    if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+    if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
+
+
     const changed_district = e
     console.log(changed_district, 'changed_district')
     // country_name.current = changed_country
@@ -392,19 +404,28 @@ const fetchOptions = async() => {
       
       }
 
-    //fetch countries
-    const fetchRegion = async() => {
-  
-  
-      try {  
-       
-        
+const removeCountryWMSLayer = () => {
         if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current) 
         if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
         if(wmsCountryLayer.current) map.current.removeLayer(wmsCountryLayer.current)
         if(current_geojson.current) map.current.removeLayer(current_geojson.current)
         if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
         if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
+      }
+
+    //fetch countries
+    const fetchRegion = async() => {
+  
+  
+      try {  
+       
+        if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current) 
+        if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+        if(wmsCountryLayer.current) map.current.removeLayer(wmsCountryLayer.current)
+        if(current_geojson.current) map.current.removeLayer(current_geojson.current)
+        if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+        if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
+        
         
         // if(district.name != null)map.current.removeLayer(wmsNTLLayer.current)
         
@@ -472,9 +493,10 @@ const fetchOptions = async() => {
        
    });
    wmsCountryLayer.current.addTo(map.current)
+   if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
    
-        
-   if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current) 
+      
+   
 
    map.current.flyToBounds(bounds.current)
 
@@ -498,17 +520,26 @@ const fetchOptions = async() => {
     }
     //fetch countries
     const fetchDistricts = async(id) => {
+      // if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+      
+      // removeCountryWMSLayer()
+    
   
       try {   
-        if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
-        if(current_geojson.current) map.current.removeLayer(current_geojson.current)
-        if(wmsCountryLayer.current) map.current.removeLayer(wmsCountryLayer.current)
-        if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
-        if(wmsCountryLayer.current)map.current.removeLayer(wmsCountryLayer.current)
-        if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
-      
+        
+       
         
         if(district_option != null) {
+
+    // if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+    // if(current_geojson.current) map.current.removeLayer(current_geojson.current)
+    // if(wmsCountryLayer.current) map.current.removeLayer(wmsCountryLayer.current)
+    // if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+    // if(wmsCountryLayer.current)map.current.removeLayer(wmsCountryLayer.current)
+    // if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+    // if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
+
+
           console.log(district_option)
           var taifa = country_name.current
           const wms = await axios.get(`${baseurl}:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL&country_name=${taifa}`);
@@ -544,6 +575,7 @@ const fetchOptions = async() => {
             // pane: 'pane1000'
           })
           current_geojson.current.addTo(map.current)
+          if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
           
           map.current.fitBounds(current_geojson.current.getBounds(), {
                   padding: [50, 50],
@@ -654,6 +686,9 @@ const fetchCountryCrop = () => {
 
 try {
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+  if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+  if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
   map.current.createPane("pane400").style.zIndex = 200;
 var taifa = country_name.current
 
@@ -796,6 +831,8 @@ if(district_agb_legend.current)map.current.removeControl(district_agb_legend.cur
 const fetchCrop = () => {
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
   if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+  if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+  if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
   map.current.createPane("pane400").style.zIndex = 200;
   var taifa = country_name.current
   
@@ -942,8 +979,10 @@ const fetchCountryClimate = (e) => {
 
  
   
-if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
-if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+  if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+  if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+  if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
 map.current.createPane("pane400").style.zIndex = 200;
 
 if(clicked_link === 'Climate' && climate_name != null && wmsCountryLayer.current != null ) {
@@ -1029,15 +1068,18 @@ const fetchClimate = (e) => {
     dispatch(changeStatsColor(temperature_color))
 
   }
-  
-if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
-if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+  if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+  if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+  if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
 map.current.createPane("pane400").style.zIndex = 200;
 
 
 
   try {
     if(clicked_link === 'Climate' && climate_name && current_geojson.current != null) {
+
+      
       var taifa = country_name.current
       wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
         pane: 'pane400',
@@ -1069,6 +1111,7 @@ map.current.createPane("pane400").style.zIndex = 200;
       if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
       if(crop_legend.current)map.current.removeControl(crop_legend.current)
       if(agb_legend.current)map.current.removeControl(agb_legend.current)
+      if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
 
       // if(wmsLayer.current){
         var legend = L.control({position:'bottomright'});
@@ -1136,14 +1179,15 @@ map.current.createPane("pane400").style.zIndex = 200;
 
  
 const addSoilLegend = () => {
-  if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
-  if(pop_legend.current)map.current.removeControl(pop_legend.current)
+      if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
+      if(pop_legend.current)map.current.removeControl(pop_legend.current)
       if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
       if(soil_legend.current)map.current.removeControl(soil_legend.current)
       if(climate_legend.current)map.current.removeControl(climate_legend.current)
       if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
       if(crop_legend.current)map.current.removeControl(crop_legend.current)
       if(agb_legend.current)map.current.removeControl(agb_legend.current)
+      if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
   console.log(separated_soil_product.current)
   if(wmsLayer.current && separated_soil_product.current != 'Organic Carbon'){
     var legend = L.control({position:'bottomright'});
@@ -1201,7 +1245,11 @@ const fetchSoilDataa = (e) => {
 
 
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+
+  if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+  if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
   if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+  if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
 map.current.createPane("pane400").style.zIndex = 200;
 
 const soilTexture = soil_product;
@@ -1318,6 +1366,7 @@ addSoilLegend()
     if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
     if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
     if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+    if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
     
     // current_geojson.current = null
     var taifa = country_name.current
@@ -1384,7 +1433,11 @@ addSoilLegend()
 
 
 if(clicked_link === 'Land Use' && current_geojson.current != null ) {
+  console.log(district.name, 'selected district')
+
   if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
+  if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+ 
   if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
   if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
   var taifa = country_name.current
@@ -1483,6 +1536,8 @@ const addNTLLegend = () => {
       if(crop_legend.current)map.current.removeControl(crop_legend.current)
       if(agb_legend.current)map.current.removeControl(agb_legend.current)
       if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
+      if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
+
 
   if(wmsNTLLayer.current){
     var legend = L.control({position:'bottomright'});
@@ -1543,6 +1598,7 @@ const addNTLLegend = () => {
       if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
       if(crop_legend.current)map.current.removeControl(crop_legend.current)
       if(agb_legend.current)map.current.removeControl(agb_legend.current)
+      if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
 
   if(wmsNTLLayer.current){
     var legend = L.control({position:'bottomright'});
@@ -1582,6 +1638,7 @@ const addPopLegend = () => {
       if(crop_legend.current)map.current.removeControl(crop_legend.current)
       if(agb_legend.current)map.current.removeControl(agb_legend.current)
       if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
+      if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
 
  
   if(wmsLayer.current && wmsCountryLayer.current != null){
@@ -1616,6 +1673,7 @@ const addPopLegend = () => {
       if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
       if(crop_legend.current)map.current.removeControl(crop_legend.current)
       if(agb_legend.current)map.current.removeControl(agb_legend.current)
+      if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
 
  
   if(wmsLayer.current && wmsCountryLayer.current != null){
@@ -1891,12 +1949,7 @@ wmsLayer.current.addTo(map.current);
     useEffect(() => {
         setLeafletMap()
         // setloading(false)
-       
-        
-        
-        
-    
-      
+
     }, [])
     useEffect(() => {
   }, [district_option, district.name, color_array, climate])
