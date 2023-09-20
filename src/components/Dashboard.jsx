@@ -95,6 +95,7 @@ const Dashboard =  () => {
     let country_name = useRef('')
     let crop_name = useRef('')
     let indicator = useRef('')
+    let wmsMarketLayer = useRef(null)
     let wmsLayer = useRef(null)
     let wmsNTLLayer = useRef(null)
     let current_response = useRef(null)
@@ -1749,12 +1750,16 @@ console.log(ancillary_selection,'selected ancil')
 
 
 if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' ) {
+
+  if(wmsMarketLayer.current)map.current.removeLayer(wmsMarketLayer.current)
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
   if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
   if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
+
   var taifa = country_name.current
   
-    wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
+  wmsMarketLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: `Landinvestment_datasets:${taifa}_Population_Density_Socioeconomics_Population`,
       crs:L.CRS.EPSG4326,
@@ -1767,7 +1772,7 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
      
  });
 
- wmsLayer.current.addTo(map.current);
+ wmsMarketLayer.current.addTo(map.current);
  addPopLegend()
 
   
@@ -1775,6 +1780,8 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
   }
 
   if( clicked_link === 'Ancillary Data' && ancillary_selection !== 'Demographics' || 'Economic Activity' || 'Market Accessibility' ) {
+
+    
     var taifa = country_name.current
     wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
@@ -1793,6 +1800,8 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
 }
 
 if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Market Accessibility' ) {
+
+  if(wmsMarketLayer.current)map.current.removeLayer(wmsMarketLayer.current) //aka demographics layer
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
   if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
   if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
@@ -1812,6 +1821,7 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Market Accessi
     
    
 });
+// map.current.removeLayer(wmsLayer.current)
 
 wmsLayer.current.addTo(map.current);
 addMarketAccessLegend()
