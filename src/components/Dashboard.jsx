@@ -95,7 +95,7 @@ const Dashboard =  () => {
     let country_name = useRef('')
     let crop_name = useRef('')
     let indicator = useRef('')
-    let wmsMarketLayer = useRef(null)
+    let wmsDemographicsLayer = useRef(null)
     let wmsLayer = useRef(null)
     let wmsNTLLayer = useRef(null)
     let current_response = useRef(null)
@@ -1730,8 +1730,8 @@ const onAncilChange = e => {
   if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
   if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
   
-  if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
-  if(pop_legend.current)map.current.removeControl(pop_legend.current)
+      if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
+      if(pop_legend.current)map.current.removeControl(pop_legend.current)
       if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
       if(soil_legend.current)map.current.removeControl(soil_legend.current)
       if(climate_legend.current)map.current.removeControl(climate_legend.current)
@@ -1751,7 +1751,7 @@ console.log(ancillary_selection,'selected ancil')
 
 if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' ) {
 
-  if(wmsMarketLayer.current)map.current.removeLayer(wmsMarketLayer.current)
+  if(wmsDemographicsLayer.current)map.current.removeLayer(wmsDemographicsLayer.current)
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
   if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
   if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
@@ -1759,7 +1759,7 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
 
   var taifa = country_name.current
   
-  wmsMarketLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
+  wmsDemographicsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: `Landinvestment_datasets:${taifa}_Population_Density_Socioeconomics_Population`,
       crs:L.CRS.EPSG4326,
@@ -1772,7 +1772,7 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
      
  });
 
- wmsMarketLayer.current.addTo(map.current);
+ wmsDemographicsLayer.current.addTo(map.current);
  addPopLegend()
 
   
@@ -1801,7 +1801,7 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
 
 if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Market Accessibility' ) {
 
-  if(wmsMarketLayer.current)map.current.removeLayer(wmsMarketLayer.current) //aka demographics layer
+  if(wmsDemographicsLayer.current)map.current.removeLayer(wmsDemographicsLayer.current) //aka demographics layer
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
   if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
   if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
@@ -1850,6 +1850,7 @@ const changeDefaultOpacity = (e) => {
  if(wmsNTLLayer.current != null)wmsNTLLayer.current.setOpacity(e.target.value)
  if(wmsDistrictLULC.current != null)wmsDistrictLULC.current.setOpacity(e.target.value)
  if(wmsLULC.current != null)wmsLULC.current.setOpacity(e.target.value)
+ if(wmsDemographicsLayer.current != null)wmsDemographicsLayer.current.setOpacity(e.target.value)
                                     
                                   
                                    
