@@ -494,6 +494,7 @@ const removeCountryWMSLayer = () => {
    });
    wmsCountryLayer.current.addTo(map.current)
    if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
+    if(current_geojson.current) current_geojson.current = null
    
       
    
@@ -692,7 +693,7 @@ try {
   map.current.createPane("pane400").style.zIndex = 200;
 var taifa = country_name.current
 
-  if( wmsCountryLayer.current != null && clicked_link === 'Crop Production' && selected_radio === 'Crop Suitability') {
+  if( wmsCountryLayer.current != null && clicked_link === 'Crop Production' && selected_radio === 'Crop Suitability' && current_geojson.current == null) {
     
     wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
@@ -1006,13 +1007,15 @@ wmsLayer.current.addTo(map.current);
 //add legend
 const addClimateLegend = () => {
   // clearLegends()
+  if(climate_legend.current)map.current.removeControl(climate_legend.current)
+  if(district_climate_legend.current)map.current.removeControl(district_climate_legend.current)
   if(district_agb_legend.current)map.current.removeControl(district_agb_legend.current)
   if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
   if(pop_legend.current)map.current.removeControl(pop_legend.current)
   if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
   if(soil_legend.current)map.current.removeControl(soil_legend.current)
-  if(climate_legend.current)map.current.removeControl(climate_legend.current)
-  if(district_climate_legend.current)map.current.removeControl(district_climate_legend.current)
+  
+ 
   if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
   if(crop_legend.current)map.current.removeControl(crop_legend.current)
   if(agb_legend.current)map.current.removeControl(agb_legend.current)
@@ -1072,6 +1075,20 @@ const fetchClimate = (e) => {
   if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
   if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
   if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
+
+
+   // clearLegends()
+   if(district_agb_legend.current)map.current.removeControl(district_agb_legend.current)
+   if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
+   if(pop_legend.current)map.current.removeControl(pop_legend.current)
+   if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+   if(soil_legend.current)map.current.removeControl(soil_legend.current)
+   if(climate_legend.current)map.current.removeControl(climate_legend.current)
+   if(district_climate_legend.current)map.current.removeControl(district_climate_legend.current)
+   if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+   if(crop_legend.current)map.current.removeControl(crop_legend.current)
+   if(agb_legend.current)map.current.removeControl(agb_legend.current)
+   if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
 map.current.createPane("pane400").style.zIndex = 200;
 
 
@@ -1396,7 +1413,9 @@ addSoilLegend()
 
  const addLULCLegend = () => {
   // clearLegends()
-  if(pop_legend.current)map.current.removeControl(pop_legend.current)
+      if(district_climate_legend.current)map.current.removeControl(district_climate_legend.current)
+      if(climate_legend.current)map.current.removeControl(climate_legend.current)
+      if(pop_legend.current)map.current.removeControl(pop_legend.current)
       if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
       if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
       if(soil_legend.current)map.current.removeControl(soil_legend.current)
@@ -1452,6 +1471,7 @@ if(clicked_link === 'Land Use' && current_geojson.current != null ) {
     transparent: true,
     opacity:1.0
     
+
     
    
 });
@@ -1460,10 +1480,10 @@ wmsDistrictLULC.current.addTo(map.current);
 
 const addLULCLegend = () => {
   // clearLegends()
-  if(district_climate_legend.current)map.current.removeControl(district_climate_legend.current)
-  if(climate_legend.current)map.current.removeControl(climate_legend.current)
-  if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
-  if(pop_legend.current)map.current.removeControl(pop_legend.current)
+      if(district_climate_legend.current)map.current.removeControl(district_climate_legend.current)
+      if(climate_legend.current)map.current.removeControl(climate_legend.current)
+      if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
+      if(pop_legend.current)map.current.removeControl(pop_legend.current)
       if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
       if(soil_legend.current)map.current.removeControl(soil_legend.current)
       if(climate_legend.current)map.current.removeControl(climate_legend.current)
@@ -1506,8 +1526,9 @@ const addLULCLegend = () => {
 //country level ntl
   if(clicked_link === 'Night-time Light' && wmsCountryLayer.current != null) { 
     var taifa = country_name.current
-    if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
     if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+    if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
+  
     if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
     if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
    map.current.createPane("pane400").style.zIndex = 200;
