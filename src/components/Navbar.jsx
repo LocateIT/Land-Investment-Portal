@@ -26,7 +26,7 @@ const Navbar = () => {
             } */}
             <img src={home} alt="homepage" onClick={() => navigate('/')} title='Homepage'/>
             <img src={dashboard} alt="dashboard" onClick={() => navigate('dashboard')} title='Dashboard' />
-            <img src={about} alt="about" title='About' />
+            <img src={about} alt="about" title='About' onClick={() => navigate('/')} />
             <img src={language} alt="language translation" title='Translations' />
         </div>
 

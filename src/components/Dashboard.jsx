@@ -1460,6 +1460,8 @@ wmsDistrictLULC.current.addTo(map.current);
 
 const addLULCLegend = () => {
   // clearLegends()
+  if(district_climate_legend.current)map.current.removeControl(district_climate_legend.current)
+  if(climate_legend.current)map.current.removeControl(climate_legend.current)
   if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
   if(pop_legend.current)map.current.removeControl(pop_legend.current)
       if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
