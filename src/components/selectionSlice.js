@@ -3,6 +3,7 @@ import  axios from 'axios'
 
 const initialState = {
     countries:[ 
+        {value:'',label:''},
     {value:'Malawi',label:'Malawi'},
      {value:'Guinea', label:'Guinea'},
      {value:'Madagascar', label:'Madagascar'}
@@ -54,7 +55,9 @@ const initialState = {
     stats_labels:[],
     stats_color:[],
     acreage_label:[],
-    total_acreage:[]
+    total_acreage:[],
+    ntl_list:['Country NTL', 'District NTL'],
+    selected_level:''
 }
 
 
@@ -150,6 +153,9 @@ const dashboardSelectionSlice = createSlice({
         },
         changeTotalAcreage:(state, action) => {
             state.total_acreage = action.payload
+        },
+        changeSelectedLevel:(state, action) => {
+            state.selected_level = action.payload
         }
        
 
@@ -161,5 +167,5 @@ export const dashboardSelections = (state) => state.dashboardselections;
 export const { changeSelectedCountry, changeSelectedDistrict, 
     changeSelectedCrop, changeClimateProduct, changeSoilProduct,changeAncilProduct,
      changeStatsFigures, changeStatsLabels, changeStatsColor, changeAcreageLabel,
-      changeTotalAcreage, changeSelectedProduct, changeSelectedIndicator} = dashboardSelectionSlice.actions
+      changeTotalAcreage, changeSelectedProduct, changeSelectedIndicator,changeSelectedLevel} = dashboardSelectionSlice.actions
 export default dashboardSelectionSlice.reducer
