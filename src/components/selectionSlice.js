@@ -3,7 +3,6 @@ import  axios from 'axios'
 
 const initialState = {
     countries:[ 
-        {value:'',label:''},
     {value:'Malawi',label:'Malawi'},
      {value:'Guinea', label:'Guinea'},
      {value:'Madagascar', label:'Madagascar'}
@@ -68,11 +67,11 @@ const dashboardSelectionSlice = createSlice({
         changeSelectedCountry:(state, action) => {
             state.selected_country = action.payload
             if(state.selected_country === 'Guinea'){
-                state.crops = ['Cassava', 'Groundnuts', 'Rice']
+                state.crops = ['Rice']
                 // state.selected_district = 'Beyla'
             }
             if(state.selected_country === 'Madagascar'){
-                state.crops = ['Cassava', 'Sweet Potato', 'Rice']
+                state.crops = ['Sweet Potatoes', 'Rice']
                 // state.selected_district = 'Androy'
             }
            

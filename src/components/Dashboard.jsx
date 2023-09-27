@@ -1113,7 +1113,7 @@ var taifa = country_name.current
       crop_legend.current.onAdd = function(map) {
         var div = L.DomUtil.create("div", "legend");
       
-        div.innerHTML += (`<p>${country_name.current} ${dashboardSlice.selected_crop} Suitability</p>`) + `<img src="http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${country_name.current}_${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:11" />`;
+        div.innerHTML += (`<p>${country_name.current} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?${current_wms_response.current.legendurl}bgColor:0xFFFFFF;dpi:150" + '' />`;
   
         
     let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -1137,14 +1137,22 @@ var taifa = country_name.current
   }
 
   if( wmsCountryLayer.current != null && clicked_link === 'Crop Production' && selected_radio === 'Agricultural Productivity') {
+    var taifa = country_name.current
+    const wmsresponse = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/getwmslayer/?product=Crop Production&sub_product=Agricultural Productivity&data_name=Above Ground Biomass&country_name=${taifa}`, {
+   
+    })
+    current_wms_response.current = wmsresponse.data
+    const biomass_wms = current_wms_response.current
+
+    console.log(current_wms_response.current, 'current biomass response')
+
+
     
     wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
-      layers: `Landinvestment_datasets:Above_Ground_Biomass_Crop_Production_Agricultural_Productivity`,
+      layers: biomass_wms.layername,
       crs:L.CRS.EPSG4326,
-      styles: '',
-      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
-    
+      styles: biomass_wms.sldname,
       format: 'image/png',
       transparent: true,
       opacity:1.0
@@ -1179,7 +1187,7 @@ if(district_agb_legend.current)map.current.removeControl(district_agb_legend.cur
     agb_legend.current.onAdd = function(map) {
   var div = L.DomUtil.create("div", "legend");
       
-  div.innerHTML += (`<p>${country_name.current} Above Ground Biomass </p>`) + `<img src="http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${country_name.current}_Above_Ground_Biomass_Crop_Production_Agricultural_Productivity&LEGEND_OPTIONS=border:true;dx:10;fontSize:11" />`;
+  div.innerHTML += (`<p>${country_name.current} Above Ground Biomass </p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?${current_wms_response.current.legendurl}bgColor:0xFFFFFF;dpi:150" + '' />`;
 
       
   let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -1270,7 +1278,7 @@ const fetchCrop = async () => {
       district_crop_legend.current.onAdd = function(map) {
        var div = L.DomUtil.create("div", "legend");
         
-       div.innerHTML += (`<p>${dashboardSlice.selected_district} ${dashboardSlice.selected_crop} Suitability</p>`) + `<img src="http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${country_name.current}_${dashboardSlice.selected_crop}_Crop_Production_Crop_Suitability&LEGEND_OPTIONS=border:true;dx:10;fontSize:11" />`;
+       div.innerHTML += (`<p>${dashboardSlice.selected_district} ${dashboardSlice.selected_crop} Suitability</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?${current_wms_response.current.legendurl}bgColor:0xFFFFFF;dpi:150" + '' />`;
   
         
     let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -1294,12 +1302,23 @@ const fetchCrop = async () => {
 
     if( clicked_link === 'Crop Production' && selected_radio === 'Agricultural Productivity') {
       var taifa = country_name.current
-    
+
+      const wmsresponse = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/getwmslayer/?product=Crop Production&sub_product=Agricultural Productivity&data_name=Above Ground Biomass&district_name=${district.name}&country_name=${taifa}`, {
+   
+      })
+      
+      current_wms_response.current = wmsresponse.data
+      const biomass_wms = current_wms_response.current
+  
+      console.log(current_wms_response.current, 'current district biomass response')
+  
+  
+      
       wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
         pane: 'pane400',
-        layers: `Landinvestment_datasets:${taifa}_Above_Ground_Biomass_Crop_Production_Agricultural_Productivity`,
+        layers: biomass_wms.layername,
         crs:L.CRS.EPSG4326,
-        styles: `Crop_Production_Agricultural_Productivity_Above_Ground_Biomass_${district.name}`,
+        styles: biomass_wms.sldname,
         // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
       
         format: 'image/png',
@@ -1332,7 +1351,7 @@ const fetchCrop = async () => {
       district_agb_legend.current.onAdd = function(map) {
     var div = L.DomUtil.create("div", "legend");
         
-    div.innerHTML += (`<p>${dashboardSlice.selected_district} Above Ground Biomass </p>`) + `<img src="http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${country_name.current}_Above_Ground_Biomass_Crop_Production_Agricultural_Productivity&LEGEND_OPTIONS=border:true;dx:10;fontSize:11" />`;
+    div.innerHTML += (`<p>${dashboardSlice.selected_district} Above Ground Biomass </p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?${current_wms_response.current.legendurl}bgColor:0xFFFFFF;dpi:150" + '' />`;
 
         
     let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -1431,7 +1450,7 @@ const addClimateLegend = () => {
   var div = L.DomUtil.create("div", "legend");
   var taifa = country_name.current
       
-  div.innerHTML += (`<p>${taifa} ${climate_name}</p>`) + `<img src="http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${country_name.current}_${climate_name}_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:11" />` ;
+  div.innerHTML += (`<p>${taifa} ${climate_name}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?${current_wms_response.current.legendurl}bgColor:0xFFFFFF;dpi:150" + '' />`;
 
       
   let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -1556,7 +1575,7 @@ map.current.createPane("pane400").style.zIndex = 200;
       var div = L.DomUtil.create("div", "legend");
       var taifa = country_name.current
           
-      div.innerHTML += (`<p>${dashboardSlice.selected_district} ${climate_name}</p>`) + `<img src="http://139.84.229.39:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${country_name.current}_${climate_name}_Climate_and_Geography_Climate&LEGEND_OPTIONS=border:true;dx:10;fontSize:11" />` ;
+      div.innerHTML += (`<p>${dashboardSlice.selected_district} ${climate_name}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?${current_wms_response.current.legendurl}bgColor:0xFFFFFF;dpi:150" + '' />`;
   
           
       let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -1613,125 +1632,6 @@ map.current.createPane("pane400").style.zIndex = 200;
 }
 
  
-const addSoilLegend = () => {
-      if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
-      if(pop_legend.current)map.current.removeControl(pop_legend.current)
-      if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
-      if(soil_legend.current)map.current.removeControl(soil_legend.current)
-      if(climate_legend.current)map.current.removeControl(climate_legend.current)
-      if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
-      if(crop_legend.current)map.current.removeControl(crop_legend.current)
-      if(agb_legend.current)map.current.removeControl(agb_legend.current)
-      if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
-  console.log(separated_soil_product.current)
-  if(wmsLayer.current && separated_soil_product.current != 'Organic Carbon'){
-    var legend = L.control({position:'bottomright'});
-    soil_legend.current = legend
-
-    soil_legend.current.onAdd = function(map) {
-  var div = L.DomUtil.create("div", "legend");
-
-  var taifa = country_name.current
-  var soil = separated_soil_product.current 
-  const separatedSoilTexture = soil.split('_').join(' ');
-      
-  div.innerHTML += (`<p>${dashboardSlice.selected_district} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${taifa}_${soil}_Crop_Production_Soil&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
-
-      
-  let draggable = new L.Draggable(div); //the legend can be dragged around the div
-  draggable.enable();
-
-  return div;
-  };
-
-  soil_legend.current.addTo(map.current);
-  }
-
-  if(wmsLayer.current && separated_soil_product.current === 'Organic_Carbon'){
-    if(soil_legend.current)map.current.removeControl(soil_legend.current)
-    var legend = L.control({position:'bottomright'});
-    soil_legend.current = legend
-
-    soil_legend.current.onAdd = function(map) {
-  var div = L.DomUtil.create("div", "legend");
-
-  var taifa = country_name.current
-  var soil = separated_soil_product.current 
-  const separatedSoilTexture = soil.split('_').join(' ');
-      
-  div.innerHTML += (`<p>${dashboardSlice.selected_district} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${taifa}_Organiccarbon_Crop_Production_Soil&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
-
-      
-  let draggable = new L.Draggable(div); //the legend can be dragged around the div
-  draggable.enable();
-
-  return div;
-  };
-
-  soil_legend.current.addTo(map.current);
-  }
-
- }
- const addCountrySoilLegend = () => {
-  if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
-  if(pop_legend.current)map.current.removeControl(pop_legend.current)
-  if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
-  if(soil_legend.current)map.current.removeControl(soil_legend.current)
-  if(climate_legend.current)map.current.removeControl(climate_legend.current)
-  if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
-  if(crop_legend.current)map.current.removeControl(crop_legend.current)
-  if(agb_legend.current)map.current.removeControl(agb_legend.current)
-  if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
-console.log(separated_soil_product.current)
-if(wmsLayer.current && separated_soil_product.current != 'Organic Carbon'){
-var legend = L.control({position:'bottomright'});
-soil_legend.current = legend
-
-soil_legend.current.onAdd = function(map) {
-var div = L.DomUtil.create("div", "legend");
-
-var taifa = country_name.current
-var soil = separated_soil_product.current 
-const separatedSoilTexture = soil.split('_').join(' ');
-  
-div.innerHTML += (`<p>${taifa} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${taifa}_${soil}_Crop_Production_Soil&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
-
-  
-let draggable = new L.Draggable(div); //the legend can be dragged around the div
-draggable.enable();
-
-return div;
-};
-
-soil_legend.current.addTo(map.current);
-}
-
-if(wmsLayer.current && separated_soil_product.current === 'Organic_Carbon'){
-if(soil_legend.current)map.current.removeControl(soil_legend.current)
-var legend = L.control({position:'bottomright'});
-soil_legend.current = legend
-
-soil_legend.current.onAdd = function(map) {
-var div = L.DomUtil.create("div", "legend");
-
-var taifa = country_name.current
-var soil = separated_soil_product.current 
-const separatedSoilTexture = soil.split('_').join(' ');
-  
-div.innerHTML += (`<p>${dashboardSlice.selected_district} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${taifa}_Organiccarbon_Crop_Production_Soil&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
-
-  
-let draggable = new L.Draggable(div); //the legend can be dragged around the div
-draggable.enable();
-
-return div;
-};
-
-soil_legend.current.addTo(map.current);
-}
-
-}
- 
 const fetchSoilDataa = async (e) => {
   console.log('soil',e)
   
@@ -1782,6 +1682,69 @@ if(clicked_link === 'Soil Fertility' && separatedSoilTexture != 'Organic_Carbon'
 });
 
 wmsLayer.current.addTo(map.current);
+
+const addSoilLegend =  () => {
+  if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
+  if(pop_legend.current)map.current.removeControl(pop_legend.current)
+  if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+  if(soil_legend.current)map.current.removeControl(soil_legend.current)
+  if(climate_legend.current)map.current.removeControl(climate_legend.current)
+  if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+  if(crop_legend.current)map.current.removeControl(crop_legend.current)
+  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
+console.log(separated_soil_product.current)
+if(wmsLayer.current && separated_soil_product.current != 'Organic Carbon'){
+var legend = L.control({position:'bottomright'});
+soil_legend.current = legend
+
+soil_legend.current.onAdd =  function(map) {
+var div = L.DomUtil.create("div", "legend");
+
+var taifa = country_name.current
+var soil = separated_soil_product.current 
+const separatedSoilTexture = soil.split('_').join(' ');
+
+
+
+div.innerHTML += (`<p>${dashboardSlice.selected_district} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?${current_wms_response.current.legendurl}bgColor:0xFFFFFF;dpi:150" + '' />`;
+
+  
+let draggable = new L.Draggable(div); //the legend can be dragged around the div
+draggable.enable();
+
+return div;
+};
+
+soil_legend.current.addTo(map.current);
+}
+
+if(wmsLayer.current && separated_soil_product.current === 'Organic_Carbon'){
+if(soil_legend.current)map.current.removeControl(soil_legend.current)
+var legend = L.control({position:'bottomright'});
+soil_legend.current = legend
+
+soil_legend.current.onAdd = function(map) {
+var div = L.DomUtil.create("div", "legend");
+
+var taifa = country_name.current
+var soil = separated_soil_product.current 
+const separatedSoilTexture = soil.split('_').join(' ');
+  
+div.innerHTML += (`<p>${dashboardSlice.selected_district} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?${current_wms_response.current.legendurl}bgColor:0xFFFFFF;dpi:150" + '' />`;
+
+  
+let draggable = new L.Draggable(div); //the legend can be dragged around the div
+draggable.enable();
+
+return div;
+};
+
+soil_legend.current.addTo(map.current);
+}
+
+}
+
 addSoilLegend()
 
 
@@ -1813,6 +1776,68 @@ if(clicked_link === 'Soil Fertility' && separatedSoilTexture === 'Organic_Carbon
 });
 
 wmsLayer.current.addTo(map.current);
+
+const addSoilLegend =  () => {
+  if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
+  if(pop_legend.current)map.current.removeControl(pop_legend.current)
+  if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+  if(soil_legend.current)map.current.removeControl(soil_legend.current)
+  if(climate_legend.current)map.current.removeControl(climate_legend.current)
+  if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+  if(crop_legend.current)map.current.removeControl(crop_legend.current)
+  if(agb_legend.current)map.current.removeControl(agb_legend.current)
+  if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
+console.log(separated_soil_product.current)
+if(wmsLayer.current && separated_soil_product.current != 'Organic Carbon'){
+var legend = L.control({position:'bottomright'});
+soil_legend.current = legend
+
+soil_legend.current.onAdd =  function(map) {
+var div = L.DomUtil.create("div", "legend");
+
+var taifa = country_name.current
+var soil = separated_soil_product.current 
+const separatedSoilTexture = soil.split('_').join(' ');
+
+
+
+div.innerHTML += (`<p>${dashboardSlice.selected_district} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?${current_wms_response.current.legendurl}bgColor:0xFFFFFF;dpi:150" + '' />`;
+
+  
+let draggable = new L.Draggable(div); //the legend can be dragged around the div
+draggable.enable();
+
+return div;
+};
+
+soil_legend.current.addTo(map.current);
+}
+
+if(wmsLayer.current && separated_soil_product.current === 'Organic_Carbon'){
+if(soil_legend.current)map.current.removeControl(soil_legend.current)
+var legend = L.control({position:'bottomright'});
+soil_legend.current = legend
+
+soil_legend.current.onAdd = function(map) {
+var div = L.DomUtil.create("div", "legend");
+
+var taifa = country_name.current
+var soil = separated_soil_product.current 
+const separatedSoilTexture = soil.split('_').join(' ');
+  
+div.innerHTML += (`<p>${dashboardSlice.selected_district} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?${current_wms_response.current.legendurl}bgColor:0xFFFFFF;dpi:150" + '' />`;
+
+  
+let draggable = new L.Draggable(div); //the legend can be dragged around the div
+draggable.enable();
+
+return div;
+};
+
+soil_legend.current.addTo(map.current);
+}
+
+}
 addSoilLegend()
 
 
@@ -1874,6 +1899,67 @@ var taifa = country_name.current
   });
   
   wmsLayer.current.addTo(map.current);
+
+
+  const addCountrySoilLegend = () => {
+    if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
+    if(pop_legend.current)map.current.removeControl(pop_legend.current)
+    if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+    if(soil_legend.current)map.current.removeControl(soil_legend.current)
+    if(climate_legend.current)map.current.removeControl(climate_legend.current)
+    if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+    if(crop_legend.current)map.current.removeControl(crop_legend.current)
+    if(agb_legend.current)map.current.removeControl(agb_legend.current)
+    if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
+  console.log(separated_soil_product.current)
+  if(wmsLayer.current && separated_soil_product.current != 'Organic Carbon'){
+  var legend = L.control({position:'bottomright'});
+  soil_legend.current = legend
+  
+  soil_legend.current.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  
+  var taifa = country_name.current
+  var soil = separated_soil_product.current 
+  const separatedSoilTexture = soil.split('_').join(' ');
+    
+  div.innerHTML += (`<p>${taifa} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?${current_wms_response.current.legendurl}bgColor:0xFFFFFF;dpi:150" + '' />`;
+  
+    
+  let draggable = new L.Draggable(div); //the legend can be dragged around the div
+  draggable.enable();
+  
+  return div;
+  };
+  
+  soil_legend.current.addTo(map.current);
+  }
+  
+  if(wmsLayer.current && separated_soil_product.current === 'Organic_Carbon'){
+  if(soil_legend.current)map.current.removeControl(soil_legend.current)
+  var legend = L.control({position:'bottomright'});
+  soil_legend.current = legend
+  
+  soil_legend.current.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  
+  var taifa = country_name.current
+  var soil = separated_soil_product.current 
+  const separatedSoilTexture = soil.split('_').join(' ');
+    
+  div.innerHTML += (`<p>${dashboardSlice.selected_district} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?${current_wms_response.current.legendurl}bgColor:0xFFFFFF;dpi:150" + '' />`;
+  
+    
+  let draggable = new L.Draggable(div); //the legend can be dragged around the div
+  draggable.enable();
+  
+  return div;
+  };
+  
+  soil_legend.current.addTo(map.current);
+  }
+  
+  }
   addCountrySoilLegend()
   
   
@@ -1908,7 +1994,68 @@ var taifa = country_name.current
    });
   
    wmsLayer.current.addTo(map.current);
-   addSoilLegend()
+
+
+   const addCountrySoilLegend = () => {
+    if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
+    if(pop_legend.current)map.current.removeControl(pop_legend.current)
+    if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
+    if(soil_legend.current)map.current.removeControl(soil_legend.current)
+    if(climate_legend.current)map.current.removeControl(climate_legend.current)
+    if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
+    if(crop_legend.current)map.current.removeControl(crop_legend.current)
+    if(agb_legend.current)map.current.removeControl(agb_legend.current)
+    if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
+  console.log(separated_soil_product.current)
+  if(wmsLayer.current && separated_soil_product.current != 'Organic Carbon'){
+  var legend = L.control({position:'bottomright'});
+  soil_legend.current = legend
+  
+  soil_legend.current.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  
+  var taifa = country_name.current
+  var soil = separated_soil_product.current 
+  const separatedSoilTexture = soil.split('_').join(' ');
+    
+  div.innerHTML += (`<p>${taifa} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?${current_wms_response.current.legendurl}bgColor:0xFFFFFF;dpi:150" + '' />`;
+  
+    
+  let draggable = new L.Draggable(div); //the legend can be dragged around the div
+  draggable.enable();
+  
+  return div;
+  };
+  
+  soil_legend.current.addTo(map.current);
+  }
+  
+  if(wmsLayer.current && separated_soil_product.current === 'Organic_Carbon'){
+  if(soil_legend.current)map.current.removeControl(soil_legend.current)
+  var legend = L.control({position:'bottomright'});
+  soil_legend.current = legend
+  
+  soil_legend.current.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  
+  var taifa = country_name.current
+  var soil = separated_soil_product.current 
+  const separatedSoilTexture = soil.split('_').join(' ');
+    
+  div.innerHTML += (`<p>${taifa} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${taifa}_Organiccarbon_Crop_Production_Soil&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+  
+    
+  let draggable = new L.Draggable(div); //the legend can be dragged around the div
+  draggable.enable();
+  
+  return div;
+  };
+  
+  soil_legend.current.addTo(map.current);
+  }
+  
+  }
+  addCountrySoilLegend()
   
   
      
@@ -1919,61 +2066,7 @@ var taifa = country_name.current
   
 }
 
-// const fetchCountryLandUse = async () => {
-//   if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
-//   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
-//   if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
-//   if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
-//   if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
-//   if(wmsDemographicsLayer.current)map.current.removeLayer(wmsDemographicsLayer.current)
-  
 
- 
-// }
-
-
-
-// fetchCountryLandUse()
-
-// const fetchDistrictLandUse = async () => {
-//   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
-//   if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
-//   if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
-//   if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
-//   if(wmsDemographicsLayer.current)map.current.removeLayer(wmsDemographicsLayer.current)
-
-  
-
-// }
-
-// fetchDistrictLandUse()
-
-
-
-// const fetchCountryNTL = async () => {
-//   // if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
-// //country level ntl
-
-  
-// }
-
-// if(clicked_link === 'Night-time Light' && wmsCountryLayer.current != null && current_geojson.current === null) { 
-//   // if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
-//   // layergroup_ntl.current.clearLayers()
-// fetchCountryNTL()
-
-// }
-
-
-// const fetchDistrictNTL = async () => {
-
-
-
-// }
-// fetchDistrictNTL()
-  
-    
-// }
 
 const addPopLegend = () => {
   // clearLegends()
