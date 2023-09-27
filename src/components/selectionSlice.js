@@ -46,6 +46,7 @@ const initialState = {
     indicators:['Crop Production', 'Climate', 'Soil Fertility', 'Land Use', 'Night-time Light', 'Ancillary Data'],
     products:['Agricultural Productivity', 'Crop Suitability'],
     crops:['Maize', 'Groundnuts', 'Tobacco', 'Cranberry', 'Tea'],
+    crops_array:[],
     climate_products:['Precipitation', 'Temperature', 'Elevation'],
     soil_products:['Soil Texture','Organic Carbon', 'Soil Drainage', 'Soil Cations', 'Soil Fertility'],
     selected_soil:'',
@@ -155,7 +156,11 @@ const dashboardSelectionSlice = createSlice({
         },
         changeSelectedLevel:(state, action) => {
             state.selected_level = action.payload
-        }
+        },
+        changeCropArray:(state, action) => {
+            state.crops_array = action.payload
+           
+        },
        
 
 
@@ -166,5 +171,5 @@ export const dashboardSelections = (state) => state.dashboardselections;
 export const { changeSelectedCountry, changeSelectedDistrict, 
     changeSelectedCrop, changeClimateProduct, changeSoilProduct,changeAncilProduct,
      changeStatsFigures, changeStatsLabels, changeStatsColor, changeAcreageLabel,
-      changeTotalAcreage, changeSelectedProduct, changeSelectedIndicator,changeSelectedLevel} = dashboardSelectionSlice.actions
+      changeTotalAcreage, changeSelectedProduct, changeSelectedIndicator,changeSelectedLevel, changeCropArray} = dashboardSelectionSlice.actions
 export default dashboardSelectionSlice.reducer

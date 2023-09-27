@@ -17,7 +17,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { dashboardSelections } from './selectionSlice';
 import { changeSelectedCountry,  changeSelectedDistrict,  changeSelectedCrop, changeClimateProduct, changeSoilProduct, 
   changeStatsFigures, changeStatsLabels, changeAcreageLabel, changeTotalAcreage,
-   changeSelectedProduct, changeSelectedIndicator, changeStatsColor} from './selectionSlice';
+   changeSelectedProduct, changeSelectedIndicator, changeStatsColor, changeCropArray} from './selectionSlice';
 import Select from 'react-select'
 
 import Navbar from './Navbar'
@@ -87,6 +87,7 @@ const Dashboard =  () => {
     const precip_color = ["#c6cdd4", "#d1c8b0", "#d0bf90", "#7ba7b3", "#2871b0", "#08306b"]
     const temperature_color = ["#3aee5b", "#49883f", "#b8e38b", "#dbe5b3", "#e77d1a", "#f90f49"]
     const elevation_color = ['#ee7245','#fdad61', '#fffebe', "#acd9e9","#2e7cb7", "#2c7bb6"]
+    const [new_crops, setnew_crops] = useState([])
     const [loader, setloader] = useState(false)
     const [ntl_layer, setntl_layer] = useState(null)
   
@@ -149,7 +150,19 @@ const Dashboard =  () => {
     const changed_country = e
     console.log(changed_country, 'changed_country')
     country_name.current = changed_country.value
-  
+
+    if(country_name.current === 'Guinea'){
+    
+     return dispatch(changeCropArray(['Rice']))
+    }
+    if(country_name.current === 'Madagascar'){
+      // dashboardSlice.crops = ['Sweet Potatoes', 'Rice']
+      return dispatch(changeCropArray(['Sweet Potatoes', 'Rice']))
+    }
+    if(country_name.current === 'Malawi'){
+    
+     return dispatch(changeCropArray(['Maize', 'Groundnuts', 'Tobacco', 'Cranberry', 'Tea']))
+      }
 
       setCountry(changed_country.value)
 
@@ -1146,8 +1159,6 @@ var taifa = country_name.current
 
     console.log(current_wms_response.current, 'current biomass response')
 
-
-    
     wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: biomass_wms.layername,

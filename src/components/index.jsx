@@ -15,7 +15,7 @@ const index = ({}) => {
     const dashboardSlice = useSelector((state) => state.dashboardselections)
   const [showList, setShowList] = useState(false)
   const [defaultSelectText, setDefaultSelectText] = useState("Select crop")
-  const [countryList, setCountryList] = useState(dashboardSlice.crops)
+  const [countryList, setCountryList] = useState(dashboardSlice.crops_array)
 
   
   // constructor(props) {
