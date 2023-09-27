@@ -1659,7 +1659,7 @@ const addSoilLegend = () => {
   var soil = separated_soil_product.current 
   const separatedSoilTexture = soil.split('_').join(' ');
       
-  div.innerHTML += (`<p>${dashboardSlice.selected_district} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${taifa}_Organiccarbon_Crop_Production_Otherlayers&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+  div.innerHTML += (`<p>${dashboardSlice.selected_district} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${taifa}_Organiccarbon_Crop_Production_Soil&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
 
       
   let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -1718,7 +1718,7 @@ var taifa = country_name.current
 var soil = separated_soil_product.current 
 const separatedSoilTexture = soil.split('_').join(' ');
   
-div.innerHTML += (`<p>${dashboardSlice.selected_district} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${taifa}_Organiccarbon_Crop_Production_Otherlayers&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
+div.innerHTML += (`<p>${dashboardSlice.selected_district} ${separatedSoilTexture}</p>`) + '<img src="' + `${baseurl}:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=Landinvestment_datasets:${taifa}_Organiccarbon_Crop_Production_Soil&LEGEND_OPTIONS=border:true;dx:10;fontSize:7;bgColor:0xFFFFFF;dpi:150" + '' />` ;
 
   
 let draggable = new L.Draggable(div); //the legend can be dragged around the div
@@ -1790,7 +1790,7 @@ addSoilLegend()
 
 if(clicked_link === 'Soil Fertility' && separatedSoilTexture === 'Organic_Carbon' && current_geojson.current != null ) {
 
-  const wmsresponse = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/getwmslayer/?product=Crop Production&sub_product=Soil&data_name=${soilTexture}&country_name=${taifa}&district_name=${district.name}`, {
+  const wmsresponse = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/getwmslayer/?product=Crop Production&sub_product=Soil&data_name=Organiccarbon&country_name=${taifa}&district_name=${district.name}`, {
    
   })
   const soil_wms = wmsresponse.data 
@@ -1800,9 +1800,9 @@ if(clicked_link === 'Soil Fertility' && separatedSoilTexture === 'Organic_Carbon
 
   wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
     pane: 'pane400',
-    layers: `Landinvestment_datasets:${taifa}_Organiccarbon_Crop_Production_Otherlayers`,
+    layers: soil_wms.layername,
     crs:L.CRS.EPSG4326,
-    styles: `Crop_Production_Otherlayers_Organiccarbon_${district.name}`,
+    styles: soil_wms.sldname,
     // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
     format: 'image/png',
     transparent: true,
@@ -1884,7 +1884,7 @@ var taifa = country_name.current
     if(clicked_link === 'Soil Fertility' && separatedSoilTexture === 'Organic_Carbon' && wmsCountryLayer.current != null ) {
   
   
-      const wmsresponse = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/getwmslayer/?product=Crop Production&sub_product=Otherlayers&data_name=Organiccarbon&country_name=${taifa}`, {
+      const wmsresponse = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/getwmslayer/?product=Crop Production&sub_product=Soil&data_name=Organiccarbon&country_name=${taifa}`, {
      
       })
       const soil_wms = wmsresponse.data 
