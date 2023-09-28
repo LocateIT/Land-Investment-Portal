@@ -150,6 +150,8 @@ const Dashboard =  () => {
     const changed_country = e
     console.log(changed_country, 'changed_country')
     country_name.current = changed_country.value
+    fetchRegion()
+
 
     if(country_name.current === 'Guinea'){
     
@@ -168,13 +170,16 @@ const Dashboard =  () => {
 
       //update the selected_region value using dispatch changeSelelcted region reducer
       dispatch(changeSelectedCountry(changed_country.value))
+      
+
+
       if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
       // if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
       if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
       if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
       // if(ntl_layer)map.current.removeLayer(ntl_layer)
 
-     fetchRegion()
+    
     //  fetchNTL()
     
     // if(layergroup_ntl.current != null) layergroup_ntl.current.clearLayers()
@@ -788,7 +793,7 @@ const fetchOptions = async() => {
 //       }
 
     //fetch countries
-    const fetchRegion = async() => {
+    const fetchRegion = async(id) => {
   
   
       try {  
@@ -806,75 +811,130 @@ const fetchOptions = async() => {
         
         var taifa = country_name.current
 
-        const wms = await axios.get(`${baseurl}:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL&country_name=${taifa}`);
-        console.log(wms.data)
-        var wms_resp = wms.data
-        const cql_fiter_column = wms_resp['wms']['cql_column']
-        const wms_layer_name = wms_resp['wms']['layer_name']
-        const district_cql = cql_fiter_column + "=" +district['district_id']
-        // const district_cql2 = cql_fiter_column + "=" +country
-        const country_filter = wms_resp['country_details']['country_id']
-        console.log('COUNTRY FILTER',country_filter)
-        // const resp = await axios.get("${baseurl}:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=Landinvestment_datasets:District&outputFormat=application/json&CQL_FILTER=country_id="+country_filter);
-      
-
-
+        // const wms = await axios.get(`${baseurl}:8700/uneca-api-0.1/geojson/getgeojsoninfo/?district_names=ALL&country_name=${taifa}`);
+        
+       
                 
-                const resp2 = await axios.get(`${baseurl}:8070/uneca-api-0.1/geojson/getcountryinfo/?country_names=ALL`)
-                console.log(resp2.data.regions_info['Southern Africa']['country_code'], 'RESP2 DATA') 
-                // var country_code_object = resp2.data.regions_info['Southern Africa']['country_code']
-                // var country_code_array = country_code_object.map((item) => item.country_code)
-                // console.log(country_code_array, 'country_code_array')
-                // if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
-                map.current.createPane("pane400").style.zIndex = 400;
-                 if(taifa === 'Malawi') {
-                  country_code.current = '152'
-                  bounds.current = [
-                    [ -17.1288105, 32.67395],
-                    [ -9.36754, 35.932 ]
-                   ]
-                 }
-                 if(taifa === 'Guinea') {
-                  country_code.current ='106'
-                  bounds.current = [
-                    [ 7.19355000004337, -15.0757013],
-                    [ 12.6762127721554, -7.64107 ]
-                   ]
-                 }
-                 if(taifa === 'Madagascar') {
-                  country_code.current ='150'
-                  bounds.current = [
-                    [ -25.6071002, 43.188156],
-                    [-11.9497945, 50.4921515 ]
-                   ]
+  //               const resp2 = await axios.get(`${baseurl}:8070/uneca-api-0.1/geojson/getcountryinfo/?country_names=ALL`)
+  //               console.log(resp2.data.regions_info['Southern Africa']['country_code'], 'RESP2 DATA') 
+  //               // var country_code_object = resp2.data.regions_info['Southern Africa']['country_code']
+  //               // var country_code_array = country_code_object.map((item) => item.country_code)
+  //               // console.log(country_code_array, 'country_code_array')
+  //               // if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
+  //               map.current.createPane("pane400").style.zIndex = 400;
+  //                if(taifa === 'Malawi') {
+  //                 country_code.current = '152'
+  //                 bounds.current = [
+  //                   [ -17.1288105, 32.67395],
+  //                   [ -9.36754, 35.932 ]
+  //                  ]
+  //                }
+  //                if(taifa === 'Guinea') {
+  //                 country_code.current ='106'
+  //                 bounds.current = [
+  //                   [ 7.19355000004337, -15.0757013],
+  //                   [ 12.6762127721554, -7.64107 ]
+  //                  ]
+  //                }
+  //                if(taifa === 'Madagascar') {
+  //                 country_code.current ='150'
+  //                 bounds.current = [
+  //                   [ -25.6071002, 43.188156],
+  //                   [-11.9497945, 50.4921515 ]
+  //                  ]
                   
-                 }
+  //                }
 
-                 console.log(country_code.current)
+  //                console.log(country_code.current)
                
-   wmsCountryLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
-        pane: 'pane400',
-        layers: `Landinvestment_datasets:geoportal_adminlevelzero`,
-        crs:L.CRS.EPSG4326,
-        CQL_FILTER: `country_code=${country_code.current}`,
-        // styles: `Crop_Production_Crop_Suitability_${dashboardSlice.selected_crop}_${district.name}`,
-        // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
-      
-        format: 'image/png',
-        transparent: true,
-        opacity:1.0
+  //  wmsCountryLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
+  //       pane: 'pane400',
+  //       layers:  `Landinvestment_datasets:geoportal_adminlevelzero`, //resp2.data.layername, //`Landinvestment_datasets:geoportal_adminlevelzero`,
+  //       crs:L.CRS.EPSG4326,
+  //       CQL_FILTER:`country_code=${country_code.current}`, //`${resp2.data.cql_column.country=country_code.current}`,// `country_code=${country_code.current}`,
+  //       // styles: `Crop_Production_Crop_Suitability_${dashboardSlice.selected_crop}_${district.name}`,
+  //       format: 'image/png',
+  //       transparent: true,
+  //       opacity:0.4
         
         
        
-   });
-   wmsCountryLayer.current.addTo(map.current)
-   if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
-    // if(current_geojson.current) current_geojson.current = null
+  //  });
+  //  wmsCountryLayer.current.addTo(map.current)
+  //  if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
+  //   // if(current_geojson.current) current_geojson.current = null
    
       
    
 
-   map.current.flyToBounds(bounds.current)
+  //  map.current.flyToBounds(bounds.current)
+
+
+
+   //second approach
+   const wms = await axios.get(`${baseurl}:8070/uneca-api-0.1/geojson/getcountryinfo/?country_names=ALL`);
+   console.log(wms.data, 'country response')
+   var wms_resp = wms.data
+   const cql_fiter_column = wms_resp['geoserver']['cql_column']
+   const wms_layer_name = wms_resp['geoserver']['layername']
+  //  const district_cql = cql_fiter_column + "="  +id
+
+
+                   if(taifa === 'Malawi') {
+                    country_code.current = '152'
+                    bounds.current = [
+                      [ -17.1288105, 32.67395],
+                      [ -9.36754, 35.932 ]
+                     ]
+                   }
+                   if(taifa === 'Guinea') {
+                    country_code.current ='106'
+                    bounds.current = [
+                      [ 7.19355000004337, -15.0757013],
+                      [ 12.6762127721554, -7.64107 ]
+                     ]
+                   }
+                   if(taifa === 'Madagascar') {
+                    country_code.current ='150'
+                    bounds.current = [
+                      [ -25.6071002, 43.188156],
+                      [-11.9497945, 50.4921515 ]
+                     ]
+                    
+                   }
+
+
+   const code = wms_resp.regions_info['Southern Africa']['country_code'][0]['country_code']
+   // const district_cql = cql_fiter_column + "=" +id
+  //  const district_cql = cql_fiter_column + "=" +district['district_id']
+   // const district_cql2 = cql_fiter_column + "=" +country
+  //  const country_filter = wms_resp['country_details']['country_id']
+  //  console.log('COUNTRY FILTER',country_filter)
+
+   // const resp = await axios.get("${baseurl}:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=Landinvestment_datasets:District&outputFormat=application/json&CQL_FILTER=country_id="+country_filter);
+   const resp = await axios.get(`${baseurl}:8080/geoserver/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=${wms_layer_name}&outputFormat=application/json&CQL_FILTER=country_code=${country_code.current}`);
+   var aoi_data = resp.data
+   console.log(aoi_data, 'aoi response')
+   current_response.current = aoi_data
+   console.log(current_response.current, 'current aoi')
+
+   // console.log(current_response.current.features[0].geometry.coordinates, 'multipolygon')
+      // map.createPane("pane1000").style.zIndex = 300;
+      wmsCountryLayer.current = L.geoJSON(current_response.current, {
+       style: {
+         color: "black",
+         opacity: 1,
+         fillOpacity:0,
+         weight: 4
+       }
+       // pane: 'pane1000'
+     })
+     wmsCountryLayer.current.addTo(map.current)
+     map.current.flyToBounds(bounds.current)
+   
+   
+
+
 
 
 
@@ -1607,7 +1667,9 @@ map.current.createPane("pane400").style.zIndex = 200;
    
       try {
         console.log(climate_name,'selected climate')
-        const response = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_statistics/?data_name=${climate_name}&district_name=${district.name}&country_name=Malawi`);
+        var taifa = country_name.current
+
+        const response = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_statistics/?data_name=${climate_name}&district_name=${district.name}&country_name=${taifa}`);
         console.log('climate stats',response.data)
         var labels = Object.keys(response.data[0])
         var figures = Object.values(response.data[0])
@@ -1619,7 +1681,7 @@ map.current.createPane("pane400").style.zIndex = 200;
         setstats_labels(labels)
         dispatch(changeStatsLabels(labels))
       } catch (error) {
-        toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
+        toast.error('Requested statistics not available', { position: toast.POSITION.TOP_CENTER })
         
       }
     
@@ -1789,6 +1851,7 @@ if(clicked_link === 'Soil Fertility' && separatedSoilTexture === 'Organic_Carbon
 wmsLayer.current.addTo(map.current);
 
 const addSoilLegend =  () => {
+  if(district_climate_legend.current)map.current.removeControl(district_climate_legend.current)
   if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
   if(pop_legend.current)map.current.removeControl(pop_legend.current)
   if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
@@ -1913,6 +1976,8 @@ var taifa = country_name.current
 
 
   const addCountrySoilLegend = () => {
+    
+    if(district_climate_legend.current)map.current.removeControl(district_climate_legend.current)
     if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
     if(pop_legend.current)map.current.removeControl(pop_legend.current)
     if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
