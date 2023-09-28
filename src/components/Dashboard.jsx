@@ -151,6 +151,9 @@ const Dashboard =  () => {
     console.log(changed_country, 'changed_country')
     country_name.current = changed_country.value
     fetchRegion()
+    //update the selected_region value using dispatch changeSelelcted region reducer
+    dispatch(changeSelectedCountry(changed_country.value))
+      
 
 
     if(country_name.current === 'Guinea'){
@@ -168,8 +171,6 @@ const Dashboard =  () => {
 
       setCountry(changed_country.value)
 
-      //update the selected_region value using dispatch changeSelelcted region reducer
-      dispatch(changeSelectedCountry(changed_country.value))
       
 
 

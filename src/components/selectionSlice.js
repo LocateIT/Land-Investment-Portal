@@ -67,14 +67,14 @@ const dashboardSelectionSlice = createSlice({
     reducers:{
         changeSelectedCountry:(state, action) => {
             state.selected_country = action.payload
-            if(state.selected_country === 'Guinea'){
-                state.crops = ['Rice']
-                // state.selected_district = 'Beyla'
-            }
-            if(state.selected_country === 'Madagascar'){
-                state.crops = ['Sweet Potatoes', 'Rice']
-                // state.selected_district = 'Androy'
-            }
+            // if(state.selected_country === 'Guinea'){
+            //     state.crops = ['Rice']
+            //     // state.selected_district = 'Beyla'
+            // }
+            // if(state.selected_country === 'Madagascar'){
+            //     state.crops = ['Sweet Potatoes', 'Rice']
+            //     // state.selected_district = 'Androy'
+            // }
            
         },
         // showDistrictOptions:async (state, action) => {
