@@ -156,19 +156,7 @@ const Dashboard =  () => {
       
 
 
-    if(country_name.current === 'Guinea'){
     
-     return dispatch(changeCropArray(['Rice']))
-    }
-    if(country_name.current === 'Madagascar'){
-      // dashboardSlice.crops = ['Sweet Potatoes', 'Rice']
-      return dispatch(changeCropArray(['Sweet Potatoes', 'Rice']))
-    }
-    if(country_name.current === 'Malawi'){
-    
-     return dispatch(changeCropArray(['Maize', 'Groundnuts', 'Tobacco', 'Cranberry', 'Tea']))
-      }
-
       setCountry(changed_country.value)
 
       
@@ -344,6 +332,20 @@ const Dashboard =  () => {
    addLULCLegend()
   }
    
+
+  if(country_name.current === 'Guinea'){
+    
+     return dispatch(changeCropArray(['Rice']))
+    }
+    if(country_name.current === 'Madagascar'){
+      // dashboardSlice.crops = ['Sweet Potatoes', 'Rice']
+      return dispatch(changeCropArray(['Sweet Potatoes', 'Rice']))
+    }
+    if(country_name.current === 'Malawi'){
+    
+     return dispatch(changeCropArray(['Maize', 'Groundnuts', 'Tobacco', 'Cranberry', 'Tea']))
+      }
+
  
   
     
@@ -418,7 +420,8 @@ wmsNTLLayer.current.addTo(map.current);
 
 
 const addNTLLegend = () => {
- // clearLegends()
+ // clearLegends() 
+ if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
  if(pop_legend.current)map.current.removeControl(pop_legend.current)
      if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
      if(soil_legend.current)map.current.removeControl(soil_legend.current)
@@ -784,14 +787,7 @@ const fetchOptions = async() => {
       
       }
 
-// const removeCountryWMSLayer = () => {
-//         if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current) 
-//         if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
-//         if(wmsCountryLayer.current) map.current.removeLayer(wmsCountryLayer.current)
-//         if(current_geojson.current) map.current.removeLayer(current_geojson.current)
-//         if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
-//         if(wmsDistrictLULC.current)map.current.removeLayer(wmsDistrictLULC.current)
-//       }
+
 
     //fetch countries
     const fetchRegion = async(id) => {
@@ -959,7 +955,7 @@ const fetchOptions = async() => {
     const fetchDistricts = async(id) => {
       // if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
       
-      // removeCountryWMSLayer()
+     
     
   
       try {   
@@ -1037,7 +1033,8 @@ const fetchOptions = async() => {
  const fetchCropStats = async () => {
  
   try {
-    const response = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_statistics/?data_name=${dashboardSlice.selected_crop}&district_name=${district.name}&country_name=Malawi`);
+    var taifa = country_name.current
+    const response = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_statistics/?data_name=${dashboardSlice.selected_crop}&district_name=${district.name}&country_name=${taifa}`);
     console.log('crop stats',response.data)
     var labels = Object.keys(response.data[0])
     var figures = Object.values(response.data[0])
@@ -1045,6 +1042,7 @@ const fetchOptions = async() => {
     var acerage_labels = Object.keys(response.data[1])
     var acerage = Object.values(response.data[1])
     console.log('stats figures and labels', figures, labels)
+    console.log('stats figures', figures[0])
     setstats_figures(figures)
     dispatch(changeStatsFigures(figures))
 
@@ -1058,10 +1056,22 @@ const fetchOptions = async() => {
 
     settotal_acreage(total_acreage)
     dispatch(changeTotalAcreage(acerage))
+
+    if(figures[0] === 0) {
+      console.log('figures array is empty')
+      toast.error(`${dashboardSlice.selected_crop} statistics not available`, { position: toast.POSITION.TOP_CENTER })
+
+    }
     
 
-  } catch (error) {
-    toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
+  } catch(error) {
+    toast.error('Statistics not available', { position: toast.POSITION.TOP_CENTER })
+    // console.log(stats_figures[0], 'catch stats figures ' )
+    // if(stats_figures[0] === 0) {
+    //   toast.error('Statistics not available', { position: toast.POSITION.TOP_CENTER })
+
+    // }
+   
     
   }
 
@@ -1070,7 +1080,8 @@ const fetchOptions = async() => {
 const fetchAGBStats = async () => {
  
   try {
-    const response = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_statistics/?data_name=Above Ground Biomass&district_name=${district.name}&country_name=Malawi`);
+    var taifa = country_name.current
+    const response = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/get_statistics/?data_name=Above Ground Biomass&district_name=${district.name}&country_name=${taifa}`);
     console.log('crop stats',response.data)
     var labels = Object.keys(response.data[0])
     var figures = Object.values(response.data[0])
@@ -1091,8 +1102,15 @@ const fetchAGBStats = async () => {
 
     settotal_acreage(total_acreage)
     dispatch(changeTotalAcreage(acerage))
+
+    if(figures[0] === 0) {
+      console.log('figures array is empty')
+      toast.error(`${dashboardSlice.selected_crop} statistics not available`, { position: toast.POSITION.TOP_CENTER })
+
+    }
+
   } catch (error) {
-    // toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
+    toast.error('Statistics not available', { position: toast.POSITION.TOP_CENTER })
     
   }
 
@@ -1108,14 +1126,15 @@ const color_func = () => {
     setcolor_array(crop_color) 
     dispatch(changeStatsColor(crop_color))
   }
-  if(dashboardSlice.selected_product === 'Crop Suitability'  && dashboardSlice.selected_crop === 'Tobacco') {
+ 
+  if(dashboardSlice.selected_product === 'Crop Suitability'  && dashboardSlice.selected_crop === 'Maize'
+   || dashboardSlice.selected_product === 'Crop Suitability'  && dashboardSlice.selected_crop === 'Rice'
+   || dashboardSlice.selected_product === 'Crop Suitability'  && dashboardSlice.selected_crop === 'Sweet Potatoes'
+   || dashboardSlice.selected_product === 'Crop Suitability'  && dashboardSlice.selected_crop === 'Tobacco') {
     setcolor_array(tobacco_color) 
     dispatch(changeStatsColor(tobacco_color))
   }
-  if(dashboardSlice.selected_product === 'Crop Suitability'  && dashboardSlice.selected_crop === 'Maize') {
-    setcolor_array(tobacco_color) 
-    dispatch(changeStatsColor(tobacco_color))
-  }
+
 
 
 
@@ -1403,6 +1422,12 @@ const fetchCrop = async () => {
   
    wmsLayer.current.addTo(map.current);
 
+  //  if(wmsLayer.current == null) {
+    // console.log(wmsLayer.current == null)
+  //   toast.error(`${district.name} layer is not available`, { position: toast.POSITION.TOP_CENTER })
+
+  // }
+
    //add legend
    const addAGBLegend = () => {
     // clearLegends()
@@ -1446,7 +1471,7 @@ const fetchCrop = async () => {
     
   } catch (error) {
     console.log(error, 'error')
-    // toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
+    toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
     
   }
   
