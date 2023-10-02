@@ -26,6 +26,7 @@
   flex-direction: row;
   gap: 2rem;
   margin-left: -0.1vw;
+  /* cursor:pointer; */
 }
 /* .subnav{ */
   /* position: absolute; */

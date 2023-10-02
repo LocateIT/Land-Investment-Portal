@@ -90,6 +90,8 @@ const Dashboard =  () => {
     const [new_crops, setnew_crops] = useState([])
     const [loader, setloader] = useState(false)
     const [ntl_layer, setntl_layer] = useState(null)
+    const [climate_max_value, setclimate_max_value] = useState(null)
+    const [climate_min_value, setclimate_min_value] = useState(null)
   
     
     const ancil_data_list = dashboardSlice.ancil_data
@@ -658,11 +660,7 @@ const districtOptions = dashboardselections.districts.map( selection => (
 
 
 
-const snack_options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
-];
+
 
 const districtOptions2 = district_option.map( selection => (
   <option key={selection.value} value={selection.label}>
@@ -1700,6 +1698,13 @@ map.current.createPane("pane400").style.zIndex = 200;
     
         setstats_labels(labels)
         dispatch(changeStatsLabels(labels))
+
+        var max_value = response.data[0]['max']
+        setclimate_max_value(max_value)
+        var min_value = response.data[0]['min']
+        setclimate_min_value(min_value)
+
+        console.log(`${climate_name} maximum value`, max_value )
       } catch (error) {
         toast.error('Requested statistics not available', { position: toast.POSITION.TOP_CENTER })
         
@@ -1711,8 +1716,6 @@ map.current.createPane("pane400").style.zIndex = 200;
       fetchClimateStats()
       handleDrawerToggle()
   
-     
-   
   
     }
     
@@ -2392,7 +2395,7 @@ const sliderfunc = async (e)  => {
 
     if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
     console.log(climate_ref.current, 'climate selected')
-map.current.createPane("pane400").style.zIndex = 200;
+  map.current.createPane("pane400").style.zIndex = 200;
 
 if(clicked_link === 'Climate' && climate_ref.current === 'Precipitation'  && current_geojson.current ) {
   console.log(value, 'value inside')
@@ -2478,7 +2481,7 @@ if(clicked_link === 'Climate' && climate_ref.current === 'Elevation'  && current
   console.log(value, 'value inside')
   wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
     pane: 'pane400',
-    layers: `Landinvestment_datasets:malawi_elevation_XXC2nrw_${district.name}clipped_filtere_less_${value}`,
+    layers: `Landinvestment_datasets:malawi_elevation_clip_${district.name}clipped_filtere_less_${value}`,
     crs:L.CRS.EPSG4326,
     format: 'image/png',
     transparent: true,
@@ -2495,7 +2498,7 @@ wmsLayer.current.addTo(map.current);
 
 
 
-    useEffect(() => {
+    useEffect(() => { 
         setLeafletMap()
         // setloading(false)
 
@@ -2951,7 +2954,7 @@ marginLeft:'76vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.
   
   <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Elevation (m)</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
-<input type="range" id="slider"  onInput={sliderfunc3} min={400} max={812} step={10}/>
+<input type="range" id="slider"  onInput={sliderfunc3} min={climate_min_value} max={climate_max_value} step={10}/>
 <p className='label' style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F', fontSize:'14px' }} > {
   elevation_slider_value ?
 `${elevation_slider_value} m` : ''
