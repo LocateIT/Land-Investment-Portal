@@ -614,7 +614,7 @@ addNTLLegend()
 
   const onRadioChange = e => {
     setSelected_radio(e.target.value)
-    console.log(e.target.value) //logs agri prod, crop suitabbility
+    console.log(e.target.value) //logs agri prod, crop suitability
     dispatch(changeSelectedProduct(e.target.value))
 
   }
@@ -681,8 +681,6 @@ return opt
   
 }
 console.log(district_option, 'district option')
-
-
 
 
     //map setup
@@ -930,13 +928,6 @@ const fetchOptions = async() => {
      map.current.flyToBounds(bounds.current)
    
    
-
-
-
-
-
-                
-       
         
         
       } catch (error) {
@@ -954,10 +945,7 @@ const fetchOptions = async() => {
     //fetch countries
     const fetchDistricts = async(id) => {
       // if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
-      
-     
     
-  
       try {   
         
        
@@ -1234,16 +1222,21 @@ var taifa = country_name.current
     const wmsresponse = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/getwmslayer/?product=Crop Production&sub_product=Agricultural Productivity&data_name=Above Ground Biomass&country_name=${taifa}`, {
    
     })
+    
     current_wms_response.current = wmsresponse.data
     const biomass_wms = current_wms_response.current
 
-    console.log(current_wms_response.current, 'current biomass response')
+    console.log(current_wms_response.current, 'current district biomass response')
 
+
+    
     wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
       pane: 'pane400',
       layers: biomass_wms.layername,
       crs:L.CRS.EPSG4326,
       styles: biomass_wms.sldname,
+      // bounds: map.current.getBounds(custom_polygon.current).toBBoxString(),
+    
       format: 'image/png',
       transparent: true,
       opacity:1.0
@@ -1253,6 +1246,7 @@ var taifa = country_name.current
  });
 
  wmsLayer.current.addTo(map.current);
+
 
  //add legend
  const addAGBLegend = () => {
@@ -1300,13 +1294,13 @@ if(district_agb_legend.current)map.current.removeControl(district_agb_legend.cur
   
 } catch (error) {
   console.log(error)
-  toast.error('Requested data is not available', { position: toast.POSITION.TOP_CENTER })
+  toast.error('Requested area is not available', { position: toast.POSITION.TOP_CENTER })
   
 }
  
 }
 
-//fetch crop data
+//fetch district crop data
 const fetchCrop = async () => {
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
   if(wmsNTLLayer.current)map.current.removeLayer(wmsNTLLayer.current)
@@ -1431,8 +1425,8 @@ const fetchCrop = async () => {
    //add legend
    const addAGBLegend = () => {
     // clearLegends()
-    if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
-    if(pop_legend.current)map.current.removeControl(pop_legend.current)
+       if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
+      if(pop_legend.current)map.current.removeControl(pop_legend.current)
       if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
       if(soil_legend.current)map.current.removeControl(soil_legend.current)
       if(climate_legend.current)map.current.removeControl(climate_legend.current)
@@ -2098,11 +2092,12 @@ var taifa = country_name.current
    wmsLayer.current.addTo(map.current);
 
 
-   const addCountrySoilLegend = () => {
+   const addCountrySoilLegend = () => { 
     if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
     if(pop_legend.current)map.current.removeControl(pop_legend.current)
     if(lulc_legend.current)map.current.removeControl(lulc_legend.current)
     if(soil_legend.current)map.current.removeControl(soil_legend.current)
+    if(district_climate_legend.current)map.current.removeControl(district_climate_legend.current)
     if(climate_legend.current)map.current.removeControl(climate_legend.current)
     if(ntl_legend.current)map.current.removeControl(ntl_legend.current)
     if(crop_legend.current)map.current.removeControl(crop_legend.current)
