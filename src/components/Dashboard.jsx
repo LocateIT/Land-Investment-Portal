@@ -2401,7 +2401,7 @@ if(clicked_link === 'Climate' && climate_ref.current === 'Precipitation'  && cur
   console.log(value, 'value inside')
   wmsLayer.current =  L.tileLayer.wms(`${baseurl}:8080/geoserver/wms?`, {
     pane: 'pane400',
-    layers: `Landinvestment_datasets:malawi_precipitation_uUTiNcB_${district.name}clipped_filtere_less_${value}`,
+    layers: `Landinvestment_datasets:malawi_elevation_clip_FyUARUM_${district.name}clipped_filtere_less_${value}`, //`Landinvestment_datasets:malawi_precipitation_uUTiNcB_${district.name}clipped_filtere_less_${value}`,
     crs:L.CRS.EPSG4326,
     format: 'image/png',
     transparent: true,
@@ -2419,7 +2419,8 @@ const sliderfunc2 = async (e)  => {
   if(climate_ref.current === 'Temperature') {
     console.log('temperature event',e.target.value)
  
-  const value = e.target.value
+  const value = Math.floor(e.target.value)
+  console.log(value, 'rounded value')
   settemp_slider_value(value)
  
   // p.innerHTML = Math.round(value * 100);
@@ -2931,7 +2932,7 @@ marginLeft:'76vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.
 
 <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Precipitation (mm)</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
-<input type="range" id="slider"  onInput={sliderfunc} min={400} max={720} step={5}/>
+<input type="range" id="slider"  onInput={sliderfunc} min={climate_min_value} max={climate_max_value}step={5}/>
 <p className='label' style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F',  fontSize:'14px' }} >{
   slider_value ?
   `${slider_value} mm ` :''
@@ -2943,7 +2944,7 @@ marginLeft:'76vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.
 
 <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Temperature (°C)</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
-<input type="range" id="slider"  onInput={sliderfunc2} min={26} max={34} step={1}/>
+<input type="range" id="slider"  onInput={sliderfunc2} min={climate_min_value} max={climate_max_value} step={1}/>
 <p className='label' style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F',  fontSize:'14px'}} > {
   temp_slider_value ?
 `${temp_slider_value}  °C` : ''
