@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import "leaflet"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
+import 'leaflet-side-by-side';
 import  axios from 'axios'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -49,7 +50,7 @@ const Dashboard =  () => {
     //return the entire dashboard slice
     const dashboardSlice = useSelector((state) => state.dashboardselections)
 
-
+//state variables
     const left_panel_icons = [crop, cloud, soil, land, moon, ancil]
     const left_links = dashboardSlice.indicators
     const [country, setCountry] = useState('')
@@ -137,6 +138,7 @@ const Dashboard =  () => {
     let layergroup_ntl = useRef(null)
     let wms_ntl = useRef(null)
     let districtname = useRef(null)
+    let swipe_control = useRef(null)
 
 
     const handleDrawerToggle = () => {
@@ -147,7 +149,7 @@ const Dashboard =  () => {
     };
    
 
-
+//function to handle country selections and to load land use and night time light layers on change
  const onCountryChanged = async (e)  => {
     const changed_country = e
     console.log(changed_country, 'changed_country')
@@ -352,6 +354,8 @@ const Dashboard =  () => {
   
     
   }
+
+  //function to handle district selections and to load land use and night time light layers on change
   const onDistrictChanged = async (e) => {
 
     if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
@@ -588,16 +592,10 @@ addNTLLegend()
     const changed_crop = e.target.value
     console.log(changed_crop, 'changed_crop')
     crop_name.current = changed_crop
-  
-
       setCrop(e.target.value)
 
       //update the selected_region value using dispatch changeSelelcted region reducer
       dispatch(changeSelectedCrop(e.target.value))
-   
-   
-  
-  
 
   }
   
@@ -621,10 +619,6 @@ addNTLLegend()
 
   }
 
-  
- 
-
-
   const close_selection = () => {
     setOpen(false)
   }
@@ -636,49 +630,8 @@ addNTLLegend()
 ))
 console.log(countryOptions, 'country options')
 
-const cropOptions = dashboardselections.crops.map( selection => (
-    <option key={selection} value={selection} style={{ }}>
-        {selection}
-</option>
-))
 
-const climateOptions = dashboardselections.climate_products.map( selection => (
-  <option key={selection} value={selection}>
-      {selection}
-</option>
-))
-const soilOptions = dashboardselections.soil_products.map( selection => (
-  <option key={selection} value={selection}>
-      {selection}
-</option>
-))
-const districtOptions = dashboardselections.districts.map( selection => (
-  <option key={selection} value={selection}>
-      {selection}
-</option>
-))
-
-
-
-
-
-const districtOptions2 = district_option.map( selection => (
-  <option key={selection.value} value={selection.label}>
-      {selection.label}
-</option>
-))
-const customoptions = (anArray) =>{
-  var opt = anArray.map((item) => {
-     return (
-        <option key={item.value} value={item.label}  > 
-        {item.label} 
-        </option>
-     )
-  })
-return opt
-  
-}
-console.log(district_option, 'district option')
+//console.log(district_option, 'district option')
 
 
     //map setup
@@ -751,6 +704,8 @@ console.log(district_option, 'district option')
           L.control.layers(basemaps_object).addTo(map.current);
     }
 
+
+    //function to get district list per selected country
 const fetchOptions = async() => {
   console.log(country_name.current, 'selected countryyyyyyyyyyyyyy')
   var taifa = country_name.current
@@ -785,7 +740,7 @@ const fetchOptions = async() => {
 
 
 
-    //fetch countries
+    //fetch countries boundaries
     const fetchRegion = async(id) => {
   
   
@@ -940,7 +895,7 @@ const fetchOptions = async() => {
       fetchOptions()
       // customoptions()
     }
-    //fetch countries
+    //fetch districts boundaries
     const fetchDistricts = async(id) => {
       // if(wmsLULC.current)map.current.removeLayer(wmsLULC.current)
     
@@ -1015,7 +970,7 @@ const fetchOptions = async() => {
     }
 
    
-//fetch stats
+//fetch stats for crops
  const fetchCropStats = async () => {
  
   try {
@@ -1063,6 +1018,7 @@ const fetchOptions = async() => {
 
 }
 
+//function to fetch Above Ground Biomass stats
 const fetchAGBStats = async () => {
  
   try {
@@ -1101,7 +1057,7 @@ const fetchAGBStats = async () => {
   }
 
 }
-
+//function to change statistics background color as per selected crop
 const color_func = () => {
   if(dashboardSlice.selected_product === 'Agricultural Productivity'  ) {
     setcolor_array(agb_color)
@@ -1122,9 +1078,6 @@ const color_func = () => {
   }
 
 
-
-
-  
 
 }
 
@@ -1312,7 +1265,7 @@ const fetchCrop = async () => {
 
   try {
     if(clicked_link === 'Crop Production' && selected_radio === 'Crop Suitability' && current_geojson.current != null) {
-      const wmsresponse = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/getwmslayer/?product=Crop Production&sub_product=Crop Suitability&data_name=${dashboardSlice.selected_crop}&country_name=${taifa}&district_name=${district.name}`, {
+      const wmsresponse = await axios.get(`${baseurl}:8700/uneca-api-0.1/data/getwmslayer/?product=Crop Production&sub_product=Crop Suitability&data_name=${dashboardSlice.selected_crop}&district_name=${district.name}&country_name=${taifa}`, {
    
       })
       
@@ -1339,7 +1292,7 @@ const fetchCrop = async () => {
    wmsLayer.current.addTo(map.current);
 
 
-
+//add crop siutability legend at district level
    const addCropLegend = () => {
     // clearLegends()
     
@@ -1414,13 +1367,9 @@ const fetchCrop = async () => {
   
    wmsLayer.current.addTo(map.current);
 
-  //  if(wmsLayer.current == null) {
-    // console.log(wmsLayer.current == null)
-  //   toast.error(`${district.name} layer is not available`, { position: toast.POSITION.TOP_CENTER })
+ 
 
-  // }
-
-   //add legend
+   //add AGB legend at district level
    const addAGBLegend = () => {
     // clearLegends()
        if(district_crop_legend.current)map.current.removeControl(district_crop_legend.current)
@@ -1469,6 +1418,9 @@ const fetchCrop = async () => {
   
 }
 
+
+
+//fetch climate layers at country level
 const fetchCountryClimate = async (e) => {
   console.log(e, 'event')
   const climate_name = e
@@ -1515,7 +1467,7 @@ if(clicked_link === 'Climate' && climate_name != null && wmsCountryLayer.current
 
 wmsLayer.current.addTo(map.current);
 
-//add legend
+//add climate legend at country level
 const addClimateLegend = () => {
   // clearLegends()
   if(climate_legend.current)map.current.removeControl(climate_legend.current)
@@ -1558,6 +1510,8 @@ const addClimateLegend = () => {
 
 
 }
+
+//fetch climate layers at district level
 const fetchClimate = async (e) => {
 
   if(wmsLayer.current)map.current.removeLayer(wmsLayer.current)
@@ -1604,7 +1558,7 @@ const fetchClimate = async (e) => {
    if(crop_legend.current)map.current.removeControl(crop_legend.current)
    if(agb_legend.current)map.current.removeControl(agb_legend.current)
    if(district_lulc_legend.current)map.current.removeControl(district_lulc_legend.current)
-map.current.createPane("pane400").style.zIndex = 200;
+  map.current.createPane("pane400").style.zIndex = 200;
 
 
 
@@ -1641,7 +1595,7 @@ map.current.createPane("pane400").style.zIndex = 200;
   
   
   
-    //add legend
+    //add climate legend at district level
     const addClimateLegend = () => {
       // clearLegends()
       if(district_agb_legend.current)map.current.removeControl(district_agb_legend.current)
@@ -1680,7 +1634,7 @@ map.current.createPane("pane400").style.zIndex = 200;
      addClimateLegend()
   
   
-  
+  //function to fetch climate statistics
      const fetchClimateStats = async () => {
    
       try {
@@ -1727,7 +1681,7 @@ map.current.createPane("pane400").style.zIndex = 200;
 
 }
 
- 
+ //fetch soil layer at district level
 const fetchSoilDataa = async (e) => {
   console.log('soil',e)
   
@@ -1779,6 +1733,8 @@ if(clicked_link === 'Soil Fertility' && separatedSoilTexture != 'Organic_Carbon'
 
 wmsLayer.current.addTo(map.current);
 
+
+//function to add soil legend
 const addSoilLegend =  () => {
   if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
   if(pop_legend.current)map.current.removeControl(pop_legend.current)
@@ -1944,7 +1900,7 @@ addSoilLegend()
 
 }
 
-
+//fetch soil data at country level
 const fetchCountrySoil = async (e) => {
 
   console.log('soil',e)
@@ -1997,7 +1953,7 @@ var taifa = country_name.current
   
   wmsLayer.current.addTo(map.current);
 
-
+//function to add market accessibility legend
   const addCountrySoilLegend = () => {
     
     if(district_climate_legend.current)map.current.removeControl(district_climate_legend.current)
@@ -2060,6 +2016,8 @@ var taifa = country_name.current
   
   }
   addCountrySoilLegend()
+
+  swipe_control.current = L.control.sideBySide(wmsLayer, wmsLayer).addTo(map.current);
   
   
   }
@@ -2094,7 +2052,7 @@ var taifa = country_name.current
   
    wmsLayer.current.addTo(map.current);
 
-
+//function to add market soil legend
    const addCountrySoilLegend = () => { 
     if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
     if(pop_legend.current)map.current.removeControl(pop_legend.current)
@@ -2158,16 +2116,13 @@ var taifa = country_name.current
   addCountrySoilLegend()
   
   
-     
-   
-  
     }
   
   
 }
 
 
-
+//function to add market demographics legend
 const addPopLegend = () => {
   // clearLegends()
   if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
@@ -2203,7 +2158,7 @@ const addPopLegend = () => {
   }
 
  }
-
+//function to add market accessibility legend
  const addMarketAccessLegend = () => {
   // clearLegends()
   if(accessibility_legend.current)map.current.removeControl(accessibility_legend.current)
@@ -2266,7 +2221,7 @@ map.current.createPane("pane400").style.zIndex = 200;
 console.log(ancillary_selection,'selected ancil')
 
 
-
+//fetch market demographics layer specifically
 if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' ) {
 
   if(wmsDemographicsLayer.current)map.current.removeLayer(wmsDemographicsLayer.current)
@@ -2296,7 +2251,7 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
   
 
   }
-
+//to fetch and display road, markets data
   if( clicked_link === 'Ancillary Data' && ancillary_selection !== 'Demographics' || 'Economic Activity' || 'Market Accessibility' ) {
 
     
@@ -2316,6 +2271,8 @@ if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Demographics' 
 
  wmsLayer.current.addTo(map.current);
 }
+
+//fetch market accessibility layer specifically
 
 if( clicked_link === 'Ancillary Data' && ancillary_selection === 'Market Accessibility' ) {
 
@@ -2349,15 +2306,16 @@ addMarketAccessLegend()
 }
 
 
-
+//function to zoom in on click
 const zoomin = () => {
   map.current.setZoom(map.current.getZoom() + 0.5)
 }
-
+//function to zoom out onclick
 const zoomout = () => {
   map.current.setZoom(map.current.getZoom() - 1)
 }
 
+//function to change the opacity of layers using the opacity tool
 const changeDefaultOpacity = (e) => {
 
   //   $('#image-opacity').html(this.value); //i might revisit
@@ -2369,15 +2327,10 @@ const changeDefaultOpacity = (e) => {
  if(wmsDistrictLULC.current != null)wmsDistrictLULC.current.setOpacity(e.target.value)
  if(wmsLULC.current != null)wmsLULC.current.setOpacity(e.target.value)
  if(wmsDemographicsLayer.current != null)wmsDemographicsLayer.current.setOpacity(e.target.value)
-                                    
-                                  
-                                   
-                                  
-                  
                                 
 }
-
-const sliderfunc = async (e)  => {
+//slider function for precipitation layer
+const precFunc = async (e)  => {
   console.log('input event',e.target.value)
  
   const value = e.target.value
@@ -2414,8 +2367,8 @@ if(clicked_link === 'Climate' && climate_ref.current === 'Precipitation'  && cur
 wmsLayer.current.addTo(map.current);
 }
 };
-
-const sliderfunc2 = async (e)  => {
+//slider function for temperature layer
+const tempFunc = async (e)  => {
   if(climate_ref.current === 'Temperature') {
     console.log('temperature event',e.target.value)
  
@@ -2456,8 +2409,8 @@ wmsLayer.current.addTo(map.current);
 }
   }
 };
-
-const sliderfunc3 = async (e)  => {
+//slider function for elevation layer
+const elevationFunc = async (e)  => {
  if(climate_ref.current === 'Elevation') {
   console.log('ielevation event',e.target.value)
  
@@ -2787,17 +2740,6 @@ className='fetch_button'
 
 
 
-
-
-                  
-
-
-                  
-
-                 
-
-
-
     </div>
     : 
 
@@ -2932,7 +2874,7 @@ marginLeft:'76vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.
 
 <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Precipitation (mm)</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
-<input type="range" id="slider"  onInput={sliderfunc} min={climate_min_value} max={climate_max_value}step={5}/>
+<input type="range" id="slider"  onInput={precFunc} min={climate_min_value} max={climate_max_value}step={5}/>
 <p className='label' style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F',  fontSize:'14px' }} >{
   slider_value ?
   `${slider_value} mm ` :''
@@ -2944,7 +2886,7 @@ marginLeft:'76vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.
 
 <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Temperature (°C)</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
-<input type="range" id="slider"  onInput={sliderfunc2} min={climate_min_value} max={climate_max_value} step={1}/>
+<input type="range" id="slider"  onInput={tempFunc} min={climate_min_value} max={climate_max_value} step={1}/>
 <p className='label' style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F',  fontSize:'14px'}} > {
   temp_slider_value ?
 `${temp_slider_value}  °C` : ''
@@ -2955,7 +2897,7 @@ marginLeft:'76vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.
   
   <p  style={{ fontFamily:'sans-serif', fontWeight:'550', color:'#1E4B5F'}}>Filter for Elevation (m)</p>
 <div className="slider-value" style={{ display:'flex' ,flexDirection:'row'}}>
-<input type="range" id="slider"  onInput={sliderfunc3} min={climate_min_value} max={climate_max_value} step={10}/>
+<input type="range" id="slider"  onInput={elevationFunc} min={climate_min_value} max={climate_max_value + 10} step={1}/>
 <p className='label' style={{fontFamily:'sans-serif', fontWeight:'600', color:'#1E4B5F', fontSize:'14px' }} > {
   elevation_slider_value ?
 `${elevation_slider_value} m` : ''
