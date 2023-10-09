@@ -93,6 +93,8 @@ const Dashboard =  () => {
     const [ntl_layer, setntl_layer] = useState(null)
     const [climate_max_value, setclimate_max_value] = useState(null)
     const [climate_min_value, setclimate_min_value] = useState(null)
+    const [calendar_input, setcalendar_input] = useState('')
+    
   
     
     const ancil_data_list = dashboardSlice.ancil_data
@@ -2449,7 +2451,26 @@ wmsLayer.current.addTo(map.current);
 }
  }
 };
+//random func to convert date to strings
+// const getPeriod = () => {
+//   // Assuming you have an HTML input element with an id "calendarInput"
+// let calendarInput = document.getElementById("calendarInput").value;
 
+
+// // Convert the calendar input string to a Date object
+// let dateObject = new Date(calendarInput);
+// console.log(" Date: " + dateObject.toISOString());
+
+// // Check if the dateObject is valid
+// if (!isNaN(dateObject.getTime())) { //getTime converts it to miliseconds
+//   // Format the date as a string in your desired format (e.g., "YYYY-MM-DD")
+//   let dateString = dateObject.toISOString().split('T')[0];
+
+//   console.log("Formatted Date: " + dateString);
+// } else {
+//   console.log("Invalid date input");
+// }
+// }
 
 
     useEffect(() => { 
@@ -2913,6 +2934,11 @@ marginLeft:'76vw', width:'24vw', display:'flex', flexDirection:'column', gap:'0.
   > <CircularProgress  /></div> )
 : loader == false ? '' : ''
 } */}
+
+
+
+{/* <input type="date" name="" id="calendarInput" style={{zIndex: 103, position:'absolute', top:'20vh', left:'50vw'}} value={calendar_input}
+          onChange={getPeriod}/> */}
 
 
     
