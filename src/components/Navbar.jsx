@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from '../assets/uneca_logo.png'
+import logo from '../assets/unecalogo.svg'
 import proj_name from '../assets/proj_name.svg'
 import home from '../assets/home.svg'
 import dashboard from '../assets/dashboard.svg'
